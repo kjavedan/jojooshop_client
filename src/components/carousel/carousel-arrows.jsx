@@ -35,7 +35,7 @@ const StyledIconButton = styled(IconButton, {
   }),
   ...(hasChild && {
     zIndex: 9,
-    top: -5,
+    top: 0,
     position: 'absolute',
     // marginTop: theme.spacing(-2.5),
   }),
@@ -72,6 +72,7 @@ export default function CarouselArrows({
             onClick={onPrev}
             {...leftButtonProps}
             sx={{
+              display: { xs: 'none', md: 'flex' },
               right: 66,
               ...leftButtonProps?.sx,
             }}
@@ -90,6 +91,7 @@ export default function CarouselArrows({
             onClick={onNext}
             {...rightButtonProps}
             sx={{
+              display: { xs: 'none', md: 'flex' },
               right: 16,
               ...rightButtonProps?.sx,
             }}

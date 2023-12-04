@@ -35,7 +35,7 @@ export default function CarouselCategory({ data }) {
   return (
     <Box
       sx={{
-        // overflow: 'hidden',
+        overflow: 'hidden',
         position: 'relative',
         mt: 5,
       }}
