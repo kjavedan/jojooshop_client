@@ -9,6 +9,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line react/display-name
 const IncrementerButton = forwardRef(
   ({ quantity, onIncrease, onDecrease, disabledIncrease, disabledDecrease, sx, ...other }, ref) => (
     <Stack

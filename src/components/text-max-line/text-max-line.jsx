@@ -8,6 +8,7 @@ import useTypography from './use-typography';
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line react/display-name
 const TextMaxLine = forwardRef(
   ({ asLink, variant = 'body1', line = 2, persistent = false, children, sx, ...other }, ref) => {
     const { lineHeight } = useTypography(variant);

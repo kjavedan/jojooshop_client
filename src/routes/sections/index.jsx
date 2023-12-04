@@ -5,7 +5,6 @@ import MainLayout from 'src/layouts/main';
 // import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { authRoutes } from './auth';
 import { HomePage, mainRoutes } from './main';
-// import { dashboardRoutes } from './dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -31,9 +30,6 @@ export default function Router() {
 
     // Auth routes
     authRoutes,
-
-    // Dashboard routes
-    // ...dashboardRoutes,
 
     // Main routes
     ...mainRoutes,

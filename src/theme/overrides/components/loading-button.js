@@ -2,7 +2,7 @@ import { loadingButtonClasses } from '@mui/lab/LoadingButton';
 
 // ----------------------------------------------------------------------
 
-export function loadingButton(theme) {
+export function loadingButton() {
   return {
     MuiLoadingButton: {
       styleOverrides: {
