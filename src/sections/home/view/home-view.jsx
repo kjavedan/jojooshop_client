@@ -28,7 +28,7 @@ export default function HomeView() {
     <Container
       maxWidth={settings.themeStretch ? false : 'lg'}
       sx={{
-        my: { xs: 10, md: 15 },
+        my: { xs: 10, md: 12 },
       }}
     >
       <CarouselCategory data={_carouselsExample.slice(8, 16)} />
