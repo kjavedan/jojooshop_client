@@ -44,6 +44,7 @@ export const mainRoutes = [
         children: [
           { element: <ProductListPage />, index: true },
           { path: 'list', element: <ProductListPage /> },
+          { path: 'category/:category', element: <ProductListPage /> },
           { path: ':id', element: <ProductDetailsPage /> },
           { path: 'checkout', element: <ProductCheckoutPage /> },
         ],

@@ -12,7 +12,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
-export default function LanguagePopover() {
+export default function LanguagePopover({ sx }) {
   const popover = usePopover();
 
   const { onChangeLang } = useTranslate();
@@ -41,6 +41,7 @@ export default function LanguagePopover() {
           ...(popover.open && {
             bgcolor: 'action.selected',
           }),
+          ...sx,
         }}
       >
         <Iconify icon={currentLang.icon} sx={{ borderRadius: 0.65, width: 28 }} />

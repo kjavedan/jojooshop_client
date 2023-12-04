@@ -25,6 +25,7 @@ import { navConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
 import HeaderShadow from '../common/header-shadow';
 import SettingsButton from '../common/settings-button';
+import LanguagePopover from '../common/language-popover';
 
 // ----------------------------------------------------------------------
 
@@ -84,8 +85,10 @@ export default function Header() {
           {mdUp && <NavDesktop data={navConfig} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            {/* either login btn or account icon  */}
             <LoginButton />
+
+            {/* either login btn or account icon  */}
+            <LanguagePopover sx={{ mr: { md: 2 }, ml: { xs: 1, md: 0 } }} />
 
             <SettingsButton
               sx={{

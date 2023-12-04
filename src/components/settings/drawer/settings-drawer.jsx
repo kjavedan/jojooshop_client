@@ -12,7 +12,6 @@ import { paper } from 'src/theme/css';
 import Iconify from '../../iconify';
 import Scrollbar from '../../scrollbar';
 import BaseOptions from './base-option';
-import LayoutOptions from './layout-options';
 import PresetsOptions from './presets-options';
 import StretchOptions from './stretch-options';
 import { useSettingsContext } from '../context';
@@ -101,20 +100,6 @@ export default function SettingsDrawer() {
     </div>
   );
 
-  const renderLayout = (
-    <div>
-      <Typography variant="caption" component="div" sx={{ ...labelStyles }}>
-        Layout
-      </Typography>
-
-      <LayoutOptions
-        value={settings.themeLayout}
-        onChange={(newValue) => settings.onUpdate('themeLayout', newValue)}
-        options={['vertical', 'horizontal', 'mini']}
-      />
-    </div>
-  );
-
   const renderStretch = (
     <div>
       <Typography
@@ -178,8 +163,6 @@ export default function SettingsDrawer() {
           {renderContrast}
 
           {renderDirection}
-
-          {renderLayout}
 
           {renderStretch}
 
