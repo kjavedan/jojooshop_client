@@ -83,7 +83,7 @@ export default function ProductShopDetailsView({ id }) {
       sx={{ py: 10 }}
     />
   );
-
+  // replace the shop route with the parent category path
   const renderProduct = product && (
     <>
       <CustomBreadcrumbs

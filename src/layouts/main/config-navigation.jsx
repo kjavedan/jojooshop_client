@@ -15,7 +15,7 @@ export const navConfig = [
 
   {
     title: 'Categories',
-    path: '/categories',
+    path: '/product',
     icon: <Iconify icon="solar:file-bold-duotone" />,
     children: [
       {
