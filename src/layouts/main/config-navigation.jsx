@@ -15,17 +15,12 @@ export const navConfig = [
   {
     title: 'Cart',
     icon: <Iconify icon="solar:cart-bold-duotone" />,
-    path: paths.components,
-  },
-  {
-    title: 'Account',
-    icon: <Iconify icon="solar:user-bold-duotone" />,
-    path: paths.components,
+    path: paths.product.checkout,
   },
   {
     title: 'Categories',
-    path: '/pages',
-    icon: <Iconify icon="solar:list-bold-duotone" />,
+    path: '/categories',
+    icon: <Iconify icon="solar:file-bold-duotone" />,
     children: [
       {
         subheader: 'A',
@@ -52,38 +47,26 @@ export const navConfig = [
       {
         subheader: 'C',
         items: [
-          { title: 'Login', path: paths.authDemo.classic.login },
-          { title: 'Register', path: paths.authDemo.classic.register },
+          { title: 'Login', path: paths.auth.login },
+          { title: 'Register', path: paths.auth.register },
           {
             title: 'Forgot password',
-            path: paths.authDemo.classic.forgotPassword,
+            path: paths.auth.forgotPassword,
           },
-          { title: 'New password', path: paths.authDemo.classic.newPassword },
-          { title: 'Verify', path: paths.authDemo.classic.verify },
-          { title: 'Login (modern)', path: paths.authDemo.modern.login },
-          { title: 'Register (modern)', path: paths.authDemo.modern.register },
+          { title: 'New password', path: paths.auth.newPassword },
+          { title: 'Verify', path: paths.auth.verify },
+          { title: 'Login (modern)', path: paths.auth.login },
+          { title: 'Register (modern)', path: paths.auth.register },
           {
             title: 'Forgot password (modern)',
-            path: paths.authDemo.modern.forgotPassword,
+            path: paths.auth.forgotPassword,
           },
           {
             title: 'New password (modern)',
-            path: paths.authDemo.modern.newPassword,
+            path: paths.auth.newPassword,
           },
-          { title: 'Verify (modern)', path: paths.authDemo.modern.verify },
+          { title: 'Verify (modern)', path: paths.auth.verify },
         ],
-      },
-      {
-        subheader: 'D',
-        items: [
-          { title: 'Page 403', path: paths.page403 },
-          { title: 'Page 404', path: paths.page404 },
-          { title: 'Page 500', path: paths.page500 },
-        ],
-      },
-      {
-        subheader: 'Dashboard',
-        items: [{ title: 'Dashboard', path: PATH_AFTER_LOGIN }],
       },
     ],
   },

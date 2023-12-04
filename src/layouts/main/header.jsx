@@ -84,7 +84,8 @@ export default function Header() {
           {mdUp && <NavDesktop data={navConfig} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            {mdUp && <LoginButton />}
+            {/* either login btn or account icon  */}
+            <LoginButton />
 
             <SettingsButton
               sx={{

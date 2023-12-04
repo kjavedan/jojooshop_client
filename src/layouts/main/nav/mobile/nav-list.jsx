@@ -14,6 +14,7 @@ import { NavItem } from './nav-item';
 // ----------------------------------------------------------------------
 
 export default function NavList({ data }) {
+  console.log(data);
   const active = useActiveLink(data.path, !!data.children);
 
   const [openMenu, setOpenMenu] = useState(false);
@@ -47,23 +48,6 @@ export default function NavList({ data }) {
             slotProps={{
               rootItem: {
                 minHeight: 36,
-              },
-            }}
-            sx={{
-              [`& .${stackClasses.root}`]: {
-                '&:last-of-type': {
-                  [`& .${listItemButtonClasses.root}`]: {
-                    height: 160,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    bgcolor: 'background.neutral',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundImage: 'url(/assets/illustrations/illustration_dashboard.png)',
-                    '& .label': {
-                      display: 'none',
-                    },
-                  },
-                },
               },
             }}
           />
