@@ -34,9 +34,9 @@ export default function CheckoutCartProductList({
           <TableHeadCustom headLabel={TABLE_HEAD} />
 
           <TableBody>
-            {products.map((row) => (
+            {products.map((row, index) => (
               <CheckoutCartProduct
-                key={row.id}
+                key={index}
                 row={row}
                 onDelete={() => onDelete(row.id)}
                 onDecrease={() => onDecreaseQuantity(row.id)}

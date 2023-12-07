@@ -21,7 +21,7 @@ import Label from 'src/components/label';
 import NavMobile from './nav/mobile';
 import NavDesktop from './nav/desktop';
 import { HEADER } from '../config-layout';
-import { navConfig } from './config-navigation';
+import { useNavConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
 import HeaderShadow from '../common/header-shadow';
 import SettingsButton from '../common/settings-button';
@@ -35,6 +35,8 @@ export default function Header() {
   const mdUp = useResponsive('up', 'md');
 
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
+
+  const navConfigData = useNavConfig();
 
   return (
     <AppBar>
@@ -82,7 +84,7 @@ export default function Header() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {mdUp && <NavDesktop data={navConfig} />}
+          {mdUp && <NavDesktop data={navConfigData} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
             <LoginButton />
@@ -97,7 +99,7 @@ export default function Header() {
               }}
             />
 
-            {!mdUp && <NavMobile data={navConfig} />}
+            {!mdUp && <NavMobile data={navConfigData} />}
           </Stack>
         </Container>
       </Toolbar>

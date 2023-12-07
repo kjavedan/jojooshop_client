@@ -1,32 +1,24 @@
 import merge from 'lodash/merge';
 import {
-  fr as frFRAdapter,
-  vi as viVNAdapter,
   enUS as enUSAdapter,
   zhCN as zhCNAdapter,
   arSA as arSAAdapter,
+  faIR as faIRAdapter,
 } from 'date-fns/locale';
 
 // date-pickers
-import {
-  enUS as enUSDate,
-  frFR as frFRDate,
-  viVN as viVNDate,
-  zhCN as zhCNDate,
-} from '@mui/x-date-pickers/locales';
+import { enUS as enUSDate, zhCN as zhCNDate, faIR as faIRDate } from '@mui/x-date-pickers/locales';
 // core
 import {
   enUS as enUSCore,
-  frFR as frFRCore,
-  viVN as viVNCore,
   zhCN as zhCNCore,
   arSA as arSACore,
+  faIR as faIRCore,
 } from '@mui/material/locale';
 // data-grid
 import {
+  faIR as faIRGrid,
   enUS as enUSDataGrid,
-  frFR as frFRDataGrid,
-  viVN as viVNDataGrid,
   zhCN as zhCNDataGrid,
   arSD as arSDDataGrid,
 } from '@mui/x-data-grid';
@@ -43,20 +35,6 @@ export const allLangs = [
     icon: 'flagpack:gb-nir',
   },
   {
-    label: 'French',
-    value: 'fr',
-    systemValue: merge(frFRDate, frFRDataGrid, frFRCore),
-    adapterLocale: frFRAdapter,
-    icon: 'flagpack:fr',
-  },
-  {
-    label: 'Vietnamese',
-    value: 'vi',
-    systemValue: merge(viVNDate, viVNDataGrid, viVNCore),
-    adapterLocale: viVNAdapter,
-    icon: 'flagpack:vn',
-  },
-  {
     label: 'Chinese',
     value: 'cn',
     systemValue: merge(zhCNDate, zhCNDataGrid, zhCNCore),
@@ -66,9 +44,16 @@ export const allLangs = [
   {
     label: 'Arabic',
     value: 'ar',
-    systemValue: merge(arSDDataGrid, arSACore),
+    systemValue: merge(faIRDate, arSDDataGrid, arSACore),
     adapterLocale: arSAAdapter,
-    icon: 'flagpack:sa',
+    icon: 'flagpack:ae',
+  },
+  {
+    label: 'Farsi',
+    value: 'fa',
+    systemValue: merge(faIRGrid, faIRCore),
+    adapterLocale: faIRAdapter,
+    icon: 'flagpack:ir',
   },
 ];
 

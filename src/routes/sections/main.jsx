@@ -22,7 +22,7 @@ const MaintenancePage = lazy(() => import('src/pages/maintenance'));
 // PRODUCT
 const ProductListPage = lazy(() => import('src/pages/product/list'));
 const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
-const ProductCheckoutPage = lazy(() => import('src/pages/product/checkout'));
+const ProductCheckoutPage = lazy(() => import('src/pages/checkout/checkout'));
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +39,7 @@ export const mainRoutes = [
       { path: 'about-us', element: <AboutPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },
+      { path: 'checkout', element: <ProductCheckoutPage /> },
       {
         path: 'product',
         children: [
@@ -46,7 +47,6 @@ export const mainRoutes = [
           { path: 'list', element: <ProductListPage /> },
           { path: 'category/:category', element: <ProductListPage /> },
           { path: ':id', element: <ProductDetailsPage /> },
-          { path: 'checkout', element: <ProductCheckoutPage /> },
         ],
       },
     ],

@@ -20,7 +20,7 @@ export default function ProductList({ products, loading, ...other }) {
   const renderList = (
     <>
       {products.map((product) => (
-        <ProductItem key={product.id} product={product} />
+        <ProductItem key={product._id} product={product} />
       ))}
     </>
   );

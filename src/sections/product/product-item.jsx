@@ -18,26 +18,40 @@ import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 
 import { useCheckoutContext } from '../checkout/context';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function ProductItem({ product }) {
+  const { lang } = useLocales();
+
   const { onAddToCart } = useCheckoutContext();
 
-  const { id, name, coverUrl, price, colors, available, sizes, priceSale, newLabel, saleLabel } =
-    product;
+  const {
+    _id,
+    name,
+    imgUrls,
+    price,
+    colors,
+    stock,
+    priceSale,
+    newLabel,
+    saleLabel,
+    discount,
+    discountedPrice,
+    category,
+  } = product;
 
-  const linkTo = paths.product.details(id);
+  const linkTo = paths.product.details(_id);
 
   const handleAddCart = async () => {
     const newProduct = {
-      id,
+      _id,
       name,
-      coverUrl,
-      available,
+      imgUrls,
+      stock,
       price,
       colors: [colors[0]],
-      size: sizes[0],
       quantity: 1,
     };
     try {
@@ -69,7 +83,7 @@ export default function ProductItem({ product }) {
 
   const renderImg = (
     <Box sx={{ position: 'relative', p: 1 }}>
-      {!!available && (
+      {!!stock > 0 && (
         <Fab
           color="warning"
           size="medium"
@@ -92,14 +106,14 @@ export default function ProductItem({ product }) {
         </Fab>
       )}
 
-      <Tooltip title={!available && 'Out of stock'} placement="bottom-end">
+      <Tooltip title={!stock > 0 && 'Out of stock'} placement="bottom-end">
         <Image
-          alt={name}
-          src={coverUrl}
+          alt={name.en}
+          src={imgUrls[0].url}
           ratio="1/1"
           sx={{
             borderRadius: 1.5,
-            ...(!available && {
+            ...(!stock > 0 && {
               opacity: 0.48,
               filter: 'grayscale(1)',
             }),
@@ -112,7 +126,7 @@ export default function ProductItem({ product }) {
   const renderContent = (
     <Stack spacing={2.5} sx={{ p: 3, pt: 2 }}>
       <Link component={RouterLink} href={linkTo} color="inherit" variant="subtitle2" noWrap>
-        {name}
+        {name[lang]}
       </Link>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between">

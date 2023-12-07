@@ -63,9 +63,9 @@ const StyledThumbnailsContainer = styled('div')(({ length, theme }) => ({
 
 export default function ProductDetailsCarousel({ product }) {
   const theme = useTheme();
-
-  const slides = product.images.map((img) => ({
-    src: img,
+  console.log(product.imgUrls);
+  const slides = product.imgUrls.map((img) => ({
+    src: img.url,
   }));
 
   const lightbox = useLightBox(slides);

@@ -27,10 +27,10 @@ const StyledIconButton = styled(IconButton, {
   }),
   ...(filled && {
     color: alpha(theme.palette.common.white, 0.8),
-    backgroundColor: alpha(theme.palette.grey[900], 0.48),
+    backgroundColor: alpha(theme.palette.grey[700], 0.48),
     '&:hover': {
       color: theme.palette.common.white,
-      backgroundColor: theme.palette.grey[900],
+      backgroundColor: theme.palette.grey[700],
     },
   }),
   ...(hasChild && {
@@ -52,6 +52,7 @@ export default function CarouselArrows({
   children,
   leftButtonProps,
   rightButtonProps,
+  dataLength,
   sx,
   ...other
 }) {
@@ -72,7 +73,7 @@ export default function CarouselArrows({
             onClick={onPrev}
             {...leftButtonProps}
             sx={{
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'none', md: dataLength > 4 ? 'flex' : 'none' },
               right: 66,
               ...leftButtonProps?.sx,
             }}
@@ -91,7 +92,7 @@ export default function CarouselArrows({
             onClick={onNext}
             {...rightButtonProps}
             sx={{
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'none', md: dataLength > 4 ? 'flex' : 'none' },
               right: 16,
               ...rightButtonProps?.sx,
             }}

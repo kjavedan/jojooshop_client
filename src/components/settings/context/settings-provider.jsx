@@ -17,7 +17,8 @@ export function SettingsProvider({ children, defaultSettings }) {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const isArabic = localStorageGetItem('i18nextLng') === 'ar';
+  const isArabic =
+    localStorageGetItem('i18nextLng') === 'ar' || localStorageGetItem('i18nextLng') === 'fa';
 
   useEffect(() => {
     if (isArabic) {
@@ -29,7 +30,7 @@ export function SettingsProvider({ children, defaultSettings }) {
   // Direction by lang
   const onChangeDirectionByLang = useCallback(
     (lang) => {
-      update('themeDirection', lang === 'ar' ? 'rtl' : 'ltr');
+      update('themeDirection', lang === 'ar' || lang === 'fa' ? 'rtl' : 'ltr');
     },
     [update]
   );

@@ -16,20 +16,27 @@ import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 
 import IncrementerButton from '../product/common/incrementer-button';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
+  const { lang } = useLocales();
   const { name, size, price, colors, coverUrl, quantity, available } = row;
-
+  console.log(row);
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-        <Avatar variant="rounded" alt={name} src={coverUrl} sx={{ width: 64, height: 64, mr: 2 }} />
+        <Avatar
+          variant="rounded"
+          alt={name.en}
+          src={coverUrl}
+          sx={{ width: 64, height: 64, mr: 2 }}
+        />
 
         <Stack spacing={0.5}>
           <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
-            {name}
+            {name[lang]}
           </Typography>
 
           <Stack

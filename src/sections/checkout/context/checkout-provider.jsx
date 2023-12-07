@@ -30,7 +30,7 @@ export function CheckoutProvider({ children }) {
   const router = useRouter();
 
   const { state, update, reset } = useLocalStorage(STORAGE_KEY, initialState);
-
+  console.log(state);
   const onGetCart = useCallback(() => {
     const totalItems = state.items.reduce((total, item) => total + item.quantity, 0);
 

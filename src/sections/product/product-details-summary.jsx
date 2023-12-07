@@ -23,6 +23,7 @@ import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 
 import IncrementerButton from './common/incrementer-button';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -35,38 +36,41 @@ export default function ProductDetailsSummary({
   ...other
 }) {
   const router = useRouter();
+  const { lang } = useLocales();
 
   const {
-    id,
+    _id,
     name,
-    sizes,
+    // sizes,
     price,
     coverUrl,
     colors,
+    discount,
     newLabel,
     available,
+    stock,
     priceSale,
     saleLabel,
-    totalRatings,
+    rate,
     totalReviews,
     inventoryType,
     subDescription,
+    discountedPrice,
   } = product;
 
-  const existProduct = !!items?.length && items.map((item) => item.id).includes(id);
+  const existProduct = !!items?.length && items.map((item) => item.id).includes(_id);
 
   const isMaxQuantity =
     !!items?.length &&
-    items.filter((item) => item.id === id).map((item) => item.quantity)[0] >= available;
+    items.filter((item) => item.id === _id).map((item) => item.quantity)[0] >= available;
 
   const defaultValues = {
-    id,
+    id: _id,
     name,
     coverUrl,
     available,
     price,
     colors: colors[0],
-    size: sizes[4],
     quantity: available < 1 ? 0 : 1,
   };
 
@@ -95,7 +99,7 @@ export default function ProductDetailsSummary({
         });
       }
       onGotoStep?.(0);
-      router.push(paths.product.checkout);
+      router.push(paths.checkout.root);
     } catch (error) {
       console.error(error);
     }
@@ -115,7 +119,7 @@ export default function ProductDetailsSummary({
 
   const renderPrice = (
     <Box sx={{ typography: 'h5' }}>
-      {priceSale && (
+      {!!discount && (
         <Box
           component="span"
           sx={{
@@ -124,11 +128,11 @@ export default function ProductDetailsSummary({
             mr: 0.5,
           }}
         >
-          {fCurrency(priceSale)}
+          {fCurrency(discountedPrice)}
         </Box>
       )}
 
-      {fCurrency(price)}
+      {fCurrency(priceSale)}
     </Box>
   );
 
@@ -193,38 +197,6 @@ export default function ProductDetailsSummary({
     </Stack>
   );
 
-  const renderSizeOptions = (
-    <Stack direction="row">
-      <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-        Size
-      </Typography>
-
-      <RHFSelect
-        name="size"
-        size="small"
-        helperText={
-          <Link underline="always" color="textPrimary">
-            Size Chart
-          </Link>
-        }
-        sx={{
-          maxWidth: 88,
-          [`& .${formHelperTextClasses.root}`]: {
-            mx: 0,
-            mt: 1,
-            textAlign: 'right',
-          },
-        }}
-      >
-        {sizes.map((size) => (
-          <MenuItem key={size} value={size}>
-            {size}
-          </MenuItem>
-        ))}
-      </RHFSelect>
-    </Stack>
-  );
-
   const renderQuantity = (
     <Stack direction="row">
       <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
@@ -242,7 +214,7 @@ export default function ProductDetailsSummary({
         />
 
         <Typography variant="caption" component="div" sx={{ textAlign: 'right' }}>
-          Available: {available}
+          Available: {stock}
         </Typography>
       </Stack>
     </Stack>
@@ -271,7 +243,7 @@ export default function ProductDetailsSummary({
 
   const renderSubDescription = (
     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-      {subDescription}
+      {subDescription[lang]}
     </Typography>
   );
 
@@ -284,7 +256,7 @@ export default function ProductDetailsSummary({
         typography: 'body2',
       }}
     >
-      <Rating size="small" value={totalRatings} precision={0.1} readOnly sx={{ mr: 1 }} />
+      <Rating size="small" value={rate} precision={0.1} readOnly sx={{ mr: 1 }} />
       {`(${fShortenNumber(totalReviews)} reviews)`}
     </Stack>
   );
@@ -317,9 +289,9 @@ export default function ProductDetailsSummary({
         <Stack spacing={2} alignItems="flex-start">
           {renderLabels}
 
-          {renderInventoryType}
+          {/* {renderInventoryType} */}
 
-          <Typography variant="h5">{name}</Typography>
+          <Typography variant="h5">{name[lang]}</Typography>
 
           {renderRating}
 
@@ -331,8 +303,6 @@ export default function ProductDetailsSummary({
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         {renderColorOptions}
-
-        {renderSizeOptions}
 
         {renderQuantity}
 

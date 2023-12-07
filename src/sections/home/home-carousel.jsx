@@ -12,12 +12,18 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
+import { useLocales } from 'src/locales';
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
 export default function CarouselCategory({ data }) {
+  const { lang } = useLocales();
+
   const carousel = useCarousel({
-    slidesToShow: 4,
+    slidesToShow: data?.categories?.length < 4 ? data.categories.length : 4,
     centerMode: true,
     centerPadding: '0px',
     responsive: [
@@ -40,18 +46,19 @@ export default function CarouselCategory({ data }) {
         mt: 5,
       }}
     >
-      <Typography variant="h4">Top Gifts</Typography>
+      <Typography variant="h4">{data.title[lang]}</Typography>
       <CarouselArrows
         filled
         icon="mingcute:right-fill"
         onNext={carousel.onNext}
         onPrev={carousel.onPrev}
+        dataLength={data.categories.length || 1}
       >
         <Box sx={{ mt: 2 }}>
           <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-            {data.map((item) => (
-              <Box key={item.id} sx={{ px: { xs: 0.3, md: 1 } }}>
-                <CarouselItem item={item} />
+            {data.categories.map((category) => (
+              <Box key={category._id} sx={{ px: { xs: 0.3, md: 1 } }}>
+                <CarouselItem item={category} />
               </Box>
             ))}
           </Carousel>
@@ -62,16 +69,18 @@ export default function CarouselCategory({ data }) {
 }
 
 CarouselCategory.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 
 // ----------------------------------------------------------------------
 
 function CarouselItem({ item }) {
+  const { lang } = useLocales();
   const theme = useTheme();
 
-  const { coverUrl, title } = item;
+  const { coverUrl, title, path } = item;
 
+  const mdUp = useResponsive('up', 'md');
   return (
     <Paper
       sx={{
@@ -80,7 +89,7 @@ function CarouselItem({ item }) {
         position: 'relative',
       }}
     >
-      <Image alt={title} src={coverUrl} ratio="4/3" />
+      <Image alt={title.en} src={coverUrl} ratio={mdUp ? '4/3' : '1/1'} />
 
       <CardContent
         sx={{
@@ -97,22 +106,26 @@ function CarouselItem({ item }) {
           }),
         }}
       >
-        <TextMaxLine variant="h4" sx={{ mb: 2 }}>
-          {title}
+        <TextMaxLine variant="h5" sx={{ mb: 2 }}>
+          {title[lang]}
         </TextMaxLine>
 
         <Link
           color="inherit"
           variant="overline"
+          component={RouterLink}
+          href={paths.product.category(path)}
           sx={{
             opacity: 0.72,
             alignItems: 'center',
             display: 'inline-flex',
+            cursor: 'pointer',
+            fontSize: { xs: 10, md: 14 },
             transition: theme.transitions.create(['opacity']),
             '&:hover': { opacity: 1 },
           }}
         >
-          learn More
+          See
           <Iconify icon="eva:arrow-forward-fill" width={16} sx={{ ml: 1 }} />
         </Link>
       </CardContent>

@@ -28,6 +28,8 @@ import { ProductDetailsSkeleton } from '../product-skeleton';
 import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
+import { useParams } from 'src/routes/hooks';
+import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -51,15 +53,20 @@ const SUMMARY = [
 
 // ----------------------------------------------------------------------
 
-export default function ProductShopDetailsView({ id }) {
+export default function ProductShopDetailsView() {
   const settings = useSettingsContext();
+  const { lang } = useLocales();
 
   const checkout = useCheckoutContext();
 
   const [currentTab, setCurrentTab] = useState('description');
 
-  const { product, productLoading, productError } = useGetProduct(id);
+  const params = useParams();
 
+  const { id } = params;
+
+  const { product, productLoading, productError } = useGetProduct(id);
+  console.log(product);
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
@@ -93,7 +100,7 @@ export default function ProductShopDetailsView({ id }) {
             name: 'Shop',
             href: paths.product.root,
           },
-          { name: product?.name },
+          { name: product?.name[lang] },
         ]}
         sx={{ mb: 5 }}
       />
@@ -153,7 +160,7 @@ export default function ProductShopDetailsView({ id }) {
             },
             {
               value: 'reviews',
-              label: `Reviews (${product.reviews.length})`,
+              label: `Reviews (${product?.reviews?.length})`,
             },
           ].map((tab) => (
             <Tab key={tab.value} value={tab.value} label={tab.label} />
@@ -161,7 +168,7 @@ export default function ProductShopDetailsView({ id }) {
         </Tabs>
 
         {currentTab === 'description' && (
-          <ProductDetailsDescription description={product?.description} />
+          <ProductDetailsDescription description={product?.description[lang]} />
         )}
 
         {currentTab === 'reviews' && (
@@ -190,7 +197,7 @@ export default function ProductShopDetailsView({ id }) {
 
       {productError && renderError}
 
-      {product && renderProduct}
+      {product && !productLoading && renderProduct}
     </Container>
   );
 }

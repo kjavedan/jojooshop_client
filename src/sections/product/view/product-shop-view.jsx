@@ -30,6 +30,7 @@ import ProductSearch from '../product-search';
 import ProductFilters from '../product-filters';
 import { useCheckoutContext } from '../../checkout/context';
 import ProductFiltersResult from '../product-filters-result';
+import { useParams } from 'src/routes/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,10 @@ export default function ProductShopView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { products, productsLoading, productsEmpty } = useGetProducts();
+  const params = useParams();
+  const { category } = params;
+  console.log(category);
+  const { products, productsLoading, productsEmpty } = useGetProducts(category);
 
   const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
 
@@ -174,7 +178,7 @@ export default function ProductShopView() {
 
       {(notFound || productsEmpty) && renderNotFound}
 
-      <ProductList products={dataFiltered} loading={productsLoading} />
+      <ProductList products={products} loading={productsLoading} />
     </Container>
   );
 }
@@ -198,20 +202,11 @@ function applyFilter({ inputData, filters, sortBy }) {
   }
 
   if (sortBy === 'priceDesc') {
-    inputData = orderBy(inputData, ['price'], ['desc']);
+    inputData = orderBy(inputData, ['priceSale'], ['desc']);
   }
 
   if (sortBy === 'priceAsc') {
-    inputData = orderBy(inputData, ['price'], ['asc']);
-  }
-
-  // FILTERS
-  if (gender.length) {
-    inputData = inputData.filter((product) => gender.includes(product.gender));
-  }
-
-  if (category !== 'all') {
-    inputData = inputData.filter((product) => product.category === category);
+    inputData = orderBy(inputData, ['priceSale'], ['asc']);
   }
 
   if (colors.length) {

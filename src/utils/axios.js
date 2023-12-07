@@ -4,7 +4,8 @@ import { HOST_API } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: HOST_API });
+// const axiosInstance = axios.create({ baseURL: HOST_API });
+const axiosInstance = axios.create({ baseURL: 'http://localhost:3000' });
 
 axiosInstance.interceptors.response.use(
   (res) => res,
@@ -26,28 +27,17 @@ export const fetcher = async (args) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
-  chat: '/api/chat',
-  kanban: '/api/kanban',
-  calendar: '/api/calendar',
   auth: {
     me: '/api/auth/me',
     login: '/api/auth/login',
     register: '/api/auth/register',
   },
-  mail: {
-    list: '/api/mail/list',
-    details: '/api/mail/details',
-    labels: '/api/mail/labels',
-  },
-  post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
-  },
   product: {
-    list: '/api/product/list',
-    details: '/api/product/details',
+    list: '/product/',
+    details: '/product/',
     search: '/api/product/search',
+  },
+  category: {
+    list: '/category/',
   },
 };

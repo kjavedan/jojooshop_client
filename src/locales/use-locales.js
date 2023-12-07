@@ -17,6 +17,7 @@ export function useLocales() {
   return {
     allLangs,
     currentLang,
+    lang: currentLang.value,
   };
 }
 
