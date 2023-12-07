@@ -7,6 +7,7 @@ import Markdown from 'src/components/markdown';
 export default function ProductDetailsDescription({ description }) {
   return (
     <Markdown
+      // eslint-disable-next-line react/no-children-prop
       children={description}
       sx={{
         p: 3,
