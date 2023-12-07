@@ -43,7 +43,7 @@ export default function ProductDetailsSummary({
     name,
     // sizes,
     price,
-    coverUrl,
+    imgUrls,
     colors,
     discount,
     newLabel,
@@ -67,11 +67,14 @@ export default function ProductDetailsSummary({
   const defaultValues = {
     id: _id,
     name,
-    coverUrl,
-    available,
-    price,
+    coverUrl: imgUrls[0].url,
+    available: stock,
+    price: priceSale,
+    discountedPrice: !!discount ? discountedPrice : null,
+    discount,
     colors: colors[0],
     quantity: available < 1 ? 0 : 1,
+    stock,
   };
 
   const methods = useForm({
@@ -214,7 +217,7 @@ export default function ProductDetailsSummary({
         />
 
         <Typography variant="caption" component="div" sx={{ textAlign: 'right' }}>
-          Available: {stock}
+          Available: {stock - values.quantity}
         </Typography>
       </Stack>
     </Stack>

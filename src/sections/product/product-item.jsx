@@ -39,20 +39,22 @@ export default function ProductItem({ product }) {
     saleLabel,
     discount,
     discountedPrice,
-    category,
   } = product;
 
   const linkTo = paths.product.details(_id);
 
   const handleAddCart = async () => {
     const newProduct = {
-      _id,
+      id: _id,
       name,
-      imgUrls,
+      coverUrl: imgUrls[0].url,
+      available: stock,
+      price: priceSale,
+      discountedPrice: !!discount ? discountedPrice : null,
+      discount,
+      colors: colors[0],
+      quantity: stock < 1 ? 0 : 1,
       stock,
-      price,
-      colors: [colors[0]],
-      quantity: 1,
     };
     try {
       onAddToCart(newProduct);

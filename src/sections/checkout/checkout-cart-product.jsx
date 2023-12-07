@@ -22,7 +22,7 @@ import { useLocales } from 'src/locales';
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
   const { lang } = useLocales();
-  const { name, size, price, colors, coverUrl, quantity, available } = row;
+  const { name, price, colors, coverUrl, quantity, stock } = row;
   console.log(row);
   return (
     <TableRow>
@@ -44,7 +44,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             alignItems="center"
             sx={{ typography: 'body2', color: 'text.secondary' }}
           >
-            size: <Label sx={{ ml: 0.5 }}> {size} </Label>
+            color:
             <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} />
             <ColorPreview colors={colors} />
           </Stack>
@@ -60,11 +60,11 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             onDecrease={onDecrease}
             onIncrease={onIncrease}
             disabledDecrease={quantity <= 1}
-            disabledIncrease={quantity >= available}
+            disabledIncrease={quantity >= stock}
           />
 
           <Typography variant="caption" component="div" sx={{ color: 'text.secondary', mt: 1 }}>
-            available: {available}
+            available: {stock - quantity}
           </Typography>
         </Box>
       </TableCell>
