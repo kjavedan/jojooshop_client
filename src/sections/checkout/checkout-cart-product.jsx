@@ -22,7 +22,7 @@ import { useLocales } from 'src/locales';
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
   const { lang } = useLocales();
-  const { name, price, colors, coverUrl, quantity, stock } = row;
+  const { name, discount, price, discountedPrice, colors, coverUrl, quantity, stock } = row;
   console.log(row);
   return (
     <TableRow>
@@ -51,7 +51,11 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Stack>
       </TableCell>
 
+      <TableCell>
+        <Label color={discount ? 'error' : 'default'}>{discount ? `${discount}%` : '------'}</Label>
+      </TableCell>
       <TableCell>{fCurrency(price)}</TableCell>
+      <TableCell>{fCurrency(discountedPrice) || '---------'}</TableCell>
 
       <TableCell>
         <Box sx={{ width: 88, textAlign: 'right' }}>
@@ -69,7 +73,9 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
         </Box>
       </TableCell>
 
-      <TableCell align="right">{fCurrency(price * quantity)}</TableCell>
+      <TableCell align="right">
+        {fCurrency((discount ? discountedPrice : price) * quantity)}
+      </TableCell>
 
       <TableCell align="right" sx={{ px: 1 }}>
         <IconButton onClick={onDelete}>

@@ -63,7 +63,6 @@ const StyledThumbnailsContainer = styled('div')(({ length, theme }) => ({
 
 export default function ProductDetailsCarousel({ product }) {
   const theme = useTheme();
-  console.log(product.imgUrls);
   const slides = product.imgUrls.map((img) => ({
     src: img.url,
   }));

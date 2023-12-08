@@ -17,15 +17,12 @@ import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 
-import { useCheckoutContext } from '../checkout/context';
 import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function ProductItem({ product }) {
   const { lang } = useLocales();
-
-  const { onAddToCart } = useCheckoutContext();
 
   const {
     _id,
@@ -43,26 +40,6 @@ export default function ProductItem({ product }) {
 
   const linkTo = paths.product.details(_id);
 
-  const handleAddCart = async () => {
-    const newProduct = {
-      id: _id,
-      name,
-      coverUrl: imgUrls[0].url,
-      available: stock,
-      price: priceSale,
-      discountedPrice: !!discount ? discountedPrice : null,
-      discount,
-      colors: colors[0],
-      quantity: stock < 1 ? 0 : 1,
-      stock,
-    };
-    try {
-      onAddToCart(newProduct);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const renderLabels = (newLabel.enabled || saleLabel.enabled) && (
     <Stack
       direction="row"
@@ -72,42 +49,19 @@ export default function ProductItem({ product }) {
     >
       {newLabel.enabled && (
         <Label variant="filled" color="info">
-          {newLabel.content}
+          {newLabel.content ? newLabel.content[lang] : 'new'}
         </Label>
       )}
       {saleLabel.enabled && (
         <Label variant="filled" color="error">
-          {saleLabel.content}
+          {saleLabel.content ? saleLabel.content[lang] : 'sale'}
         </Label>
       )}
     </Stack>
   );
 
   const renderImg = (
-    <Box sx={{ position: 'relative', p: 1 }}>
-      {!!stock > 0 && (
-        <Fab
-          color="warning"
-          size="medium"
-          className="add-cart-btn"
-          onClick={handleAddCart}
-          sx={{
-            right: 16,
-            bottom: 16,
-            zIndex: 9,
-            opacity: 0,
-            position: 'absolute',
-            transition: (theme) =>
-              theme.transitions.create('all', {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.shorter,
-              }),
-          }}
-        >
-          <Iconify icon="solar:cart-plus-bold" width={24} />
-        </Fab>
-      )}
-
+    <Box sx={{ position: 'relative', p: 1 }} component={RouterLink} href={linkTo}>
       <Tooltip title={!stock > 0 && 'Out of stock'} placement="bottom-end">
         <Image
           alt={name.en}

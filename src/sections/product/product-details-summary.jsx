@@ -266,8 +266,13 @@ export default function ProductDetailsSummary({
 
   const renderLabels = (newLabel.enabled || saleLabel.enabled) && (
     <Stack direction="row" alignItems="center" spacing={1}>
-      {newLabel.enabled && <Label color="info">{newLabel.content}</Label>}
-      {saleLabel.enabled && <Label color="error">{saleLabel.content}</Label>}
+      {newLabel.enabled && (
+        <Label color="info">{newLabel.content ? newLabel.content[lang] : 'new'}</Label>
+      )}
+      {saleLabel.enabled && (
+        <Label color="error">{saleLabel.content ? saleLabel.content[lang] : 'sale'}</Label>
+      )}
+      {discount && <Label color="error">%{discount} discout</Label>}
     </Stack>
   );
 
@@ -276,13 +281,10 @@ export default function ProductDetailsSummary({
       component="span"
       sx={{
         typography: 'overline',
-        color:
-          (inventoryType === 'out of stock' && 'error.main') ||
-          (inventoryType === 'low stock' && 'warning.main') ||
-          'success.main',
+        color: (stock <= 0 && 'error.main') || stock < 20 ? 'warning.main' : 'success.main',
       }}
     >
-      {inventoryType}
+      {(stock <= 0 && 'Out Of Stock') || stock < 20 ? 'Low Stock' : 'In Stock'}
     </Box>
   );
 
@@ -292,7 +294,7 @@ export default function ProductDetailsSummary({
         <Stack spacing={2} alignItems="flex-start">
           {renderLabels}
 
-          {/* {renderInventoryType} */}
+          {renderInventoryType}
 
           <Typography variant="h5">{name[lang]}</Typography>
 

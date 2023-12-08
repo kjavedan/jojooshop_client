@@ -66,7 +66,7 @@ export default function ProductShopDetailsView() {
   const { id } = params;
 
   const { product, productLoading, productError } = useGetProduct(id);
-  console.log(product);
+
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
@@ -80,7 +80,7 @@ export default function ProductShopDetailsView() {
       action={
         <Button
           component={RouterLink}
-          href={paths.product.root}
+          href={paths.product.category(product?.category)}
           startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
           sx={{ mt: 3 }}
         >
@@ -90,7 +90,7 @@ export default function ProductShopDetailsView() {
       sx={{ py: 10 }}
     />
   );
-  // replace the shop route with the parent category path
+
   const renderProduct = product && (
     <>
       <CustomBreadcrumbs
@@ -98,7 +98,7 @@ export default function ProductShopDetailsView() {
           { name: 'Home', href: '/' },
           {
             name: 'Shop',
-            href: paths.product.root,
+            href: paths.product.category(product?.category),
           },
           { name: product?.name[lang] },
         ]}

@@ -60,6 +60,7 @@ export default function ProductShopView() {
   const [filters, setFilters] = useState(defaultFilters);
 
   const params = useParams();
+
   const { category } = params;
   console.log(category);
   const { products, productsLoading, productsEmpty } = useGetProducts(category);

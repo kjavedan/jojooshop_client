@@ -13,7 +13,9 @@ import CheckoutCartProduct from './checkout-cart-product';
 
 const TABLE_HEAD = [
   { id: 'product', label: 'Product' },
+  { id: 'discount', label: 'discount' },
   { id: 'price', label: 'Price' },
+  { id: 'discountedPrice', label: 'discountedPrice' },
   { id: 'quantity', label: 'Quantity' },
   { id: 'totalAmount', label: 'Total Price', align: 'right' },
   { id: '' },
