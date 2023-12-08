@@ -21,16 +21,13 @@ export default function ProductFiltersResult({
   results,
   ...other
 }) {
-  const handleRemoveGender = (inputValue) => {
-    const newValue = filters.gender.filter((item) => item !== inputValue);
-    onFilters('gender', newValue);
-  };
-
-  const handleRemoveCategory = () => {
-    onFilters('category', 'all');
+  const handleRemoveTags = (inputValue) => {
+    const newValue = filters.tags.filter((item) => item !== inputValue);
+    onFilters('tags', newValue);
   };
 
   const handleRemoveColor = (inputValue) => {
+    console.log(inputValue);
     const newValue = filters.colors.filter((item) => item !== inputValue);
     onFilters('colors', newValue);
   };
@@ -53,28 +50,17 @@ export default function ProductFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {!!filters.gender.length && (
-          <Block label="Gender:">
-            {filters.gender.map((item) => (
-              <Chip
-                key={item}
-                label={item}
-                size="small"
-                onDelete={() => handleRemoveGender(item)}
-              />
+        {!!filters.tags.length && (
+          <Block label="Tags:">
+            {filters.tags.map((item) => (
+              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveTags(item)} />
             ))}
           </Block>
         )}
 
-        {filters.category !== 'all' && (
-          <Block label="Category:">
-            <Chip size="small" label={filters.category} onDelete={handleRemoveCategory} />
-          </Block>
-        )}
-
-        {!!filters.colors.length && (
+        {!!filters?.colors.length && (
           <Block label="Colors:">
-            {filters.colors.map((item) => (
+            {filters?.colors?.map((item) => (
               <Chip
                 key={item}
                 size="small"

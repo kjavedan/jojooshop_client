@@ -184,7 +184,6 @@ export default function ProductDetailsSummary({
       <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
         Color
       </Typography>
-
       <Controller
         name="colors"
         control={control}

@@ -34,6 +34,7 @@ export default function ProductFilters({
   canReset,
   onResetFilters,
   //
+  tagOptions,
   colorOptions,
   genderOptions,
   ratingOptions,
@@ -50,14 +51,14 @@ export default function ProductFilters({
     };
   });
 
-  const handleFilterGender = useCallback(
+  const handleFilterTags = useCallback(
     (newValue) => {
-      const checked = filters.gender.includes(newValue)
-        ? filters.gender.filter((value) => value !== newValue)
-        : [...filters.gender, newValue];
-      onFilters('gender', checked);
+      const checked = filters.tags.includes(newValue)
+        ? filters.tags.filter((value) => value !== newValue)
+        : [...filters.tags, newValue];
+      onFilters('tags', checked);
     },
-    [filters.gender, onFilters]
+    [filters.tags, onFilters]
   );
 
   const handleFilterCategory = useCallback(
@@ -116,43 +117,15 @@ export default function ProductFilters({
   const renderGender = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Gender
+        Tags
       </Typography>
-      {genderOptions.map((option) => (
+      {tagOptions.map((tag, index) => (
         <FormControlLabel
-          key={option.value}
+          key={index}
           control={
-            <Checkbox
-              checked={filters.gender.includes(option.label)}
-              onClick={() => handleFilterGender(option.label)}
-            />
+            <Checkbox checked={filters.tags.includes(tag)} onClick={() => handleFilterTags(tag)} />
           }
-          label={option.label}
-        />
-      ))}
-    </Stack>
-  );
-
-  const renderCategory = (
-    <Stack>
-      <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Category
-      </Typography>
-      {categoryOptions.map((option) => (
-        <FormControlLabel
-          key={option}
-          control={
-            <Radio
-              checked={option === filters.category}
-              onClick={() => handleFilterCategory(option)}
-            />
-          }
-          label={option}
-          sx={{
-            ...(option === 'all' && {
-              textTransform: 'capitalize',
-            }),
-          }}
+          label={tag}
         />
       ))}
     </Stack>
@@ -262,9 +235,7 @@ export default function ProductFilters({
           <Stack spacing={3}>
             {renderGender}
 
-            {renderCategory}
-
-            {renderColor}
+            {!!colorOptions.length && renderColor}
 
             {renderPrice}
 
@@ -287,7 +258,7 @@ ProductFilters.propTypes = {
   onResetFilters: PropTypes.func,
   ratingOptions: PropTypes.array,
   categoryOptions: PropTypes.array,
-  colorOptions: PropTypes.arrayOf(PropTypes.string),
+  colorOptions: PropTypes.array,
 };
 
 // ----------------------------------------------------------------------

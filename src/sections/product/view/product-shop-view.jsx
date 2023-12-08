@@ -1,6 +1,6 @@
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
@@ -31,10 +31,13 @@ import ProductFilters from '../product-filters';
 import { useCheckoutContext } from '../../checkout/context';
 import ProductFiltersResult from '../product-filters-result';
 import { useParams } from 'src/routes/hooks';
+import { useGetGroups } from 'src/api/category';
+import { conforms } from 'lodash';
 
 // ----------------------------------------------------------------------
 
 const defaultFilters = {
+  tags: [],
   gender: [],
   colors: [],
   rating: '',
@@ -59,10 +62,16 @@ export default function ProductShopView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
+  const [tagOptions, setTagOptions] = useState([]);
+
+  const [colorOptions, setColorOptions] = useState([]);
+
   const params = useParams();
 
   const { category } = params;
-  console.log(category);
+
+  const { groups } = useGetGroups();
+
   const { products, productsLoading, productsEmpty } = useGetProducts(category);
 
   const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
@@ -79,6 +88,19 @@ export default function ProductShopView() {
     filters,
     sortBy,
   });
+
+  useEffect(() => {
+    const foundCategory = groups
+      .flatMap((group) => group.categories)
+      .find((groupCategory) => groupCategory.path === category);
+
+    if (foundCategory) {
+      const { filters, colors } = foundCategory;
+      const tags = filters.map((filter) => filter.key);
+      setTagOptions(tags);
+      setColorOptions(colors);
+    }
+  }, [category, groups]);
 
   const canReset = !isEqual(defaultFilters, filters);
 
@@ -123,9 +145,10 @@ export default function ProductShopView() {
           canReset={canReset}
           onResetFilters={handleResetFilters}
           //
-          colorOptions={PRODUCT_COLOR_OPTIONS}
+          colorOptions={colorOptions}
           ratingOptions={PRODUCT_RATING_OPTIONS}
           genderOptions={PRODUCT_GENDER_OPTIONS}
+          tagOptions={tagOptions}
           categoryOptions={['all', ...PRODUCT_CATEGORY_OPTIONS]}
         />
 
