@@ -15,12 +15,12 @@ export default function ColorPreview({ colors, limit = 3, sx }) {
     <Stack component="span" direction="row" alignItems="center" justifyContent="flex-end" sx={sx}>
       {renderColors.map((color, index) => (
         <Box
-          key={color + index}
+          key={index}
           sx={{
             ml: -0.75,
             width: 16,
             height: 16,
-            bgcolor: color,
+            bgcolor: color.value,
             borderRadius: '50%',
             border: (theme) => `solid 2px ${theme.palette.background.paper}`,
             boxShadow: (theme) => `inset -1px 1px 2px ${alpha(theme.palette.common.black, 0.24)}`,
@@ -36,7 +36,7 @@ export default function ColorPreview({ colors, limit = 3, sx }) {
 }
 
 ColorPreview.propTypes = {
-  colors: PropTypes.arrayOf(PropTypes.string),
+  colors: PropTypes.arrayOf(PropTypes.object),
   limit: PropTypes.number,
   sx: PropTypes.object,
 };

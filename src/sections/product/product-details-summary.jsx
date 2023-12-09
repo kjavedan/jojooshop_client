@@ -191,6 +191,7 @@ export default function ProductDetailsSummary({
           <ColorPicker
             colors={colors}
             selected={field.value}
+            singleSelect={true}
             onSelectColor={(color) => field.onChange(color)}
             limit={4}
           />

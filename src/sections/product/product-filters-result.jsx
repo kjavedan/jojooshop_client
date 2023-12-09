@@ -40,6 +40,8 @@ export default function ProductFiltersResult({
     onFilters('rating', '');
   };
 
+  console.log(filters.colors);
+
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
@@ -60,9 +62,9 @@ export default function ProductFiltersResult({
 
         {!!filters?.colors.length && (
           <Block label="Colors:">
-            {filters?.colors?.map((item) => (
+            {filters?.colors?.map((item, index) => (
               <Chip
-                key={item}
+                key={index}
                 size="small"
                 label={
                   <Box
@@ -70,7 +72,7 @@ export default function ProductFiltersResult({
                       ml: -0.5,
                       width: 18,
                       height: 18,
-                      bgcolor: item,
+                      bgcolor: item.value,
                       borderRadius: '50%',
                       border: (theme) => `solid 1px ${alpha(theme.palette.common.white, 0.24)}`,
                     }}

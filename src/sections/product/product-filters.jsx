@@ -61,13 +61,6 @@ export default function ProductFilters({
     [filters.tags, onFilters]
   );
 
-  const handleFilterCategory = useCallback(
-    (newValue) => {
-      onFilters('category', newValue);
-    },
-    [onFilters]
-  );
-
   const handleFilterColors = useCallback(
     (newValue) => {
       onFilters('colors', newValue);
@@ -138,6 +131,7 @@ export default function ProductFilters({
       </Typography>
       <ColorPicker
         selected={filters.colors}
+        singleSelect={false}
         onSelectColor={(colors) => handleFilterColors(colors)}
         colors={colorOptions}
         limit={6}

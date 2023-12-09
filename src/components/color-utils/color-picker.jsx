@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 import { forwardRef, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
@@ -10,21 +10,23 @@ import Iconify from '../iconify';
 // ----------------------------------------------------------------------
 
 const ColorPicker = forwardRef(
-  ({ colors, selected, onSelectColor, limit = 'auto', sx, ...other }, ref) => {
-    const singleSelect = typeof selected === 'object';
-    console.log(colors);
-    console.log(selected);
+  ({ colors, selected, onSelectColor, singleSelect, limit = 'auto', sx, ...other }, ref) => {
+    console.log('Type: ', typeof selected);
+    console.log('Selected: ', selected);
+
     const handleSelect = useCallback(
       (color) => {
         if (singleSelect) {
-          if (color !== selected) {
+          console.log(color);
+          console.log(selected);
+          if (color.value !== selected.value) {
+            console.log('ran');
             onSelectColor(color);
           }
         } else {
-          const newSelected = selected.includes(color.value)
+          const newSelected = selected.includes(color)
             ? selected.filter((value) => value !== color)
             : [...selected, color];
-
           onSelectColor(newSelected);
         }
       },
@@ -48,8 +50,8 @@ const ColorPicker = forwardRef(
       >
         {colors.map((color) => {
           const hasSelected = singleSelect
-            ? selected === color.value
-            : selected.includes(color.value);
+            ? selected.value === color.value
+            : selected.includes(color);
 
           return (
             <ButtonBase
@@ -60,7 +62,7 @@ const ColorPicker = forwardRef(
                 borderRadius: '50%',
               }}
               onClick={() => {
-                handleSelect(color.value);
+                handleSelect(color);
               }}
             >
               <Stack
@@ -107,7 +109,7 @@ ColorPicker.propTypes = {
   colors: PropTypes.array,
   limit: PropTypes.number,
   onSelectColor: PropTypes.func,
-  selected: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
   sx: PropTypes.object,
 };
 
