@@ -14,7 +14,7 @@ export default function ProductReviewList({ reviews }) {
       ))}
 
       <Pagination
-        count={10}
+        count={1}
         sx={{
           mx: 'auto',
           [`& .${paginationClasses.ul}`]: {

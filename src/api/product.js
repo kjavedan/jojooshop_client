@@ -15,6 +15,7 @@ export function useGetProducts(category, page, rowsPerPage = 10, filters, sortBy
         rowsPerPage,
         filters: JSON.stringify(filters),
         srotBy: JSON.stringify(sortBy),
+        role: 'user',
       },
     },
     ,
@@ -25,6 +26,7 @@ export function useGetProducts(category, page, rowsPerPage = 10, filters, sortBy
   const memoizedValue = useMemo(
     () => ({
       products: data?.products || [],
+      totalCount: data?.totalCount,
       totalPages: Math.ceil(data?.totalCount / rowsPerPage) || 0,
       productsLoading: isLoading,
       productsError: error,

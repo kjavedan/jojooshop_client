@@ -173,10 +173,9 @@ export default function ProductShopDetailsView() {
 
         {currentTab === 'reviews' && (
           <ProductDetailsReview
-            ratings={product.ratings}
-            reviews={product.reviews}
-            totalRatings={product.totalRatings}
-            totalReviews={product.totalReviews}
+            rate={product?.rate}
+            reviews={product?.reviews}
+            totalReviews={product?.reviews?.length}
           />
         )}
       </Card>

@@ -78,7 +78,7 @@ export default function ProductShopView() {
 
   const { groups } = useGetGroups();
 
-  const { products, totalPages, productsLoading, productsEmpty } = useGetProducts(
+  const { products, totalPages, totalCount, productsLoading, productsEmpty } = useGetProducts(
     category,
     page,
     10,
@@ -184,7 +184,7 @@ export default function ProductShopView() {
       canReset={canReset}
       onResetFilters={handleResetFilters}
       //
-      results={dataFiltered.length}
+      results={totalCount}
     />
   );
 
