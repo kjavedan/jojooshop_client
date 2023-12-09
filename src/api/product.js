@@ -5,20 +5,21 @@ import { fetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export function useGetProducts(category) {
-  const URL = [endpoints.product.list, { params: { category } }];
+export function useGetProducts(category, page, rowsPerPage = 10) {
+  const URL = [endpoints.product.list, { params: { category, page, rowsPerPage } }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
       products: data?.products || [],
+      totalPages: Math.ceil(data?.totalCount / rowsPerPage) || 0,
       productsLoading: isLoading,
       productsError: error,
       productsValidating: isValidating,
       productsEmpty: !isLoading && !data?.products.length,
     }),
-    [data?.products, error, isLoading, isValidating]
+    [data, rowsPerPage, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -38,7 +39,7 @@ export function useGetProduct(productId) {
       productError: error,
       productValidating: isValidating,
     }),
-    [data?.product, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -46,8 +47,8 @@ export function useGetProduct(productId) {
 
 // ----------------------------------------------------------------------
 
-export function useSearchProducts(query) {
-  const URL = query ? [endpoints.product.search, { params: { query } }] : '';
+export function useSearchProducts(category, rowsPerPage, page) {
+  const URL = [endpoints.product.search, { params: { category, rowsPerPage, page } }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     keepPreviousData: true,

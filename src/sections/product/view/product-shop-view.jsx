@@ -64,13 +64,26 @@ export default function ProductShopView() {
 
   const [colorOptions, setColorOptions] = useState([]);
 
+  const [page, setPage] = useState(1);
+
+  const handlePageChange = useCallback(
+    (event, newPage) => {
+      setPage(newPage);
+    },
+    [setPage]
+  );
+
   const params = useParams();
 
   const { category } = params;
 
   const { groups } = useGetGroups();
 
-  const { products, productsLoading, productsEmpty } = useGetProducts(category);
+  const { products, totalPages, productsLoading, productsEmpty } = useGetProducts(
+    category,
+    page,
+    10
+  );
 
   const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
 
@@ -200,7 +213,12 @@ export default function ProductShopView() {
 
       {(notFound || productsEmpty) && renderNotFound}
 
-      <ProductList products={products} loading={productsLoading} />
+      <ProductList
+        products={products}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        loading={productsLoading}
+      />
     </Container>
   );
 }

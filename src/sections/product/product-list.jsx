@@ -8,7 +8,7 @@ import { ProductItemSkeleton } from './product-skeleton';
 
 // ----------------------------------------------------------------------
 
-export default function ProductList({ products, loading, ...other }) {
+export default function ProductList({ products, totalPages, handlePageChange, loading, ...other }) {
   const renderSkeleton = (
     <>
       {[...Array(16)].map((_, index) => (
@@ -41,9 +41,10 @@ export default function ProductList({ products, loading, ...other }) {
         {loading ? renderSkeleton : renderList}
       </Box>
 
-      {products.length > 8 && (
+      {products.length > 1 && (
         <Pagination
-          count={8}
+          count={totalPages}
+          onChange={handlePageChange}
           sx={{
             mt: 8,
             [`& .${paginationClasses.ul}`]: {
@@ -59,4 +60,6 @@ export default function ProductList({ products, loading, ...other }) {
 ProductList.propTypes = {
   loading: PropTypes.bool,
   products: PropTypes.array,
+  totalPages: PropTypes.number,
+  handlePageChange: PropTypes.func,
 };

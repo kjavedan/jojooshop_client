@@ -127,4 +127,5 @@ CarouselArrows.propTypes = {
   rightButtonProps: PropTypes.object,
   shape: PropTypes.oneOf(['circular', 'rounded']),
   sx: PropTypes.object,
+  dataLength: PropTypes.number,
 };

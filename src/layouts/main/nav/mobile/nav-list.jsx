@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import Collapse from '@mui/material/Collapse';
-import { stackClasses } from '@mui/material/Stack';
-import { listItemButtonClasses } from '@mui/material/ListItemButton';
 
 import { useActiveLink } from 'src/routes/hooks/use-active-link';
 
