@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { m } from 'framer-motion';
 import { useCallback } from 'react';
 
@@ -63,3 +64,7 @@ export default function LanguagePopover({ sx }) {
     </>
   );
 }
+
+LanguagePopover.propTypes = {
+  sx: PropTypes.object,
+};

@@ -1,4 +1,4 @@
-import PropTypes, { object } from 'prop-types';
+import PropTypes from 'prop-types';
 import { forwardRef, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
@@ -11,9 +11,6 @@ import Iconify from '../iconify';
 
 const ColorPicker = forwardRef(
   ({ colors, selected, onSelectColor, singleSelect, limit = 'auto', sx, ...other }, ref) => {
-    console.log('Type: ', typeof selected);
-    console.log('Selected: ', selected);
-
     const handleSelect = useCallback(
       (color) => {
         if (singleSelect) {
@@ -109,6 +106,7 @@ ColorPicker.propTypes = {
   colors: PropTypes.array,
   limit: PropTypes.number,
   onSelectColor: PropTypes.func,
+  singleSelect: PropTypes.bool,
   selected: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
   sx: PropTypes.object,
 };

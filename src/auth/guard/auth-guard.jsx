@@ -25,7 +25,7 @@ AuthGuard.propTypes = {
 function Container({ children }) {
   const router = useRouter();
 
-  const { authenticated, method } = useAuthContext();
+  const { authenticated } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
@@ -35,7 +35,7 @@ function Container({ children }) {
         returnTo: window.location.pathname,
       }).toString();
 
-      const loginPath = paths.auth.jwt.login;
+      const loginPath = paths.auth.login;
 
       const href = `${loginPath}?${searchParams}`;
 
@@ -43,12 +43,11 @@ function Container({ children }) {
     } else {
       setChecked(true);
     }
-  }, [authenticated, method, router]);
+  }, [authenticated, router]);
 
   useEffect(() => {
     check();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [check]);
 
   if (!checked) {
     return null;

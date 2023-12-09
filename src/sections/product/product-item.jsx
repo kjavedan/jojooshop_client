@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 
-import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
@@ -14,7 +13,6 @@ import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
 import Image from 'src/components/image';
-import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 
 import { useLocales } from 'src/locales';
@@ -28,7 +26,6 @@ export default function ProductItem({ product }) {
     _id,
     name,
     imgUrls,
-    price,
     colors,
     stock,
     priceSale,
@@ -89,13 +86,13 @@ export default function ProductItem({ product }) {
         <ColorPreview colors={colors} />
 
         <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
-          {priceSale && (
+          {!!discount && (
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {fCurrency(priceSale)}
+              {fCurrency(discountedPrice)}
             </Box>
           )}
 
-          <Box component="span">{fCurrency(price)}</Box>
+          <Box component="span">{fCurrency(priceSale)}</Box>
         </Stack>
       </Stack>
     </Stack>

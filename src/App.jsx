@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-imports */
 import 'src/global.css';
 
 // i18n
@@ -17,34 +16,37 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 import { CheckoutProvider } from 'src/sections/checkout/context';
 
+import { AuthProvider } from 'src/auth/context/jwt';
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
 
   return (
-    <LocalizationProvider>
-      <SettingsProvider
-        defaultSettings={{
-          themeMode: 'light', // 'light' | 'dark'
-          themeDirection: 'ltr', //  'rtl' | 'ltr'
-          themeContrast: 'default', // 'default' | 'bold'
-          themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-          themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-          themeStretch: false,
-        }}
-      >
-        <ThemeProvider>
-          <MotionLazy>
-            <SnackbarProvider>
-              <CheckoutProvider>
-                <SettingsDrawer />
-                <Router />
-              </CheckoutProvider>
-            </SnackbarProvider>
-          </MotionLazy>
-        </ThemeProvider>
-      </SettingsProvider>
-    </LocalizationProvider>
+    <AuthProvider>
+      <LocalizationProvider>
+        <SettingsProvider
+          defaultSettings={{
+            themeMode: 'light', // 'light' | 'dark'
+            themeDirection: 'ltr', //  'rtl' | 'ltr'
+            themeContrast: 'default', // 'default' | 'bold'
+            themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+            themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+            themeStretch: false,
+          }}
+        >
+          <ThemeProvider>
+            <MotionLazy>
+              <SnackbarProvider>
+                <CheckoutProvider>
+                  <SettingsDrawer />
+                  <Router />
+                </CheckoutProvider>
+              </SnackbarProvider>
+            </MotionLazy>
+          </ThemeProvider>
+        </SettingsProvider>
+      </LocalizationProvider>
+    </AuthProvider>
   );
 }

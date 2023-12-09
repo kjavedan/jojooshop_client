@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
 
-import Radio from '@mui/material/Radio';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Drawer from '@mui/material/Drawer';
@@ -36,9 +35,7 @@ export default function ProductFilters({
   //
   tagOptions,
   colorOptions,
-  genderOptions,
   ratingOptions,
-  categoryOptions,
 }) {
   const marksLabel = [...Array(21)].map((_, index) => {
     const value = index * 10;
@@ -248,11 +245,10 @@ ProductFilters.propTypes = {
   canReset: PropTypes.bool,
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  genderOptions: PropTypes.array,
   onResetFilters: PropTypes.func,
   ratingOptions: PropTypes.array,
-  categoryOptions: PropTypes.array,
   colorOptions: PropTypes.array,
+  tagOptions: PropTypes.arrayOf(PropTypes.string),
 };
 
 // ----------------------------------------------------------------------

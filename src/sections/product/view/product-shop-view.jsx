@@ -1,6 +1,6 @@
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
@@ -14,7 +14,6 @@ import { useDebounce } from 'src/hooks/use-debounce';
 import { useGetProducts, useSearchProducts } from 'src/api/product';
 import {
   PRODUCT_SORT_OPTIONS,
-  PRODUCT_COLOR_OPTIONS,
   PRODUCT_GENDER_OPTIONS,
   PRODUCT_RATING_OPTIONS,
   PRODUCT_CATEGORY_OPTIONS,
@@ -32,7 +31,6 @@ import { useCheckoutContext } from '../../checkout/context';
 import ProductFiltersResult from '../product-filters-result';
 import { useParams } from 'src/routes/hooks';
 import { useGetGroups } from 'src/api/category';
-import { conforms } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -210,7 +208,7 @@ export default function ProductShopView() {
 // ----------------------------------------------------------------------
 
 function applyFilter({ inputData, filters, sortBy }) {
-  const { gender, category, colors, priceRange, rating } = filters;
+  const { colors, priceRange, rating } = filters;
 
   const min = priceRange[0];
 

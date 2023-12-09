@@ -16,11 +16,19 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useRouter, useSearchParams } from 'src/routes/hooks';
+import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export default function ModernLoginView() {
   const password = useBoolean();
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const returnTo = searchParams.get('returnTo') || paths.checkout.root;
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
@@ -46,14 +54,15 @@ export default function ModernLoginView() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       console.info('DATA', data);
+      router.replace(returnTo);
     } catch (error) {
       console.error(error);
     }
   });
 
   const renderHead = (
-    <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">Sign in to Minimal</Typography>
+    <Stack spacing={2} sx={{ mb: 4 }}>
+      <Typography variant="h4">Login for best experience</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
@@ -110,11 +119,30 @@ export default function ModernLoginView() {
     </Stack>
   );
 
+  const renderGoogleLogin = (
+    <>
+      <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
+      <LoadingButton
+        fullWidth
+        color="inherit"
+        size="large"
+        variant="outlined"
+        loading={isSubmitting}
+        endIcon={<Iconify icon="flat-color-icons:google" />}
+        sx={{ justifyContent: 'center', pl: 2, pr: 1.5 }}
+      >
+        Google
+      </LoadingButton>
+    </>
+  );
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}
+
+      {renderGoogleLogin}
     </FormProvider>
   );
 }

@@ -19,6 +19,7 @@ import { varFade, MotionViewport } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
+/* eslint react-refresh/only-export-components: off */
 export const SKILLS = [...Array(3)].map((_, index) => ({
   label: ['Development', 'Design', 'Marketing'][index],
   value: [20, 40, 60][index],

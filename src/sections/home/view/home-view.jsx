@@ -1,15 +1,9 @@
 import Container from '@mui/material/Container';
 import { useSettingsContext } from 'src/components/settings';
-import Box from '@mui/material/Box';
 
-import { paths } from 'src/routes/paths';
-
-import { _mock } from 'src/_mock';
-
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useGetGroups } from 'src/api/category';
 
 import CarouselCategory from '../home-carousel';
-import { useGetGroups } from 'src/api/category';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {

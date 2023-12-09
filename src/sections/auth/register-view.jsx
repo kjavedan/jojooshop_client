@@ -16,6 +16,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { Divider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -23,15 +24,13 @@ export default function ModernRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name required'),
-    lastName: Yup.string().required('Last name required'),
+    fullName: Yup.string().required('FullName required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
   });
 
   const defaultValues = {
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
     password: '',
   };
@@ -57,13 +56,13 @@ export default function ModernRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">Register</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
 
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          Sign in
+          Login
         </Link>
       </Stack>
     </Stack>
@@ -94,8 +93,7 @@ export default function ModernRegisterView() {
   const renderForm = (
     <Stack spacing={2.5}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField name="firstName" label="First name" />
-        <RHFTextField name="lastName" label="Last name" />
+        <RHFTextField name="fullName" label="Full name" />
       </Stack>
 
       <RHFTextField name="email" label="Email address" />
@@ -130,6 +128,23 @@ export default function ModernRegisterView() {
     </Stack>
   );
 
+  const renderGoogleRegister = (
+    <>
+      <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
+      <LoadingButton
+        fullWidth
+        color="inherit"
+        size="large"
+        variant="outlined"
+        loading={isSubmitting}
+        endIcon={<Iconify icon="flat-color-icons:google" />}
+        sx={{ justifyContent: 'center', pl: 2, pr: 1.5 }}
+      >
+        Google
+      </LoadingButton>
+    </>
+  );
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
@@ -137,6 +152,8 @@ export default function ModernRegisterView() {
       {renderForm}
 
       {renderTerms}
+
+      {renderGoogleRegister}
     </FormProvider>
   );
 }

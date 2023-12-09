@@ -8,9 +8,7 @@ import Stack from '@mui/material/Stack';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import { formHelperTextClasses } from '@mui/material/FormHelperText';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -20,7 +18,7 @@ import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
-import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form';
 
 import IncrementerButton from './common/incrementer-button';
 import { useLocales } from 'src/locales';
@@ -42,7 +40,6 @@ export default function ProductDetailsSummary({
     _id,
     name,
     // sizes,
-    price,
     imgUrls,
     colors,
     discount,
@@ -53,7 +50,6 @@ export default function ProductDetailsSummary({
     saleLabel,
     rate,
     totalReviews,
-    inventoryType,
     subDescription,
     discountedPrice,
   } = product;
@@ -70,7 +66,7 @@ export default function ProductDetailsSummary({
     coverUrl: imgUrls[0].url,
     available: stock,
     price: priceSale,
-    discountedPrice: !!discount ? discountedPrice : null,
+    discountedPrice: discount ? discountedPrice : null,
     discount,
     colors: colors[0],
     quantity: available < 1 ? 0 : 1,

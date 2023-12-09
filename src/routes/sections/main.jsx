@@ -25,7 +25,7 @@ const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
 const ProductCheckoutPage = lazy(() => import('src/pages/checkout/checkout'));
 
 // ----------------------------------------------------------------------
-
+/* eslint react-refresh/only-export-components: off */
 export const mainRoutes = [
   {
     element: (
