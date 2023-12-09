@@ -8,7 +8,7 @@ export const PRODUCT_GENDER_OPTIONS = [
 
 export const PRODUCT_CATEGORY_OPTIONS = ['Shose', 'Apparel', 'Accessories'];
 
-export const PRODUCT_RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
+export const PRODUCT_RATING_OPTIONS = [4, 3, 2, 1];
 
 export const PRODUCT_COLOR_OPTIONS = [
   '#00AB55',
@@ -64,8 +64,9 @@ export const PRODUCT_PUBLISH_OPTIONS = [
 ];
 
 export const PRODUCT_SORT_OPTIONS = [
-  { value: 'featured', label: 'Featured' },
+  { value: 'featured', label: 'featured' },
   { value: 'newest', label: 'Newest' },
+  { value: 'discount', label: 'Heighest discount' },
   { value: 'priceDesc', label: 'Price: High - Low' },
   { value: 'priceAsc', label: 'Price: Low - High' },
 ];

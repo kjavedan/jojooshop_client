@@ -12,12 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 
 import { useGetProducts, useSearchProducts } from 'src/api/product';
-import {
-  PRODUCT_SORT_OPTIONS,
-  PRODUCT_GENDER_OPTIONS,
-  PRODUCT_RATING_OPTIONS,
-  PRODUCT_CATEGORY_OPTIONS,
-} from 'src/_mock';
+import { PRODUCT_SORT_OPTIONS, PRODUCT_RATING_OPTIONS } from 'src/_mock';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
@@ -36,11 +31,9 @@ import { useGetGroups } from 'src/api/category';
 
 const defaultFilters = {
   tags: [],
-  gender: [],
   colors: [],
-  rating: '',
-  category: 'all',
-  priceRange: [0, 200],
+  rate: 0,
+  priceRange: [0, 0],
 };
 
 // ----------------------------------------------------------------------
@@ -50,6 +43,10 @@ export default function ProductShopView() {
 
   const checkout = useCheckoutContext();
 
+  const params = useParams();
+
+  const { category } = params;
+
   const openFilters = useBoolean();
 
   const [sortBy, setSortBy] = useState('featured');
@@ -57,6 +54,10 @@ export default function ProductShopView() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const debouncedQuery = useDebounce(searchQuery);
+
+  // console.log(debouncedQuery);
+
+  const [dataFiltered, setDataFilteredData] = useState([]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -66,6 +67,8 @@ export default function ProductShopView() {
 
   const [page, setPage] = useState(1);
 
+  const [categoryPriceRange, setCategoryPriceRange] = useState({ min: 0, max: 500 });
+
   const handlePageChange = useCallback(
     (event, newPage) => {
       setPage(newPage);
@@ -73,19 +76,18 @@ export default function ProductShopView() {
     [setPage]
   );
 
-  const params = useParams();
-
-  const { category } = params;
-
   const { groups } = useGetGroups();
 
   const { products, totalPages, productsLoading, productsEmpty } = useGetProducts(
     category,
     page,
-    10
+    10,
+    filters,
+    sortBy
   );
 
-  const { searchResults, searchLoading } = useSearchProducts(debouncedQuery);
+  const { searchResults, totalSearchPages, searchEmpty, searchLoading } =
+    useSearchProducts(debouncedQuery);
 
   const handleFilters = useCallback((name, value) => {
     setFilters((prevState) => ({
@@ -94,11 +96,8 @@ export default function ProductShopView() {
     }));
   }, []);
 
-  const dataFiltered = applyFilter({
-    inputData: products,
-    filters,
-    sortBy,
-  });
+  console.log(filters);
+  console.log(sortBy);
 
   useEffect(() => {
     const foundCategory = groups
@@ -106,16 +105,15 @@ export default function ProductShopView() {
       .find((groupCategory) => groupCategory.path === category);
 
     if (foundCategory) {
-      const { filters, colors } = foundCategory;
-      const tags = filters.map((filter) => filter.key);
+      const { filters, colors, priceRange } = foundCategory;
+      const tags = filters.map((filter) => ({ key: filter.key, title: filter.title }));
       setTagOptions(tags);
       setColorOptions(colors);
+      setCategoryPriceRange(priceRange);
     }
   }, [category, groups]);
 
   const canReset = !isEqual(defaultFilters, filters);
-
-  const notFound = !dataFiltered.length && canReset;
 
   const handleSortBy = useCallback((newValue) => {
     setSortBy(newValue);
@@ -128,6 +126,17 @@ export default function ProductShopView() {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  const handleFetchFilteredData = useCallback(() => {
+    const { colors, priceRange, rating, tags } = filters;
+    if (colors.length || !!priceRange[1] || !!rating || tags.length) {
+      console.log('need filtering');
+    }
+  }, [filters, sortBy]);
+
+  useEffect(() => {
+    handleFetchFilteredData();
+  }, [filters, sortBy]);
 
   const renderFilters = (
     <Stack
@@ -158,9 +167,8 @@ export default function ProductShopView() {
           //
           colorOptions={colorOptions}
           ratingOptions={PRODUCT_RATING_OPTIONS}
-          genderOptions={PRODUCT_GENDER_OPTIONS}
           tagOptions={tagOptions}
-          categoryOptions={['all', ...PRODUCT_CATEGORY_OPTIONS]}
+          categoryPriceRange={categoryPriceRange}
         />
 
         <ProductSort sort={sortBy} onSort={handleSortBy} sortOptions={PRODUCT_SORT_OPTIONS} />
@@ -211,7 +219,7 @@ export default function ProductShopView() {
         {canReset && renderResults}
       </Stack>
 
-      {(notFound || productsEmpty) && renderNotFound}
+      {productsEmpty && renderNotFound}
 
       <ProductList
         products={products}
@@ -224,52 +232,3 @@ export default function ProductShopView() {
 }
 
 // ----------------------------------------------------------------------
-
-function applyFilter({ inputData, filters, sortBy }) {
-  const { colors, priceRange, rating } = filters;
-
-  const min = priceRange[0];
-
-  const max = priceRange[1];
-
-  // SORT BY
-  if (sortBy === 'featured') {
-    inputData = orderBy(inputData, ['totalSold'], ['desc']);
-  }
-
-  if (sortBy === 'newest') {
-    inputData = orderBy(inputData, ['createdAt'], ['desc']);
-  }
-
-  if (sortBy === 'priceDesc') {
-    inputData = orderBy(inputData, ['priceSale'], ['desc']);
-  }
-
-  if (sortBy === 'priceAsc') {
-    inputData = orderBy(inputData, ['priceSale'], ['asc']);
-  }
-
-  if (colors.length) {
-    inputData = inputData.filter((product) =>
-      product.colors.some((color) => colors.includes(color))
-    );
-  }
-
-  if (min !== 0 || max !== 200) {
-    inputData = inputData.filter((product) => product.price >= min && product.price <= max);
-  }
-
-  if (rating) {
-    inputData = inputData.filter((product) => {
-      const convertRating = (value) => {
-        if (value === 'up4Star') return 4;
-        if (value === 'up3Star') return 3;
-        if (value === 'up2Star') return 2;
-        return 1;
-      };
-      return product.totalRatings > convertRating(rating);
-    });
-  }
-
-  return inputData;
-}

@@ -88,11 +88,11 @@ export default function ProductItem({ product }) {
         <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
           {!!discount && (
             <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {fCurrency(discountedPrice)}
+              {fCurrency(priceSale)}
             </Box>
           )}
 
-          <Box component="span">{fCurrency(priceSale)}</Box>
+          <Box component="span">{fCurrency(discountedPrice)}</Box>
         </Stack>
       </Stack>
     </Stack>

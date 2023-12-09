@@ -36,9 +36,10 @@ export default function ProductFilters({
   tagOptions,
   colorOptions,
   ratingOptions,
+  categoryPriceRange,
 }) {
   const marksLabel = [...Array(21)].map((_, index) => {
-    const value = index * 10;
+    const value = index * (categoryPriceRange.max / 20);
 
     const firstValue = index === 0 ? `$${value}` : `${value}`;
 
@@ -74,7 +75,7 @@ export default function ProductFilters({
 
   const handleFilterRating = useCallback(
     (newValue) => {
-      onFilters('rating', newValue);
+      onFilters('rate', newValue);
     },
     [onFilters]
   );
@@ -104,7 +105,7 @@ export default function ProductFilters({
     </Stack>
   );
 
-  const renderGender = (
+  const renderTags = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
         Tags
@@ -113,9 +114,12 @@ export default function ProductFilters({
         <FormControlLabel
           key={index}
           control={
-            <Checkbox checked={filters.tags.includes(tag)} onClick={() => handleFilterTags(tag)} />
+            <Checkbox
+              checked={filters.tags.includes(tag.key)}
+              onClick={() => handleFilterTags(tag.key)}
+            />
           }
-          label={tag}
+          label={tag.title.en}
         />
       ))}
     </Stack>
@@ -143,16 +147,26 @@ export default function ProductFilters({
       </Typography>
 
       <Stack direction="row" spacing={5} sx={{ my: 2 }}>
-        <InputRange type="min" value={filters.priceRange} onFilters={onFilters} />
-        <InputRange type="max" value={filters.priceRange} onFilters={onFilters} />
+        <InputRange
+          type="min"
+          value={filters.priceRange}
+          categoryPriceRange={categoryPriceRange}
+          onFilters={onFilters}
+        />
+        <InputRange
+          type="max"
+          value={filters.priceRange}
+          categoryPriceRange={categoryPriceRange}
+          onFilters={onFilters}
+        />
       </Stack>
 
       <Slider
         value={filters.priceRange}
         onChange={handleFilterPriceRange}
-        step={10}
-        min={0}
-        max={200}
+        step={100}
+        min={categoryPriceRange.min}
+        max={categoryPriceRange.max}
         marks={marksLabel}
         getAriaValueText={(value) => `$${value}`}
         valueLabelFormat={(value) => `$${value}`}
@@ -224,7 +238,7 @@ export default function ProductFilters({
 
         <Scrollbar sx={{ px: 2.5, py: 3 }}>
           <Stack spacing={3}>
-            {renderGender}
+            {renderTags}
 
             {!!colorOptions.length && renderColor}
 
@@ -248,28 +262,29 @@ ProductFilters.propTypes = {
   onResetFilters: PropTypes.func,
   ratingOptions: PropTypes.array,
   colorOptions: PropTypes.array,
-  tagOptions: PropTypes.arrayOf(PropTypes.string),
+  categoryPriceRange: PropTypes.object,
+  tagOptions: PropTypes.arrayOf(PropTypes.object),
 };
 
 // ----------------------------------------------------------------------
 
-function InputRange({ type, value, onFilters }) {
+function InputRange({ type, value, categoryPriceRange, onFilters }) {
   const min = value[0];
 
   const max = value[1];
 
   const handleBlurInputRange = useCallback(() => {
-    if (min < 0) {
-      onFilters('priceRange', [0, max]);
+    if (min < categoryPriceRange.min) {
+      onFilters('priceRange', [categoryPriceRange.min, max]);
     }
-    if (min > 200) {
-      onFilters('priceRange', [200, max]);
+    if (min > categoryPriceRange.max) {
+      onFilters('priceRange', [categoryPriceRange.mx, max]);
     }
-    if (max < 0) {
-      onFilters('priceRange', [min, 0]);
+    if (max < categoryPriceRange.min) {
+      onFilters('priceRange', [min, categoryPriceRange.min]);
     }
-    if (max > 200) {
-      onFilters('priceRange', [min, 200]);
+    if (max > categoryPriceRange.max) {
+      onFilters('priceRange', [min, categoryPriceRange.max]);
     }
   }, [max, min, onFilters]);
 
@@ -297,9 +312,9 @@ function InputRange({ type, value, onFilters }) {
         }
         onBlur={handleBlurInputRange}
         inputProps={{
-          step: 10,
-          min: 0,
-          max: 200,
+          step: 100,
+          min: categoryPriceRange.min,
+          max: categoryPriceRange.max,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
@@ -321,6 +336,7 @@ function InputRange({ type, value, onFilters }) {
 
 InputRange.propTypes = {
   onFilters: PropTypes.func,
+  categoryPriceRange: PropTypes.object,
   type: PropTypes.oneOf(['min', 'max']),
   value: PropTypes.arrayOf(PropTypes.number),
 };

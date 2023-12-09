@@ -5,9 +5,21 @@ import { fetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export function useGetProducts(category, page, rowsPerPage = 10) {
-  const URL = [endpoints.product.list, { params: { category, page, rowsPerPage } }];
-
+export function useGetProducts(category, page, rowsPerPage = 10, filters, sortBy) {
+  const URL = [
+    endpoints.product.list,
+    {
+      params: {
+        category,
+        page: page - 1,
+        rowsPerPage,
+        filters: JSON.stringify(filters),
+        srotBy: JSON.stringify(sortBy),
+      },
+    },
+    ,
+  ];
+  console.log(filters);
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
@@ -47,23 +59,25 @@ export function useGetProduct(productId) {
 
 // ----------------------------------------------------------------------
 
-export function useSearchProducts(category, rowsPerPage, page) {
-  const URL = [endpoints.product.search, { params: { category, rowsPerPage, page } }];
+export function useSearchProducts(filters) {
+  const URL = [endpoints.product.search, { params: { filters } }];
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
-    keepPreviousData: true,
-  });
+  // const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
+  //   keepPreviousData: true,
+  // });
 
-  const memoizedValue = useMemo(
-    () => ({
-      searchResults: data?.results || [],
-      searchLoading: isLoading,
-      searchError: error,
-      searchValidating: isValidating,
-      searchEmpty: !isLoading && !data?.results.length,
-    }),
-    [data?.results, error, isLoading, isValidating]
-  );
+  // const memoizedValue = useMemo(
+  //   () => ({
+  //     searchResults: data?.results || [],
+  //     totalSearchPages: Math.ceil(data?.totalCount / 10) || 0,
+  //     searchLoading: isLoading,
+  //     searchError: error,
+  //     searchValidating: isValidating,
+  //     searchEmpty: !isLoading && !data?.results.length,
+  //   }),
+  //   [data?.results, error, isLoading, isValidating]
+  // );
 
-  return memoizedValue;
+  // return memoizedValue;
+  return [];
 }

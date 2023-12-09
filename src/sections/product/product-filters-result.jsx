@@ -84,7 +84,7 @@ export default function ProductFiltersResult({
           </Block>
         )}
 
-        {(filters.priceRange[0] !== 0 || filters.priceRange[1] !== 200) && (
+        {(filters.priceRange[0] !== 0 || filters.priceRange[1] !== 0) && (
           <Block label="Price:">
             <Chip
               size="small"
