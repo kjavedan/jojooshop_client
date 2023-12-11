@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -10,29 +11,29 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
+import { useAuthContext } from 'src/auth/hooks';
 import { RouterLink } from 'src/routes/components';
-
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
-import { Divider } from '@mui/material';
+import GoogleAuth from '../google-auth';
 
 // ----------------------------------------------------------------------
 
 export default function ModernLoginView() {
+  const { t } = useTranslate();
   const password = useBoolean();
 
-  const router = useRouter();
-
-  const searchParams = useSearchParams();
-
-  const returnTo = searchParams.get('returnTo') || paths.checkout.root;
+  const { login } = useAuthContext();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters'),
   });
 
   const defaultValues = {
@@ -52,11 +53,9 @@ export default function ModernLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
-      router.replace(returnTo);
+      await login?.(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   });
 
@@ -106,6 +105,7 @@ export default function ModernLoginView() {
 
       <LoadingButton
         fullWidth
+        onClick={onSubmit}
         color="inherit"
         size="large"
         type="submit"
@@ -119,30 +119,11 @@ export default function ModernLoginView() {
     </Stack>
   );
 
-  const renderGoogleLogin = (
-    <>
-      <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
-      <LoadingButton
-        fullWidth
-        color="inherit"
-        size="large"
-        variant="outlined"
-        loading={isSubmitting}
-        endIcon={<Iconify icon="flat-color-icons:google" />}
-        sx={{ justifyContent: 'center', pl: 2, pr: 1.5 }}
-      >
-        Google
-      </LoadingButton>
-    </>
-  );
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
-
       {renderForm}
-
-      {renderGoogleLogin}
+      <GoogleAuth />
     </FormProvider>
   );
 }

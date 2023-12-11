@@ -28,9 +28,11 @@ export const fetcher = async (args) => {
 
 export const endpoints = {
   auth: {
-    me: '/api/auth/me',
-    login: '/api/auth/login',
-    register: '/api/auth/register',
+    login: '/user/login',
+    register: '/user/add',
+    me: '/user/auto-login',
+    google: '/user/google-login',
+    refreshToken: '/user/refresh-token',
   },
   product: {
     list: '/product/',

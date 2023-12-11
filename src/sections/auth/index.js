@@ -1,5 +1,5 @@
-export { default as LoginView } from './login-view';
-export { default as VerifyView } from './verify-view';
-export { default as RegisterView } from './register-view';
-export { default as NewPassordView } from './new-password-view';
-export { default as ForgotPassordView } from './forgot-password-view';
+export { default as LoginView } from './view/login-view';
+export { default as VerifyView } from './view/verify-view';
+export { default as RegisterView } from './view/register-view';
+export { default as NewPassordView } from './view/new-password-view';
+export { default as ForgotPassordView } from './view/forgot-password-view';

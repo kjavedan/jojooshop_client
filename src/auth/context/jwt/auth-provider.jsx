@@ -1,18 +1,12 @@
 import PropTypes from 'prop-types';
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
-
+import { useSnackbar } from 'notistack';
 import axios, { endpoints } from 'src/utils/axios';
-
+import { useRouter, useSearchParams } from 'src/routes/hooks';
 import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
-
-// ----------------------------------------------------------------------
-
-// NOTE:
-// We only build demo at basic level.
-// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
-
-// ----------------------------------------------------------------------
+import { useTranslate } from 'src/locales';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 const initialState = {
   user: null,
@@ -54,33 +48,21 @@ const STORAGE_KEY = 'accessToken';
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const router = useRouter();
+  const { t } = useTranslate();
+  const searchParams = useSearchParams();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const returnTo = searchParams.get('returnTo');
   const initialize = useCallback(async () => {
     try {
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
-
-        const response = await axios.get(endpoints.auth.me);
-
-        const { user } = response.data;
-
-        dispatch({
-          type: 'INITIAL',
-          payload: {
-            user: {
-              ...user,
-              accessToken,
-            },
-          },
-        });
+        handleSuccessfulInitialization(accessToken);
       } else {
-        dispatch({
-          type: 'INITIAL',
-          payload: {
-            user: null,
-          },
-        });
+        await handleFailedInitialization();
       }
     } catch (error) {
       console.error(error);
@@ -93,57 +75,133 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const handleSuccessfulInitialization = async (accessToken) => {
+    try {
+      const response = await axios.get(endpoints.auth.me, { withCredentials: true });
+      const { user } = response.data;
+
+      dispatch({
+        type: 'INITIAL',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
+        },
+      });
+    } catch (error) {
+      handleFailedInitialization();
+    }
+  };
+
+  const handleFailedInitialization = async () => {
+    try {
+      const response = await axios.post(endpoints.auth.refreshToken, {}, { withCredentials: true });
+
+      const { accessToken, user } = response.data;
+
+      setSession(accessToken);
+
+      dispatch({
+        type: 'INITIAL',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: 'INITIAL',
+        payload: {
+          user: null,
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     initialize();
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email, password) => {
-    const data = {
-      email,
-      password,
-    };
+  const login = useCallback(async (data) => {
+    try {
+      const response = await axios.post(endpoints.auth.login, data, { withCredentials: true });
 
-    const response = await axios.post(endpoints.auth.login, data);
+      const { accessToken, user } = response.data;
+      console.log(accessToken);
+      console.log(response);
+      setSession(accessToken);
+      router.push(returnTo || PATH_AFTER_LOGIN);
 
-    const { accessToken, user } = response.data;
-
-    setSession(accessToken);
-
-    dispatch({
-      type: 'LOGIN',
-      payload: {
-        user: {
-          ...user,
-          accessToken,
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.msg === 'User is not authorized!'
+          ? t('emailOrPasswordWrong')
+          : t('somethingWentWrong');
+      enqueueSnackbar(errorMessage, { variant: 'error' });
+    }
   }, []);
 
-  // REGISTER
-  const register = useCallback(async (email, password, fullName) => {
-    const data = {
-      email,
-      password,
-      fullName,
-    };
+  // GOOGLE_LOGIN
+  const googleLogin = useCallback(async (code) => {
+    try {
+      const response = await axios.post(endpoints.auth.google, code, { withCredentials: true });
+      const { accessToken, user } = response.data;
 
-    const response = await axios.post(endpoints.auth.register, data);
+      setSession(accessToken);
 
-    const { accessToken, user } = response.data;
-
-    sessionStorage.setItem(STORAGE_KEY, accessToken);
-
-    dispatch({
-      type: 'REGISTER',
-      payload: {
-        user: {
-          ...user,
-          accessToken,
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.log(error);
+
+      enqueueSnackbar(t('somethingWentWrong'), { variant: 'error' });
+    }
+  });
+
+  // REGISTER
+  const register = useCallback(async (data) => {
+    try {
+      const response = await axios.post(endpoints.auth.register, data, { withCredentials: true });
+
+      const { accessToken, user } = response.data;
+
+      // sessionStorage.setItem(STORAGE_KEY, accessToken);
+
+      dispatch({
+        type: 'REGISTER',
+        payload: {
+          user: {
+            ...user,
+            accessToken,
+          },
+        },
+      });
+    } catch (error) {
+      const errorMessage = error?.errors?.length ? t('emailExists') : t('somethingWentWrong');
+      enqueueSnackbar(errorMessage, { variant: 'error' });
+      console.log(error);
+    }
   }, []);
 
   // LOGOUT
@@ -169,10 +227,11 @@ export function AuthProvider({ children }) {
       unauthenticated: status === 'unauthenticated',
       //
       login,
+      googleLogin,
       register,
       logout,
     }),
-    [login, logout, register, state.user, status]
+    [login, googleLogin, logout, register, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

@@ -10,11 +10,11 @@ import { SplashScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // AUTH
-const LoginPage = lazy(() => import('src/pages/auth'));
-const VerifyPage = lazy(() => import('src/pages/auth'));
-const RegisterPage = lazy(() => import('src/pages/auth'));
-const NewPasswordPage = lazy(() => import('src/pages/auth'));
-const ForgotPasswordPage = lazy(() => import('src/pages/auth'));
+const LoginPage = lazy(() => import('src/pages/auth/login'));
+const VerifyPage = lazy(() => import('src/pages/auth/verify'));
+const RegisterPage = lazy(() => import('src/pages/auth/register'));
+const NewPasswordPage = lazy(() => import('src/pages/auth/new-password'));
+const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgot-password'));
 
 // ----------------------------------------------------------------------
 

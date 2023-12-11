@@ -151,5 +151,8 @@
   "categories": "Categories",
   "aboutUs": "About Us",
   "contactUs": "Contact Us",
-  "faqs": "FAQs"
+  "faqs": "FAQs",
+  "emailExists": "Email exists please try another one",
+  "loginSuccess": "Welocom to jojooshop",
+  "emailOrPasswordWrong": "Wrong Email or Password please try again"
 }

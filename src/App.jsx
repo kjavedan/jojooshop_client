@@ -17,13 +17,14 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import { CheckoutProvider } from 'src/sections/checkout/context';
 
 import { AuthProvider } from 'src/auth/context/jwt';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
 
   return (
-    <AuthProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID_PROD}>
       <LocalizationProvider>
         <SettingsProvider
           defaultSettings={{
@@ -38,15 +39,17 @@ export default function App() {
           <ThemeProvider>
             <MotionLazy>
               <SnackbarProvider>
-                <CheckoutProvider>
-                  <SettingsDrawer />
-                  <Router />
-                </CheckoutProvider>
+                <AuthProvider>
+                  <CheckoutProvider>
+                    <SettingsDrawer />
+                    <Router />
+                  </CheckoutProvider>
+                </AuthProvider>
               </SnackbarProvider>
             </MotionLazy>
           </ThemeProvider>
         </SettingsProvider>
       </LocalizationProvider>
-    </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }

@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -11,28 +12,46 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import { useTranslate } from 'src/locales';
+
+import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { Divider } from '@mui/material';
+
+import GoogleAuth from '../google-auth';
 
 // ----------------------------------------------------------------------
 
 export default function ModernRegisterView() {
+  const { t } = useTranslate();
   const password = useBoolean();
 
+  const { register } = useAuthContext();
+
   const RegisterSchema = Yup.object().shape({
-    fullName: Yup.string().required('FullName required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    fullName: Yup.string().trim().required('FullName required'),
+    email: Yup.string()
+      .trim()
+      .required('Email is required')
+      .email('Email must be a valid email address'),
+    password: Yup.string()
+      .trim()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters'),
+    confirmPassword: Yup.string()
+      .trim()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm Password is required'),
   });
 
   const defaultValues = {
     fullName: '',
     email: '',
     password: '',
+    confirmPassword: '',
   };
 
   const methods = useForm({
@@ -47,10 +66,9 @@ export default function ModernRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
+      await register?.(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   });
 
@@ -112,6 +130,20 @@ export default function ModernRegisterView() {
           ),
         }}
       />
+      <RHFTextField
+        name="confirmPassword"
+        label="Confirm Password"
+        type={password.value ? 'text' : 'password'}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={password.onToggle} edge="end">
+                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
 
       <LoadingButton
         fullWidth
@@ -128,23 +160,6 @@ export default function ModernRegisterView() {
     </Stack>
   );
 
-  const renderGoogleRegister = (
-    <>
-      <Divider sx={{ borderStyle: 'dashed', my: 2 }} />
-      <LoadingButton
-        fullWidth
-        color="inherit"
-        size="large"
-        variant="outlined"
-        loading={isSubmitting}
-        endIcon={<Iconify icon="flat-color-icons:google" />}
-        sx={{ justifyContent: 'center', pl: 2, pr: 1.5 }}
-      >
-        Google
-      </LoadingButton>
-    </>
-  );
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
@@ -152,8 +167,7 @@ export default function ModernRegisterView() {
       {renderForm}
 
       {renderTerms}
-
-      {renderGoogleRegister}
+      <GoogleAuth />
     </FormProvider>
   );
 }
