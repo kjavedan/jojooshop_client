@@ -1,4 +1,5 @@
 import { m } from 'framer-motion';
+import { useSnackbar } from 'notistack';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -12,12 +13,9 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
-
 import { useAuthContext } from 'src/auth/hooks';
 
 import { varHover } from 'src/components/animate';
-import { useSnackbar } from 'src/components/snackbar';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
@@ -29,11 +27,11 @@ const OPTIONS = [
   },
   {
     label: 'Profile',
-    linkTo: paths.dashboard.user.profile,
+    linkTo: paths.user.profile,
   },
   {
     label: 'Settings',
-    linkTo: paths.dashboard.user.account,
+    linkTo: paths.product.root,
   },
 ];
 
@@ -42,9 +40,9 @@ const OPTIONS = [
 export default function AccountPopover() {
   const router = useRouter();
 
-  const { user } = useMockedUser();
+  const { logout, user } = useAuthContext();
 
-  const { logout } = useAuthContext();
+  console.log(user);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -85,22 +83,22 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={user?.photoURL}
-          alt={user?.displayName}
+          src={user.picture}
+          alt={user?.fullName || ''}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {user?.displayName.charAt(0).toUpperCase()}
+          {user?.fullName}
         </Avatar>
       </IconButton>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.displayName}
+            {user?.fullName}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>

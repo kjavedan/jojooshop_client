@@ -154,5 +154,6 @@
   "faqs": "FAQs",
   "emailExists": "Email exists please try another one",
   "loginSuccess": "Welocom to jojooshop",
-  "emailOrPasswordWrong": "Wrong Email or Password please try again"
+  "emailOrPasswordWrong": "Wrong Email or Password please try again",
+  "profile": "Profile"
 }

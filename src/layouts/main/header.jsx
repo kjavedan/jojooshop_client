@@ -9,6 +9,7 @@ import Badge, { badgeClasses } from '@mui/material/Badge';
 
 import { paths } from 'src/routes/paths';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -22,6 +23,7 @@ import { HEADER } from '../config-layout';
 import { useNavConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
 import HeaderShadow from '../common/header-shadow';
+import AccountPopover from '../common/account-popover';
 import SettingsButton from '../common/settings-button';
 import LanguagePopover from '../common/language-popover';
 
@@ -35,6 +37,10 @@ export default function Header() {
   const offsetTop = useOffSetTop(HEADER.H_DESKTOP);
 
   const navConfigData = useNavConfig();
+
+  const { authenticated } = useAuthContext();
+
+  console.log(authenticated);
 
   return (
     <AppBar>
@@ -85,7 +91,7 @@ export default function Header() {
           {mdUp && <NavDesktop data={navConfigData} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            <LoginButton />
+            {authenticated ? <AccountPopover /> : <LoginButton />}
 
             {/* either login btn or account icon  */}
             <LanguagePopover sx={{ mr: { md: 2 }, ml: { xs: 1, md: 0 } }} />

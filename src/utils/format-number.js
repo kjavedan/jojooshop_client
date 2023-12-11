@@ -9,6 +9,8 @@ export function fNumber(number) {
 }
 
 export function fCurrency(number) {
+  if (!number) return '';
+
   const { lang } = useLocales();
 
   let currencyCode = 'USD'; // Default currency code
@@ -43,12 +45,10 @@ export function fCurrency(number) {
     IRR: 41905, // Exchange rate for IRR (Iranian Rial)
     // Add more exchange rates as needed
   };
-
   const convertedValue = fx.convert(number, { from: 'USD', to: currencyCode });
 
-  console.log(currencySymbol);
   // Format the converted value with the determined currency symbol
-  const formattedValue = numeral(convertedValue).format(`0,0.00`);
+  const formattedValue = convertedValue ? numeral(convertedValue).format(`0,0.00`) : '';
   console.log(formattedValue);
   const result = currencySymbol + formattedValue;
   return result;

@@ -46,14 +46,10 @@ export const paths = {
   checkout: {
     root: '/checkout',
   },
-  post: {
-    root: `/post`,
-    details: (title) => `/post/${paramCase(title)}`,
-    demo: {
-      details: `/post/${paramCase(MOCK_TITLE)}`,
-    },
+  user: {
+    root: `/user`,
+    profile: 'user/profile/',
   },
-  // AUTH
   auth: {
     login: `${ROOTS.AUTH}/login`,
     verify: `${ROOTS.AUTH}/verify`,
