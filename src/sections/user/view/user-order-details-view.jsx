@@ -20,15 +20,12 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 export default function UserOrderDetailsView() {
-  const { id } = params;
-  const params = useParams();
   const settings = useSettingsContext();
 
+  const params = useParams();
+  const { id } = params;
+
   const { order, orderLoading } = useGetOrder(id);
-
-  console.log(order);
-
-  console.log(order);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ mb: 15 }}>

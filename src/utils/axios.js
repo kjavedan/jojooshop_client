@@ -33,6 +33,7 @@ export const endpoints = {
     me: '/user/auto-login',
     google: '/user/google-login',
     refreshToken: '/user/refresh-token',
+    logout: '/user/logout',
   },
   product: {
     list: '/product/',

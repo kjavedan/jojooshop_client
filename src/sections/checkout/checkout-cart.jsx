@@ -1,16 +1,26 @@
+import { useCallback } from 'react';
+
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
+import { useBoolean } from 'src/hooks/use-boolean';
 import EmptyContent from 'src/components/empty-content';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useCheckoutContext } from './context';
+
 import CheckoutSummary from './checkout-summary';
 import CheckoutCartProductList from './checkout-cart-product-list';
 
@@ -19,70 +29,102 @@ import CheckoutCartProductList from './checkout-cart-product-list';
 export default function CheckoutCart() {
   const checkout = useCheckoutContext();
 
+  const { authenticated } = useAuthContext();
+
+  const router = useRouter();
+
+  const login = useBoolean();
+
   const empty = !checkout.items.length;
 
+  const handleCheckout = useCallback(() => {
+    if (authenticated) {
+      checkout.onNextStep();
+    } else {
+      login.onTrue();
+    }
+  }, []);
+
   return (
-    <Grid container spacing={3}>
-      <Grid xs={12} md={8}>
-        <Card sx={{ mb: 3 }}>
-          <CardHeader
-            title={
-              <Typography variant="h6">
-                Cart
-                <Typography component="span" sx={{ color: 'text.secondary' }}>
-                  &nbsp;({checkout.totalItems} item)
+    <>
+      <Grid container spacing={3}>
+        <Grid xs={12} md={8}>
+          <Card sx={{ mb: 3 }}>
+            <CardHeader
+              title={
+                <Typography variant="h6">
+                  Cart
+                  <Typography component="span" sx={{ color: 'text.secondary' }}>
+                    &nbsp;({checkout.totalItems} item)
+                  </Typography>
                 </Typography>
-              </Typography>
-            }
-            sx={{ mb: 3 }}
+              }
+              sx={{ mb: 3 }}
+            />
+
+            {empty ? (
+              <EmptyContent
+                title="Cart is Empty!"
+                description="Look like you have no items in your shopping cart."
+                imgUrl="/assets/icons/empty/ic_cart.svg"
+                sx={{ pt: 5, pb: 10 }}
+              />
+            ) : (
+              <CheckoutCartProductList
+                products={checkout.items}
+                onDelete={checkout.onDeleteCart}
+                onIncreaseQuantity={checkout.onIncreaseQuantity}
+                onDecreaseQuantity={checkout.onDecreaseQuantity}
+              />
+            )}
+          </Card>
+
+          <Button
+            component={RouterLink}
+            href={paths.product.root}
+            color="inherit"
+            startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
+          >
+            Continue Shopping
+          </Button>
+        </Grid>
+
+        <Grid xs={12} md={4}>
+          <CheckoutSummary
+            total={checkout.total}
+            discount={checkout.discount}
+            subTotal={checkout.subTotal}
+            onApplyDiscount={checkout.onApplyDiscount}
           />
 
-          {empty ? (
-            <EmptyContent
-              title="Cart is Empty!"
-              description="Look like you have no items in your shopping cart."
-              imgUrl="/assets/icons/empty/ic_cart.svg"
-              sx={{ pt: 5, pb: 10 }}
-            />
-          ) : (
-            <CheckoutCartProductList
-              products={checkout.items}
-              onDelete={checkout.onDeleteCart}
-              onIncreaseQuantity={checkout.onIncreaseQuantity}
-              onDecreaseQuantity={checkout.onDecreaseQuantity}
-            />
-          )}
-        </Card>
-
-        <Button
-          component={RouterLink}
-          href={paths.product.root}
-          color="inherit"
-          startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
-        >
-          Continue Shopping
-        </Button>
+          <Button
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            disabled={empty}
+            onClick={handleCheckout}
+          >
+            Check Out
+          </Button>
+        </Grid>
       </Grid>
 
-      <Grid xs={12} md={4}>
-        <CheckoutSummary
-          total={checkout.total}
-          discount={checkout.discount}
-          subTotal={checkout.subTotal}
-          onApplyDiscount={checkout.onApplyDiscount}
-        />
+      <Dialog open={login.value} onClose={login.onFalse}>
+        <DialogTitle> Login to proceed </DialogTitle>
 
-        <Button
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          disabled={empty}
-          onClick={checkout.onNextStep}
-        >
-          Check Out
-        </Button>
-      </Grid>
-    </Grid>
+        <DialogActions>
+          <Button
+            sx={{ width: 250 }}
+            size="large"
+            color="inherit"
+            variant="contained"
+            onClick={() => router.push(paths.auth.login)}
+          >
+            Login
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

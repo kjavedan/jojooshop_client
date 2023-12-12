@@ -60,6 +60,7 @@ export function AuthProvider({ children }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const returnTo = searchParams.get('returnTo');
+
   const initialize = useCallback(async () => {
     try {
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
@@ -139,6 +140,7 @@ export function AuthProvider({ children }) {
       const { accessToken, user } = response.data;
 
       setSession(accessToken);
+      console.log(returnTo);
       router.push(returnTo || PATH_AFTER_LOGIN);
 
       dispatch({
@@ -167,6 +169,7 @@ export function AuthProvider({ children }) {
       const { accessToken, user } = response.data;
 
       setSession(accessToken);
+      router.push(returnTo || PATH_AFTER_LOGIN);
 
       dispatch({
         type: 'LOGIN',
@@ -211,10 +214,15 @@ export function AuthProvider({ children }) {
 
   // LOGOUT
   const logout = useCallback(async () => {
-    setSession(null);
-    dispatch({
-      type: 'LOGOUT',
-    });
+    try {
+      setSession(null);
+      deleteCookie('refreshToken');
+      dispatch({
+        type: 'LOGOUT',
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   // REFRESH
@@ -258,3 +266,7 @@ export function AuthProvider({ children }) {
 AuthProvider.propTypes = {
   children: PropTypes.node,
 };
+
+function deleteCookie(cookieName) {
+  document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost;`;
+}
