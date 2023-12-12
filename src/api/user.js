@@ -1,14 +1,23 @@
-import api from './baseUrl';
-import { endpoints } from 'src/utils/axios';
+import useSWR from 'swr';
+import { useMemo } from 'react';
+import { endpoints, fetcher } from 'src/utils/axios';
 
-export const registerUser = (data) =>
-  api.post(endpoints.auth.register, data, { withCredentials: true }).then((res) => res);
+// ----------------------------------------------------------------------
 
-export const loginUser = (data) =>
-  api.post(endpoints.auth.login, data, { withCredentials: true }).then((res) => res);
+export function useGetUser(userId) {
+  const URL = endpoints.user.info(userId);
 
-export const retriveTokenWithGoogleCode = (data) =>
-  api.post(endpoints.auth.google, data, { withCredentials: true }).then((res) => res);
+  const { data, error, isValidating, isLoading } = useSWR(URL, fetcher);
 
-export const getUserInfoByRefreshToken = () =>
-  api.post(endpoints.auth.me, {}, { withCredentials: true });
+  const memoizedValue = useMemo(
+    () => ({
+      user: data || {},
+      userLoading: isLoading,
+      userError: error,
+      userValidating: isValidating,
+    }),
+    [data, error, isValidating, isLoading]
+  );
+
+  return memoizedValue;
+}

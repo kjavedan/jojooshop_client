@@ -40,8 +40,6 @@ export default function Header() {
 
   const { authenticated } = useAuthContext();
 
-  console.log(authenticated);
-
   return (
     <AppBar>
       <Toolbar

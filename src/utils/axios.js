@@ -43,6 +43,7 @@ export const endpoints = {
     list: '/category/',
   },
   user: {
+    info: (id) => `/user/${id}`,
     update: (id) => `/user/update/${id}`,
   },
 };

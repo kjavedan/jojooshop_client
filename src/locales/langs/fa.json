@@ -164,6 +164,6 @@
   "faqs": "سوالات متداول",
   "emailExists": "ایمیل وجود دارد لطفا یکی دیگر را امتحان کنید",
   "loginSuccess": "Welocom به jojooshop",
-  "emailOrPasswordWrong": "ایمیل یا رمز عبور اشتباه است لطفا دوباره امتحان کنید",
+  "emailOrPasswordWrong": "ایمیل یا رمز عبور اشتباه است!",
   "profile": "مشخصات"
 }

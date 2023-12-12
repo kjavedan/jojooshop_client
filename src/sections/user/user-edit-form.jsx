@@ -1,31 +1,26 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useMemo, useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useMemo, useCallback, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
-import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Unstable_Grid2';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { paths } from 'src/routes/paths';
-import { endpoints } from 'src/utils/axios';
+import axios, { endpoints } from 'src/utils/axios';
 import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fData } from 'src/utils/format-number';
+import { convertFileToBase64 } from 'src/utils/format-image';
 
 import { useTranslate } from 'src/locales';
 import { countries } from 'src/assets/data';
@@ -39,7 +34,6 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
-import axios from 'axios';
 
 import { AddressItem, AddressNewForm } from '../address';
 // ----------------------------------------------------------------------
@@ -47,16 +41,15 @@ import { AddressItem, AddressNewForm } from '../address';
 export default function UserEditForm() {
   const { t } = useTranslate();
   const router = useRouter();
-  const { user } = useAuthContext();
+  const { user, refreshUserInfo } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
 
   const editUserSchema = Yup.object().shape({
-    status: Yup.string().required(t('statusRequired')),
-    address: Yup.string().required(t('addressRequired')),
-    country: Yup.string().required(t('countryRequired')),
+    country: Yup.string(),
     fullName: Yup.string().required(t('fullNameRequired')),
-    phoneNumber: Yup.string().required(t('phoneNumberRequired')),
+    phoneNumber: Yup.string(),
     picture: Yup.mixed().nullable(),
+    addressBook: Yup.array(),
   });
 
   const passwordForm = useBoolean();
@@ -64,7 +57,6 @@ export default function UserEditForm() {
 
   const defaultValues = useMemo(
     () => ({
-      id: user?._id,
       email: user?.email,
       address: user?.address,
       country: user?.country,
@@ -83,42 +75,37 @@ export default function UserEditForm() {
 
   const {
     watch,
+    reset,
     control,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
+  useEffect(() => {
+    if (user) {
+      reset(defaultValues);
+    }
+  }, [user, defaultValues, reset]);
+
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const res = await axios.post(endpoints.user.update(defaultValues.id), data);
-      if (res.status === 200) {
-        enqueueSnackbar(t('updateSuccess'), {
-          variant: 'success',
-        });
-      } else {
-        enqueueSnackbar(t('somethingWentWrong'), {
-          variant: 'error',
-        });
-      }
+      await axios.put(endpoints.user.update(user._id), data);
+      enqueueSnackbar(t('updateSuccess'), {
+        variant: 'success',
+      });
     } catch (error) {
-      if (error.response.status === 400) {
-        enqueueSnackbar(t('emailExists'), {
-          variant: 'error',
-        });
-      } else {
-        enqueueSnackbar(t('somethingWentWrong'), {
-          variant: 'error',
-        });
-      }
       console.log(error);
+      enqueueSnackbar(t('somethingWentWrong'), {
+        variant: 'error',
+      });
     }
   });
 
   const handleDrop = useCallback(
-    (acceptedFiles) => {
+    async (acceptedFiles) => {
       const file = acceptedFiles[0];
 
       const newFile = Object.assign(file, {
@@ -126,11 +113,47 @@ export default function UserEditForm() {
       });
 
       if (file) {
-        setValue('picture', newFile, { shouldValidate: true });
+        const base64img = await convertFileToBase64(newFile);
+        await handleUpdateUser({ picture: base64img });
       }
     },
     [setValue]
   );
+
+  const handleAddAddressToAddressBook = useCallback(
+    (address) => {
+      const newAddressBook = values.addressBook.map((a) =>
+        address.primary ? { ...a, primary: false } : a
+      );
+
+      const addressBook = [...newAddressBook, address];
+      handleUpdateUser({ addressBook });
+    },
+    [setValue, values.addressBook]
+  );
+
+  const handleDeleteAddress = useCallback(
+    (e, index) => {
+      const addressBook = values.addressBook.filter((_, i) => i !== index);
+      handleUpdateUser({ addressBook });
+    },
+    [setValue, values.addressBook]
+  );
+
+  const handleUpdateUser = useCallback(async (data) => {
+    try {
+      await axios.put(endpoints.user.update(user._id), data);
+      enqueueSnackbar(t('updateSuccess'), {
+        variant: 'success',
+      });
+      refreshUserInfo(user._id);
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar(t('somethingWentWrong'), {
+        variant: 'error',
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -205,8 +228,6 @@ export default function UserEditForm() {
                     );
                   }}
                 />
-
-                <RHFTextField name="address" label={t('address')} />
               </Box>
 
               <Stack direction={'row'} justifyContent={'space-between'} sx={{ mt: 3 }}>
@@ -232,13 +253,18 @@ export default function UserEditForm() {
               <Typography variant="h6" mb={1}>
                 Address Book
               </Typography>
-              {user?.addressBook?.map((address) => (
+              {values?.addressBook?.map((address, index) => (
                 <AddressItem
-                  key={address._id}
+                  key={index}
                   address={address}
                   action={
                     <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}>
-                      <Button size="small" color="error" sx={{ mr: 1 }}>
+                      <Button
+                        size="small"
+                        color="error"
+                        sx={{ mr: 1 }}
+                        onClick={(e) => handleDeleteAddress(e, index)}
+                      >
                         Delete
                       </Button>
                     </Stack>
@@ -269,7 +295,7 @@ export default function UserEditForm() {
       <AddressNewForm
         open={addressForm.value}
         onClose={addressForm.onFalse}
-        onCreate={() => console.log('create')}
+        onCreate={handleAddAddressToAddressBook}
       />
     </>
   );

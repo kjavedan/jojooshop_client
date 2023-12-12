@@ -38,6 +38,12 @@ const reducer = (state, action) => {
       user: null,
     };
   }
+  if (action.type === 'REFRESH') {
+    return {
+      ...state,
+      user: action.payload.user,
+    };
+  }
   return state;
 };
 
@@ -131,8 +137,7 @@ export function AuthProvider({ children }) {
       const response = await axios.post(endpoints.auth.login, data, { withCredentials: true });
 
       const { accessToken, user } = response.data;
-      console.log(accessToken);
-      console.log(response);
+
       setSession(accessToken);
       router.push(returnTo || PATH_AFTER_LOGIN);
 
@@ -186,7 +191,7 @@ export function AuthProvider({ children }) {
 
       const { accessToken, user } = response.data;
 
-      // sessionStorage.setItem(STORAGE_KEY, accessToken);
+      sessionStorage.setItem(STORAGE_KEY, accessToken);
 
       dispatch({
         type: 'REGISTER',
@@ -212,6 +217,18 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
+  // REFRESH
+  const refreshUserInfo = useCallback(async (userId) => {
+    const { data: user } = await axios.get(endpoints.user.info(userId));
+    dispatch({
+      type: 'REFRESH',
+      payload: {
+        user: {
+          ...user,
+        },
+      },
+    });
+  }, []);
   // ----------------------------------------------------------------------
 
   const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
@@ -230,8 +247,9 @@ export function AuthProvider({ children }) {
       googleLogin,
       register,
       logout,
+      refreshUserInfo,
     }),
-    [login, googleLogin, logout, register, state.user, status]
+    [login, googleLogin, logout, register, refreshUserInfo, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
