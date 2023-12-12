@@ -22,15 +22,11 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 const OPTIONS = [
   {
-    label: 'Home',
-    linkTo: '/',
-  },
-  {
     label: 'Profile',
     linkTo: paths.user.profile,
   },
   {
-    label: 'Settings',
+    label: 'My Orders',
     linkTo: paths.product.root,
   },
 ];

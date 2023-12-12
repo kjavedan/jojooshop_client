@@ -36,6 +36,7 @@ import FormProvider, {
 } from 'src/components/hook-form';
 
 import { AddressItem, AddressNewForm } from '../address';
+import UpdatePasswordForm from '../auth/update-password-form';
 // ----------------------------------------------------------------------
 
 export default function UserEditForm() {
@@ -54,6 +55,7 @@ export default function UserEditForm() {
 
   const passwordForm = useBoolean();
   const addressForm = useBoolean();
+  const updatePasswordForm = useBoolean();
 
   const defaultValues = useMemo(
     () => ({
@@ -92,7 +94,7 @@ export default function UserEditForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.put(endpoints.user.update(user._id), data);
+      await axios.put(endpoints.user.update(user?._id), data);
       enqueueSnackbar(t('updateSuccess'), {
         variant: 'success',
       });
@@ -104,21 +106,18 @@ export default function UserEditForm() {
     }
   });
 
-  const handleDrop = useCallback(
-    async (acceptedFiles) => {
-      const file = acceptedFiles[0];
+  const handleDrop = useCallback(async (acceptedFiles) => {
+    const file = acceptedFiles[0];
 
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
+    const newFile = Object.assign(file, {
+      preview: URL.createObjectURL(file),
+    });
 
-      if (file) {
-        const base64img = await convertFileToBase64(newFile);
-        await handleUpdateUser({ picture: base64img });
-      }
-    },
-    [setValue]
-  );
+    if (file) {
+      const base64img = await convertFileToBase64(newFile);
+      await handleUpdateUser({ picture: base64img });
+    }
+  }, []);
 
   const handleAddAddressToAddressBook = useCallback(
     (address) => {
@@ -140,20 +139,23 @@ export default function UserEditForm() {
     [setValue, values.addressBook]
   );
 
-  const handleUpdateUser = useCallback(async (data) => {
-    try {
-      await axios.put(endpoints.user.update(user._id), data);
-      enqueueSnackbar(t('updateSuccess'), {
-        variant: 'success',
-      });
-      refreshUserInfo(user._id);
-    } catch (error) {
-      console.log(error);
-      enqueueSnackbar(t('somethingWentWrong'), {
-        variant: 'error',
-      });
-    }
-  }, []);
+  const handleUpdateUser = useCallback(
+    async (data) => {
+      try {
+        await axios.put(endpoints.user.update(user?._id), data);
+        enqueueSnackbar(t('updateSuccess'), {
+          variant: 'success',
+        });
+        refreshUserInfo(user?._id);
+      } catch (error) {
+        console.log(error);
+        enqueueSnackbar(t('somethingWentWrong'), {
+          variant: 'error',
+        });
+      }
+    },
+    [user?._id]
+  );
 
   return (
     <>
@@ -234,7 +236,7 @@ export default function UserEditForm() {
                 <Button
                   size="small"
                   sx={{ textDecoration: 'underline' }}
-                  onClick={passwordForm.onTrue}
+                  onClick={updatePasswordForm.onTrue}
                   startIcon={<Iconify icon="uim:lock" />}
                 >
                   update password
@@ -297,8 +299,11 @@ export default function UserEditForm() {
         onClose={addressForm.onFalse}
         onCreate={handleAddAddressToAddressBook}
       />
+      <UpdatePasswordForm
+        open={updatePasswordForm.value}
+        onClose={updatePasswordForm.onFalse}
+        onCreate={handleUpdateUser}
+      />
     </>
   );
 }
-
-UserEditForm.propTypes = {};
