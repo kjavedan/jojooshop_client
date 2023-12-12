@@ -165,5 +165,6 @@
   "emailExists": "البريد الإلكتروني موجود يرجى تجربة بريد آخر",
   "loginSuccess": "مرحبا بكم في jojooshop",
   "emailOrPasswordWrong": "البريد الإلكتروني أو كلمة المرور خاطئة!",
-  "profile": "حساب تعريفي"
+  "profile": "حساب تعريفي",
+  "processing": "يعالج"
 }

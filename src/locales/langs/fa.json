@@ -165,5 +165,6 @@
   "emailExists": "ایمیل وجود دارد لطفا یکی دیگر را امتحان کنید",
   "loginSuccess": "Welocom به jojooshop",
   "emailOrPasswordWrong": "ایمیل یا رمز عبور اشتباه است!",
-  "profile": "مشخصات"
+  "profile": "مشخصات",
+  "processing": "در حال پردازش"
 }

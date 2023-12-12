@@ -27,7 +27,7 @@ const OPTIONS = [
   },
   {
     label: 'My Orders',
-    linkTo: paths.product.root,
+    linkTo: paths.user.orders,
   },
 ];
 

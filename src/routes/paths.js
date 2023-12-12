@@ -49,6 +49,7 @@ export const paths = {
   user: {
     root: `/user`,
     profile: 'user/profile/',
+    orders: 'user/orders/',
   },
   auth: {
     login: `${ROOTS.AUTH}/login`,

@@ -155,5 +155,6 @@
   "emailExists": "Email exists please try another one",
   "loginSuccess": "Welocom to jojooshop",
   "emailOrPasswordWrong": "Email or Password wrong!",
-  "profile": "Profile"
+  "profile": "Profile",
+  "processing": "Processing"
 }
