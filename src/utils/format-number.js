@@ -49,7 +49,6 @@ export function fCurrency(number) {
 
   // Format the converted value with the determined currency symbol
   const formattedValue = convertedValue ? numeral(convertedValue).format(`0,0.00`) : '';
-  console.log(formattedValue);
   const result = currencySymbol + formattedValue;
   return result;
 }

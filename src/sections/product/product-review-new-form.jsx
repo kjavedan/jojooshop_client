@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
+import { mutate } from 'swr';
 import PropTypes from 'prop-types';
+import { useSnackbar } from 'notistack';
 import { useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,23 +17,38 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import FormHelperText from '@mui/material/FormHelperText';
 
+import { useParams } from 'src/routes/hooks';
+import { useAuthContext } from 'src/auth/hooks';
+
+import { useTranslate } from 'src/locales';
+
+import axios, { endpoints } from 'src/utils/axios';
+
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function ProductReviewNewForm({ onClose, ...other }) {
+export default function ProductReviewNewForm({ onClose, currentReview, ...other }) {
+  const params = useParams();
+  const { id: productId } = params;
+  const { user } = useAuthContext();
+
+  const { t } = useTranslate();
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const ReviewSchema = Yup.object().shape({
-    rating: Yup.number().min(1, 'Rating must be greater than or equal to 1'),
-    review: Yup.string().required('Review is required'),
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    rate: Yup.number().min(1, 'Rating must be greater than or equal to 1'),
+    comment: Yup.string().required('Review is required'),
   });
 
   const defaultValues = {
-    rating: 0,
-    review: '',
-    name: '',
-    email: '',
+    rate: currentReview?.rate || 0,
+    comment: currentReview?.comment || '',
+    picture: user?.picture || '',
+    userId: user?._id,
+    productId,
+    reviewerName: user?.fullName,
   };
 
   const methods = useForm({
@@ -48,12 +65,23 @@ export default function ProductReviewNewForm({ onClose, ...other }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await (currentReview
+        ? axios.put(endpoints.review.update(currentReview._id), data)
+        : axios.post(endpoints.review.add, data));
+
+      mutate(endpoints.product.details(productId));
       reset();
       onClose();
-      console.info('DATA', data);
+      const successMessage = currentReview ? t('reviewAddSuccess') : t('updateSuccess');
+
+      enqueueSnackbar(successMessage, {
+        variant: 'success',
+      });
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      enqueueSnackbar(t('somethingWentWrong'), {
+        variant: 'error',
+      });
     }
   });
 
@@ -72,7 +100,7 @@ export default function ProductReviewNewForm({ onClose, ...other }) {
             <Typography variant="body2">Your review about this product:</Typography>
 
             <Controller
-              name="rating"
+              name="rate"
               control={control}
               render={({ field }) => (
                 <Rating
@@ -87,13 +115,9 @@ export default function ProductReviewNewForm({ onClose, ...other }) {
             />
           </Stack>
 
-          {!!errors.rating && <FormHelperText error> {errors.rating?.message}</FormHelperText>}
+          {!!errors.rate && <FormHelperText error> {errors.rate?.message}</FormHelperText>}
 
-          <RHFTextField name="review" label="Review *" multiline rows={3} sx={{ mt: 3 }} />
-
-          <RHFTextField name="name" label="Name *" sx={{ mt: 3 }} />
-
-          <RHFTextField name="email" label="Email *" sx={{ mt: 3 }} />
+          <RHFTextField name="comment" label="Review *" multiline rows={3} sx={{ mt: 3 }} />
         </DialogContent>
 
         <DialogActions>
@@ -112,4 +136,5 @@ export default function ProductReviewNewForm({ onClose, ...other }) {
 
 ProductReviewNewForm.propTypes = {
   onClose: PropTypes.func,
+  currentReview: PropTypes.any,
 };

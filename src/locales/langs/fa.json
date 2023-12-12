@@ -166,5 +166,7 @@
   "loginSuccess": "Welocom به jojooshop",
   "emailOrPasswordWrong": "ایمیل یا رمز عبور اشتباه است!",
   "profile": "مشخصات",
-  "processing": "در حال پردازش"
+  "processing": "در حال پردازش",
+  "reviewAddSuccess": "بررسی با موفقیت اضافه شد!",
+  "reviewDeleteSuccess": "بررسی با موفقیت حذف شد!"
 }

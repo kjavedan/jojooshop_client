@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import Pagination, { paginationClasses } from '@mui/material/Pagination';
+import Box from '@mui/material/Box';
 
 import ProductReviewItem from './product-review-item';
 
@@ -8,23 +8,11 @@ import ProductReviewItem from './product-review-item';
 
 export default function ProductReviewList({ reviews }) {
   return (
-    <>
+    <Box pb={5}>
       {reviews.map((review) => (
-        <ProductReviewItem key={review.id} review={review} />
+        <ProductReviewItem key={review._id} review={review} />
       ))}
-
-      <Pagination
-        count={1}
-        sx={{
-          mx: 'auto',
-          [`& .${paginationClasses.ul}`]: {
-            my: 5,
-            mx: 'auto',
-            justifyContent: 'center',
-          },
-        }}
-      />
-    </>
+    </Box>
   );
 }
 

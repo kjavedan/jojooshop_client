@@ -156,5 +156,7 @@
   "loginSuccess": "Welocom to jojooshop",
   "emailOrPasswordWrong": "Email or Password wrong!",
   "profile": "Profile",
-  "processing": "Processing"
+  "processing": "Processing",
+  "reviewAddSuccess": "Review Added Successfully!",
+  "reviewDeleteSuccess": "Review Deleted Successfully!"
 }

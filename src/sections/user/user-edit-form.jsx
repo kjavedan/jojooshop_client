@@ -12,9 +12,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
 import axios, { endpoints } from 'src/utils/axios';
-import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -25,7 +23,6 @@ import { convertFileToBase64 } from 'src/utils/format-image';
 import { useTranslate } from 'src/locales';
 import { countries } from 'src/assets/data';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { _addressBooks } from 'src/_mock';
 
@@ -41,7 +38,6 @@ import UpdatePasswordForm from '../auth/update-password-form';
 
 export default function UserEditForm() {
   const { t } = useTranslate();
-  const router = useRouter();
   const { user, refreshUserInfo } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
 

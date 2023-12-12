@@ -12,7 +12,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+
+import { useLocales } from 'src/locales';
 
 import { useGetProduct } from 'src/api/product';
 
@@ -28,8 +31,6 @@ import { ProductDetailsSkeleton } from '../product-skeleton';
 import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
-import { useParams } from 'src/routes/hooks';
-import { useLocales } from 'src/locales';
 
 // ----------------------------------------------------------------------
 

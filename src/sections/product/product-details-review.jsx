@@ -21,7 +21,7 @@ import ProductReviewNewForm from './product-review-new-form';
 
 export default function ProductDetailsReview({ totalReviews, rate, reviews }) {
   const review = useBoolean();
-
+  console.log(reviews);
   const renderSummary = (
     <Stack p={2} spacing={1} alignItems="center" justifyContent="center">
       <Typography variant="subtitle2">Average rating</Typography>

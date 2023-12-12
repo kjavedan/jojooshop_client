@@ -36,11 +36,16 @@ export const endpoints = {
   },
   product: {
     list: '/product/',
-    details: '/product/',
+    details: (id) => `/product/${id}`,
     search: '/api/product/search',
   },
   category: {
     list: '/category/',
+  },
+  review: {
+    add: '/review/add',
+    delete: (id) => `/review/delete/${id}`,
+    update: (id) => `/review/update/${id}`,
   },
   user: {
     info: (id) => `/user/${id}`,

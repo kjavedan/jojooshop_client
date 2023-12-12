@@ -20,8 +20,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 export default function UserOrderDetailsView() {
-  const params = useParams();
   const { id } = params;
+  const params = useParams();
   const settings = useSettingsContext();
 
   const { order, orderLoading } = useGetOrder(id);

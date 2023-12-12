@@ -5,16 +5,20 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
-import { alpha, useTheme } from '@mui/material/styles';
+
 import { bgGradient } from 'src/theme/css';
+import { alpha, useTheme } from '@mui/material/styles';
+
+import { useRouter } from 'src/routes/hooks';
 
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import TextMaxLine from 'src/components/text-max-line';
-import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
+
 import { useLocales } from 'src/locales';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
@@ -77,12 +81,14 @@ CarouselCategory.propTypes = {
 function CarouselItem({ item }) {
   const { lang } = useLocales();
   const theme = useTheme();
+  const router = useRouter();
 
   const { coverUrl, title, path } = item;
 
   const mdUp = useResponsive('up', 'md');
   return (
     <Paper
+      onClick={() => router.push(paths.product.category(path))}
       sx={{
         borderRadius: 2,
         overflow: 'hidden',

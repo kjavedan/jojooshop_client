@@ -166,5 +166,7 @@
   "loginSuccess": "مرحبا بكم في jojooshop",
   "emailOrPasswordWrong": "البريد الإلكتروني أو كلمة المرور خاطئة!",
   "profile": "حساب تعريفي",
-  "processing": "يعالج"
+  "processing": "يعالج",
+  "reviewAddSuccess": "تمت إضافة المراجعة بنجاح!",
+  "reviewDeleteSuccess": "تم حذف المراجعة بنجاح!"
 }

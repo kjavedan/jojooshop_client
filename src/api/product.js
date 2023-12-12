@@ -42,7 +42,7 @@ export function useGetProducts(category, page, rowsPerPage = 10, filters, sortBy
 // ----------------------------------------------------------------------
 
 export function useGetProduct(productId) {
-  const URL = endpoints.product.details + '/' + productId;
+  const URL = endpoints.product.details(productId);
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
