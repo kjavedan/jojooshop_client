@@ -27,6 +27,7 @@ const ProductCheckoutPage = lazy(() => import('src/pages/checkout/checkout'));
 //USER
 const UserProfilePage = lazy(() => import('src/pages/user/profile'));
 const UserOrdersPage = lazy(() => import('src/pages/user/orders'));
+const UserOrderDetailsPage = lazy(() => import('src/pages/user/order'));
 
 // ----------------------------------------------------------------------
 /* eslint react-refresh/only-export-components: off */
@@ -59,6 +60,7 @@ export const mainRoutes = [
           { element: <UserProfilePage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'orders', element: <UserOrdersPage /> },
+          { path: 'order/:id', element: <UserOrderDetailsPage /> },
         ],
       },
     ],

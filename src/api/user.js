@@ -19,9 +19,25 @@ export function useGetOrders(userId) {
       cancelledCount: data?.cancelledCount,
       refundedCount: data?.refundedCount,
       ordersLoading: isLoading,
-      ordrsError: error,
-      ordrsValidating: isValidating,
-      ordrsEmpty: !isLoading && !data?.ordrs?.length,
+      ordersError: error,
+      ordersValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetOrder(orderId) {
+  const URL = endpoints.user.order(orderId);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      order: data || {},
+      orderLoading: isLoading,
+      orderError: error,
+      orderValidating: isValidating,
     }),
     [data, error, isLoading, isValidating]
   );
