@@ -21,7 +21,6 @@ import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 
 import { fDate } from 'src/utils/format-time';
-import { fCurrency } from 'src/utils/format-number';
 
 import { useGetOrders } from 'src/api/user';
 
@@ -30,6 +29,7 @@ import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { LoadingScreen } from 'src/components/loading-screen';
+import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
 // ----------------------------------------------------------------------
 
@@ -42,38 +42,10 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-const TABS = [
-  {
-    value: 'general',
-    label: 'General',
-    icon: <Iconify icon="solar:user-id-bold" width={24} />,
-  },
-  {
-    value: 'cart',
-    label: 'Cart',
-    icon: <Iconify icon="solar:cart-bold" width={24} />,
-  },
-  {
-    value: 'orders',
-    label: 'Orders',
-    icon: <Iconify icon="solar:box-bold" width={24} />,
-  },
-  {
-    value: 'reviews',
-    label: 'Reviews',
-    icon: <Iconify icon="mingcute:message-3-fill" width={24} />,
-  },
-  {
-    value: 'invoice',
-    label: 'Invoice',
-    icon: <Iconify icon="basil:invoice-solid" width={24} />,
-  },
-];
-
-// ----------------------------------------------------------------------
-
 export default function UserOrdersView() {
   const { t } = useTranslate();
+  const { fCurrency } = useCurrencyConverter();
+
   const STATUS_OPTIONS = [
     { value: 'all', label: t('all') },
     { value: 'pending', label: t('pending') },

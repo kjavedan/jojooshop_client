@@ -9,19 +9,18 @@ import Tooltip from '@mui/material/Tooltip';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { fCurrency } from 'src/utils/format-number';
-
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import { ColorPreview } from 'src/components/color-utils';
 
 import { useLocales } from 'src/locales';
+import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
 // ----------------------------------------------------------------------
 
 export default function ProductItem({ product }) {
   const { lang } = useLocales();
-
+  const { fCurrency } = useCurrencyConverter();
   const {
     _id,
     name,
@@ -58,7 +57,7 @@ export default function ProductItem({ product }) {
   );
 
   const renderImg = (
-    <Box sx={{ position: 'relative', p: 1 }} component={RouterLink} href={linkTo}>
+    <Box sx={{ position: 'relative' }} component={RouterLink} href={linkTo}>
       <Tooltip title={!stock > 0 && 'Out of stock'} placement="bottom-end">
         <Image
           alt={name.en}

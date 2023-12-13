@@ -24,7 +24,6 @@ import { useTranslate } from 'src/locales';
 import { countries } from 'src/assets/data';
 
 import Iconify from 'src/components/iconify';
-import { _addressBooks } from 'src/_mock';
 
 import FormProvider, {
   RHFTextField,
@@ -102,18 +101,21 @@ export default function UserEditForm() {
     }
   });
 
-  const handleDrop = useCallback(async (acceptedFiles) => {
-    const file = acceptedFiles[0];
+  const handleDrop = useCallback(
+    async (acceptedFiles) => {
+      const file = acceptedFiles[0];
 
-    const newFile = Object.assign(file, {
-      preview: URL.createObjectURL(file),
-    });
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
 
-    if (file) {
-      const base64img = await convertFileToBase64(newFile);
-      await handleUpdateUser({ picture: base64img });
-    }
-  }, []);
+      if (file) {
+        const base64img = await convertFileToBase64(newFile);
+        await handleUpdateUser({ picture: base64img });
+      }
+    },
+    [handleUpdateUser]
+  );
 
   return (
     <>

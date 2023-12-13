@@ -10,8 +10,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import InputAdornment from '@mui/material/InputAdornment';
-
-import { fCurrency } from 'src/utils/format-number';
+import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +22,7 @@ export default function CheckoutSummary({
   //
   onApplyDiscount,
 }) {
+  const { fCurrency } = useCurrencyConverter();
   const displayShipping = shipping?.value !== null ? 'Free' : '-';
 
   return (

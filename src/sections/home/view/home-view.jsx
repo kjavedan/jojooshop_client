@@ -9,7 +9,6 @@ import CarouselCategory from '../home-carousel';
 export default function HomeView() {
   const settings = useSettingsContext();
   const { groups, groupsLoading } = useGetGroups();
-  console.log(groups);
   const renderCategories = (
     <>
       {groups.map((group, index) => (

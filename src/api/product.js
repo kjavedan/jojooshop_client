@@ -18,9 +18,7 @@ export function useGetProducts(category, page, rowsPerPage = 10, filters, sortBy
         role: 'user',
       },
     },
-    ,
   ];
-  console.log(filters);
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
@@ -64,22 +62,21 @@ export function useGetProduct(productId) {
 export function useSearchProducts(filters) {
   const URL = [endpoints.product.search, { params: { filters } }];
 
-  // const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
-  //   keepPreviousData: true,
-  // });
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
+    keepPreviousData: true,
+  });
 
-  // const memoizedValue = useMemo(
-  //   () => ({
-  //     searchResults: data?.results || [],
-  //     totalSearchPages: Math.ceil(data?.totalCount / 10) || 0,
-  //     searchLoading: isLoading,
-  //     searchError: error,
-  //     searchValidating: isValidating,
-  //     searchEmpty: !isLoading && !data?.results.length,
-  //   }),
-  //   [data?.results, error, isLoading, isValidating]
-  // );
+  const memoizedValue = useMemo(
+    () => ({
+      searchResults: data?.results || [],
+      totalSearchPages: Math.ceil(data?.totalCount / 10) || 0,
+      searchLoading: isLoading,
+      searchError: error,
+      searchValidating: isValidating,
+      searchEmpty: !isLoading && !data?.results.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
 
-  // return memoizedValue;
-  return [];
+  return memoizedValue;
 }

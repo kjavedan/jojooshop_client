@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -32,7 +31,7 @@ export default function ModernLoginView() {
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string()
-      .required('Password is required')
+      .required(t('passwordRequired'))
       .min(6, 'Password must be at least 6 characters'),
   });
 

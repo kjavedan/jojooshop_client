@@ -13,15 +13,16 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { fCurrency, fShortenNumber } from 'src/utils/format-number';
+import { fShortenNumber } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider from 'src/components/hook-form';
 
-import IncrementerButton from './common/incrementer-button';
 import { useLocales } from 'src/locales';
+import IncrementerButton from './common/incrementer-button';
+import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ export default function ProductDetailsSummary({
 }) {
   const router = useRouter();
   const { lang } = useLocales();
-
+  const { fCurrency } = useCurrencyConverter();
   const {
     _id,
     name,

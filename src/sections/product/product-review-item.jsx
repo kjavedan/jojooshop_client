@@ -61,7 +61,7 @@ export default function ProductReviewItem({ review }) {
         variant: 'error',
       });
     }
-  }, []);
+  }, [enqueueSnackbar, popover, productId, reviewId, t]);
 
   const renderInfo = (
     <Stack

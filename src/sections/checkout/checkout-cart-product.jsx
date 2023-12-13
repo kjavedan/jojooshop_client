@@ -9,19 +9,19 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { fCurrency } from 'src/utils/format-number';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 
 import IncrementerButton from '../product/common/incrementer-button';
 import { useLocales } from 'src/locales';
+import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
   const { lang } = useLocales();
+  const { fCurrency } = useCurrencyConverter();
   const { name, discount, price, discountedPrice, colors, coverUrl, quantity, stock } = row;
   console.log(row);
   return (

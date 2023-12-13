@@ -1,4 +1,3 @@
-import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback, useEffect } from 'react';
 
@@ -57,7 +56,7 @@ export default function ProductShopView() {
 
   // console.log(debouncedQuery);
 
-  const [dataFiltered, setDataFilteredData] = useState([]);
+  // const [dataFiltered, setDataFilteredData] = useState([]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -86,8 +85,7 @@ export default function ProductShopView() {
     sortBy
   );
 
-  const { searchResults, totalSearchPages, searchEmpty, searchLoading } =
-    useSearchProducts(debouncedQuery);
+  const { searchLoading } = useSearchProducts(debouncedQuery);
 
   const handleFilters = useCallback((name, value) => {
     setFilters((prevState) => ({
@@ -95,9 +93,6 @@ export default function ProductShopView() {
       [name]: value,
     }));
   }, []);
-
-  console.log(filters);
-  console.log(sortBy);
 
   useEffect(() => {
     const foundCategory = groups
@@ -132,11 +127,11 @@ export default function ProductShopView() {
     if (colors.length || !!priceRange[1] || !!rating || tags.length) {
       console.log('need filtering');
     }
-  }, [filters, sortBy]);
+  }, [filters]);
 
   useEffect(() => {
     handleFetchFilteredData();
-  }, [filters, sortBy]);
+  }, [handleFetchFilteredData]);
 
   const renderFilters = (
     <Stack
@@ -147,7 +142,7 @@ export default function ProductShopView() {
     >
       <ProductSearch
         query={debouncedQuery}
-        results={searchResults}
+        results={[]}
         onSearch={handleSearch}
         loading={searchLoading}
         hrefItem={(id) => paths.product.details(id)}

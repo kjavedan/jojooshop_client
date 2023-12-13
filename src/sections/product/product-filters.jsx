@@ -286,7 +286,7 @@ function InputRange({ type, value, categoryPriceRange, onFilters }) {
     if (max > categoryPriceRange.max) {
       onFilters('priceRange', [min, categoryPriceRange.max]);
     }
-  }, [max, min, onFilters]);
+  }, [max, min, onFilters, categoryPriceRange]);
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: 1 }}>

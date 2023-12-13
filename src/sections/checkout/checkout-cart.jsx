@@ -37,7 +37,7 @@ export default function CheckoutCart() {
     } else {
       login.onTrue();
     }
-  }, []);
+  }, [authenticated, checkout, login]);
 
   return (
     <>

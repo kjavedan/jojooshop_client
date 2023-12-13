@@ -62,12 +62,62 @@ export function AuthProvider({ children }) {
   const returnTo = searchParams.get('returnTo');
 
   const initialize = useCallback(async () => {
+    const handleSuccessfulInitialization = async (accessToken) => {
+      try {
+        const response = await axios.get(endpoints.auth.me, { withCredentials: true });
+        const { user } = response.data;
+
+        dispatch({
+          type: 'INITIAL',
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
+          },
+        });
+      } catch (error) {
+        handleFailedInitialization();
+      }
+    };
+
+    const handleFailedInitialization = async () => {
+      try {
+        const response = await axios.post(
+          endpoints.auth.refreshToken,
+          {},
+          { withCredentials: true }
+        );
+
+        const { accessToken, user } = response.data;
+
+        setSession(accessToken);
+
+        dispatch({
+          type: 'INITIAL',
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
+          },
+        });
+      } catch (error) {
+        dispatch({
+          type: 'INITIAL',
+          payload: {
+            user: null,
+          },
+        });
+      }
+    };
+
     try {
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
-        handleSuccessfulInitialization(accessToken);
+        await handleSuccessfulInitialization(accessToken);
       } else {
         await handleFailedInitialization();
       }
@@ -82,135 +132,98 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const handleSuccessfulInitialization = async (accessToken) => {
-    try {
-      const response = await axios.get(endpoints.auth.me, { withCredentials: true });
-      const { user } = response.data;
-
-      dispatch({
-        type: 'INITIAL',
-        payload: {
-          user: {
-            ...user,
-            accessToken,
-          },
-        },
-      });
-    } catch (error) {
-      handleFailedInitialization();
-    }
-  };
-
-  const handleFailedInitialization = async () => {
-    try {
-      const response = await axios.post(endpoints.auth.refreshToken, {}, { withCredentials: true });
-
-      const { accessToken, user } = response.data;
-
-      setSession(accessToken);
-
-      dispatch({
-        type: 'INITIAL',
-        payload: {
-          user: {
-            ...user,
-            accessToken,
-          },
-        },
-      });
-    } catch (error) {
-      dispatch({
-        type: 'INITIAL',
-        payload: {
-          user: null,
-        },
-      });
-    }
-  };
-
   useEffect(() => {
     initialize();
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (data) => {
-    try {
-      const response = await axios.post(endpoints.auth.login, data, { withCredentials: true });
+  const login = useCallback(
+    async (data) => {
+      try {
+        const response = await axios.post(endpoints.auth.login, data, { withCredentials: true });
 
-      const { accessToken, user } = response.data;
+        const { accessToken, user } = response.data;
 
-      setSession(accessToken);
-      console.log(returnTo);
-      router.push(returnTo || PATH_AFTER_LOGIN);
+        setSession(accessToken);
+        console.log(returnTo);
+        router.push(returnTo || PATH_AFTER_LOGIN);
 
-      dispatch({
-        type: 'LOGIN',
-        payload: {
-          user: {
-            ...user,
-            accessToken,
+        dispatch({
+          type: 'LOGIN',
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
           },
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      const errorMessage =
-        error.msg === 'User is not authorized!'
-          ? t('emailOrPasswordWrong')
-          : t('somethingWentWrong');
-      enqueueSnackbar(errorMessage, { variant: 'error' });
-    }
-  }, []);
+        });
+      } catch (error) {
+        console.log(error);
+        const errorMessage =
+          error.msg === 'User is not authorized!'
+            ? t('emailOrPasswordWrong')
+            : t('somethingWentWrong');
+        enqueueSnackbar(errorMessage, { variant: 'error' });
+      }
+    },
+    [enqueueSnackbar, returnTo, router, t]
+  );
 
   // GOOGLE_LOGIN
-  const googleLogin = useCallback(async (code) => {
-    try {
-      const response = await axios.post(endpoints.auth.google, code, { withCredentials: true });
-      const { accessToken, user } = response.data;
+  const googleLogin = useCallback(
+    async (code) => {
+      try {
+        const response = await axios.post(endpoints.auth.google, code, { withCredentials: true });
+        const { accessToken, user } = response.data;
 
-      setSession(accessToken);
-      router.push(returnTo || PATH_AFTER_LOGIN);
+        setSession(accessToken);
+        router.push(returnTo || PATH_AFTER_LOGIN);
 
-      dispatch({
-        type: 'LOGIN',
-        payload: {
-          user: {
-            ...user,
-            accessToken,
+        dispatch({
+          type: 'LOGIN',
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
           },
-        },
-      });
-    } catch (error) {
-      console.log(error);
+        });
+      } catch (error) {
+        console.log(error);
 
-      enqueueSnackbar(t('somethingWentWrong'), { variant: 'error' });
-    }
-  });
+        enqueueSnackbar(t('somethingWentWrong'), { variant: 'error' });
+      }
+    },
+    [enqueueSnackbar, returnTo, router, t]
+  );
 
   // REGISTER
-  const register = useCallback(async (data) => {
-    try {
-      const response = await axios.post(endpoints.auth.register, data, { withCredentials: true });
+  const register = useCallback(
+    async (data) => {
+      try {
+        const response = await axios.post(endpoints.auth.register, data, { withCredentials: true });
 
-      const { accessToken, user } = response.data;
+        const { accessToken, user } = response.data;
 
-      sessionStorage.setItem(STORAGE_KEY, accessToken);
+        sessionStorage.setItem(STORAGE_KEY, accessToken);
 
-      dispatch({
-        type: 'REGISTER',
-        payload: {
-          user: {
-            ...user,
-            accessToken,
+        dispatch({
+          type: 'REGISTER',
+          payload: {
+            user: {
+              ...user,
+              accessToken,
+            },
           },
-        },
-      });
-    } catch (error) {
-      const errorMessage = error?.errors?.length ? t('emailExists') : t('somethingWentWrong');
-      enqueueSnackbar(errorMessage, { variant: 'error' });
-      console.log(error);
-    }
-  }, []);
+        });
+      } catch (error) {
+        const errorMessage = error?.errors?.length ? t('emailExists') : t('somethingWentWrong');
+        enqueueSnackbar(errorMessage, { variant: 'error' });
+        console.log(error);
+      }
+    },
+    [enqueueSnackbar, t]
+  );
 
   // LOGOUT
   const logout = useCallback(async () => {

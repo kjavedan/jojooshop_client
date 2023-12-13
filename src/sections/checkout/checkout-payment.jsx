@@ -49,18 +49,15 @@ const PAYMENT_OPTIONS = [
     value: 'paypal',
     label: 'Pay with Paypal',
     description: 'You will be redirected to PayPal website to complete your purchase securely.',
-    description: 'You will be redirected to PayPal website to complete your purchase securely.',
   },
   {
     value: 'credit',
     label: 'Credit / Debit Card',
     description: 'We support Mastercard, Visa, Discover and Stripe.',
-    description: 'We support Mastercard, Visa, Discover and Stripe.',
   },
   {
     value: 'cash',
     label: 'Cash',
-    description: 'Pay with cash when your order is delivered.',
     description: 'Pay with cash when your order is delivered.',
   },
 ];
