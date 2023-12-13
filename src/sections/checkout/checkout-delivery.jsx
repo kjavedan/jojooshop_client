@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import CardHeader from '@mui/material/CardHeader';
 import ListItemText from '@mui/material/ListItemText';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import Iconify from 'src/components/iconify';
 
@@ -22,7 +23,7 @@ export default function CheckoutDelivery({ options, onApplyShipping, ...other })
       <Controller
         name="delivery"
         control={control}
-        render={({ field }) => (
+        render={({ field, fieldState: { error } }) => (
           <Box
             columnGap={2}
             rowGap={2.5}
@@ -35,15 +36,25 @@ export default function CheckoutDelivery({ options, onApplyShipping, ...other })
           >
             {options.map((option) => (
               <OptionItem
-                key={option.label}
+                key={option.speedy}
                 option={option}
-                selected={field.value === option.value}
+                selected={field.value.speedy === option.speedy}
                 onClick={() => {
-                  field.onChange(option.value);
-                  onApplyShipping(option.value);
+                  field.onChange({
+                    speedy: option.speedy,
+                    shipBy: 'DHL',
+                    trackingNumber: option.trackingNumber,
+                  });
+                  onApplyShipping(option);
                 }}
               />
             ))}
+
+            {!!error && (
+              <FormHelperText error sx={{ pt: 1, px: 2 }}>
+                {error.message}
+              </FormHelperText>
+            )}
           </Box>
         )}
       />
@@ -59,7 +70,7 @@ CheckoutDelivery.propTypes = {
 // ----------------------------------------------------------------------
 
 function OptionItem({ option, selected, ...other }) {
-  const { value, label, description } = option;
+  const { value, speedy, description } = option;
 
   return (
     <Paper
@@ -75,16 +86,16 @@ function OptionItem({ option, selected, ...other }) {
       }}
       {...other}
     >
-      {label === 'Free' && <Iconify icon="carbon:bicycle" width={32} />}
-      {label === 'Standard' && <Iconify icon="carbon:delivery" width={32} />}
-      {label === 'Express' && <Iconify icon="carbon:rocket" width={32} />}
+      {speedy === 'Free' && <Iconify icon="carbon:bicycle" width={32} />}
+      {speedy === 'Standard' && <Iconify icon="carbon:delivery" width={32} />}
+      {speedy === 'Express' && <Iconify icon="carbon:rocket" width={32} />}
 
       <ListItemText
         sx={{ ml: 2 }}
         primary={
           <Stack direction="row" alignItems="center">
             <Box component="span" sx={{ flexGrow: 1 }}>
-              {label}
+              {speedy}
             </Box>
             <Box component="span" sx={{ typography: 'h6' }}>{`$${value}`}</Box>
           </Stack>

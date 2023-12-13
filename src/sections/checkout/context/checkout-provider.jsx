@@ -42,8 +42,8 @@ export function CheckoutProvider({ children }) {
     update('subTotal', subTotal);
     update('totalItems', totalItems);
     update('discount', state.items.length ? state.discount : 0);
-    update('shipping', state.items.length ? state.shipping : 0);
-    update('total', state.subTotal - state.discount + state.shipping);
+    update('shipping', state.items.length ? state.shipping : { value: 0 });
+    update('total', state.subTotal - state.discount + state.shipping.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     state.items,

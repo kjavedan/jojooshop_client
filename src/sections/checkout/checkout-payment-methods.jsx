@@ -34,23 +34,24 @@ export default function CheckoutPaymentMethods({ options, cardOptions, ...other 
           control={control}
           render={({ field, fieldState: { error } }) => (
             <Stack sx={{ px: 3, pb: 3 }}>
+              {console.log(error)}
               {options.map((option) => (
                 <OptionItem
                   option={option}
                   key={option.label}
                   onOpen={newCard.onTrue}
                   cardOptions={cardOptions}
-                  selected={field.value === option.value}
-                  isCredit={option.value === 'credit' && field.value === 'credit'}
+                  selected={field.value.cardType === option.value}
+                  isCredit={option.value === 'credit' && field.value.cardType === 'credit'}
                   onClick={() => {
-                    field.onChange(option.value);
+                    field.onChange({ cardType: option.value, cardNumber: '**** **** **** 1212' });
                   }}
                 />
               ))}
 
               {!!error && (
                 <FormHelperText error sx={{ pt: 1, px: 2 }}>
-                  {error.message}
+                  {error.cardType.message}
                 </FormHelperText>
               )}
             </Stack>

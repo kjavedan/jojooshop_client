@@ -54,4 +54,7 @@ export const endpoints = {
     update: (id) => `/user/update/${id}`,
     orders: (id) => `/order/user/${id}`,
   },
+  order: {
+    add: '/order/add',
+  },
 };

@@ -13,8 +13,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import Iconify from 'src/components/iconify';
-
 // ----------------------------------------------------------------------
 
 export default function CheckoutSummary({
@@ -25,7 +23,7 @@ export default function CheckoutSummary({
   //
   onApplyDiscount,
 }) {
-  const displayShipping = shipping !== null ? 'Free' : '-';
+  const displayShipping = shipping?.value !== null ? 'Free' : '-';
 
   return (
     <Card sx={{ mb: 3 }}>
@@ -52,7 +50,7 @@ export default function CheckoutSummary({
               Shipping
             </Typography>
             <Typography variant="subtitle2">
-              {shipping ? fCurrency(shipping) : displayShipping}
+              {shipping?.value ? fCurrency(shipping?.value) : displayShipping}
             </Typography>
           </Stack>
 
@@ -95,7 +93,7 @@ export default function CheckoutSummary({
 CheckoutSummary.propTypes = {
   total: PropTypes.number,
   discount: PropTypes.number,
-  shipping: PropTypes.number,
+  shipping: PropTypes.object,
   subTotal: PropTypes.number,
   onApplyDiscount: PropTypes.func,
 };

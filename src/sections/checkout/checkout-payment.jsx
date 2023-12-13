@@ -9,33 +9,38 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form';
 
-import { useBoolean } from 'src/hooks/use-boolean';
 import { useAuthContext } from 'src/auth/hooks';
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import axios, { endpoints } from 'src/utils/axios';
 
 import { useCheckoutContext } from './context';
 import CheckoutSummary from './checkout-summary';
 import CheckoutDelivery from './checkout-delivery';
+import LoginToProceed from '../auth/login-to-proceed';
 import CheckoutBillingInfo from './checkout-billing-info';
 import CheckoutPaymentMethods from './checkout-payment-methods';
-import LoginToProceed from '../auth/login-to-proceed';
 
 // ----------------------------------------------------------------------
 
 const DELIVERY_OPTIONS = [
   {
     value: 0,
-    label: 'Free',
+    speedy: 'Free',
     description: '5-7 Days delivery',
+    trackingNumber: 'SPX037739199373',
   },
   {
     value: 10,
-    label: 'Standard',
+    speedy: 'Standard',
     description: '3-5 Days delivery',
+    trackingNumber: 'SPX037739199373',
   },
   {
     value: 20,
-    label: 'Express',
+    speedy: 'Express',
     description: '2-3 Days delivery',
+    trackingNumber: 'SPX037739199373',
   },
 ];
 
@@ -44,15 +49,18 @@ const PAYMENT_OPTIONS = [
     value: 'paypal',
     label: 'Pay with Paypal',
     description: 'You will be redirected to PayPal website to complete your purchase securely.',
+    description: 'You will be redirected to PayPal website to complete your purchase securely.',
   },
   {
     value: 'credit',
     label: 'Credit / Debit Card',
     description: 'We support Mastercard, Visa, Discover and Stripe.',
+    description: 'We support Mastercard, Visa, Discover and Stripe.',
   },
   {
     value: 'cash',
     label: 'Cash',
+    description: 'Pay with cash when your order is delivered.',
     description: 'Pay with cash when your order is delivered.',
   },
 ];
@@ -65,18 +73,37 @@ const CARDS_OPTIONS = [
 
 export default function CheckoutPayment() {
   const checkout = useCheckoutContext();
-
-  const { authenticated } = useAuthContext();
+  const { items, billing, shipping } = checkout;
+  const { addressType, fullAddress, phoneNumber } = billing;
+  const { user, authenticated } = useAuthContext();
 
   const login = useBoolean();
 
   const PaymentSchema = Yup.object().shape({
-    payment: Yup.string().required('Payment is required'),
+    payment: Yup.object().shape({
+      cardType: Yup.string().required('CardType is required'),
+      cardNumber: Yup.string().required('CardNumber is required'),
+    }),
+    delivery: Yup.object().shape({
+      speedy: Yup.string().required('shipby is required'),
+    }),
   });
 
   const defaultValues = {
-    delivery: checkout.shipping,
-    payment: '',
+    userId: user?._id,
+    products: items.map((item) => ({ productId: item.id, qty: item.quantity })),
+    shippingAddress: {
+      fullAddress,
+      phoneNumber,
+      addressType,
+    },
+    shippingPrice: shipping.value,
+    payment: {},
+    delivery: {
+      shipBy: 'BHL',
+      speedy: 'Free',
+      trackingNumber: 'SPX037739199373',
+    },
   };
 
   const methods = useForm({
@@ -95,6 +122,7 @@ export default function CheckoutPayment() {
         checkout.onNextStep();
         checkout.onReset();
         console.info('DATA', data);
+        axios.post(endpoints.order.add, data);
       } else {
         login.onTrue();
       }
