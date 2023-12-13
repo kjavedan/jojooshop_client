@@ -5,6 +5,7 @@ import MainLayout from 'src/layouts/main';
 // import { PATH_AFTER_LOGIN } from 'src/config-global';
 import { authRoutes } from './auth';
 import { HomePage, mainRoutes } from './main';
+import { userRoutes } from './user';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ export default function Router() {
 
     // Main routes
     ...mainRoutes,
-
+    ...userRoutes,
     // No match 404
     // { path: '*', element: <Navigate to="/404" replace /> },
   ]);

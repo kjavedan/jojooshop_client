@@ -31,6 +31,7 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
+import useAddressBook from './hooks/address-book';
 
 import { AddressItem, AddressNewForm } from '../address';
 import UpdatePasswordForm from '../auth/update-password-form';
@@ -38,8 +39,10 @@ import UpdatePasswordForm from '../auth/update-password-form';
 
 export default function UserEditForm() {
   const { t } = useTranslate();
-  const { user, refreshUserInfo } = useAuthContext();
+  const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { handleAddAddressToAddressBook, handleDeleteAddress, handleUpdateUser } = useAddressBook();
 
   const editUserSchema = Yup.object().shape({
     country: Yup.string(),
@@ -49,7 +52,6 @@ export default function UserEditForm() {
     addressBook: Yup.array(),
   });
 
-  const passwordForm = useBoolean();
   const addressForm = useBoolean();
   const updatePasswordForm = useBoolean();
 
@@ -74,8 +76,6 @@ export default function UserEditForm() {
   const {
     watch,
     reset,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -114,44 +114,6 @@ export default function UserEditForm() {
       await handleUpdateUser({ picture: base64img });
     }
   }, []);
-
-  const handleAddAddressToAddressBook = useCallback(
-    (address) => {
-      const newAddressBook = values.addressBook.map((a) =>
-        address.primary ? { ...a, primary: false } : a
-      );
-
-      const addressBook = [...newAddressBook, address];
-      handleUpdateUser({ addressBook });
-    },
-    [setValue, values.addressBook]
-  );
-
-  const handleDeleteAddress = useCallback(
-    (e, index) => {
-      const addressBook = values.addressBook.filter((_, i) => i !== index);
-      handleUpdateUser({ addressBook });
-    },
-    [setValue, values.addressBook]
-  );
-
-  const handleUpdateUser = useCallback(
-    async (data) => {
-      try {
-        await axios.put(endpoints.user.update(user?._id), data);
-        enqueueSnackbar(t('updateSuccess'), {
-          variant: 'success',
-        });
-        refreshUserInfo(user?._id);
-      } catch (error) {
-        console.log(error);
-        enqueueSnackbar(t('somethingWentWrong'), {
-          variant: 'error',
-        });
-      }
-    },
-    [user?._id]
-  );
 
   return (
     <>
@@ -261,7 +223,7 @@ export default function UserEditForm() {
                         size="small"
                         color="error"
                         sx={{ mr: 1 }}
-                        onClick={(e) => handleDeleteAddress(e, index)}
+                        onClick={() => handleDeleteAddress(index)}
                       >
                         Delete
                       </Button>

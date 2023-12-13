@@ -23,23 +23,13 @@ export default function CheckoutSummary({
   subTotal,
   shipping,
   //
-  onEdit,
   onApplyDiscount,
 }) {
   const displayShipping = shipping !== null ? 'Free' : '-';
 
   return (
     <Card sx={{ mb: 3 }}>
-      <CardHeader
-        title="Order Summary"
-        action={
-          onEdit && (
-            <Button size="small" onClick={onEdit} startIcon={<Iconify icon="solar:pen-bold" />}>
-              Edit
-            </Button>
-          )
-        }
-      />
+      <CardHeader title="Order Summary" />
 
       <CardContent>
         <Stack spacing={2}>
@@ -107,6 +97,5 @@ CheckoutSummary.propTypes = {
   discount: PropTypes.number,
   shipping: PropTypes.number,
   subTotal: PropTypes.number,
-  onEdit: PropTypes.func,
   onApplyDiscount: PropTypes.func,
 };

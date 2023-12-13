@@ -16,18 +16,13 @@ const Page404 = lazy(() => import('src/pages/404'));
 const FaqsPage = lazy(() => import('src/pages/faqs'));
 const AboutPage = lazy(() => import('src/pages/about-us'));
 const ContactPage = lazy(() => import('src/pages/contact-us'));
-const PaymentPage = lazy(() => import('src/pages/payment'));
 const ComingSoonPage = lazy(() => import('src/pages/coming-soon'));
 const MaintenancePage = lazy(() => import('src/pages/maintenance'));
+
 // PRODUCT
 const ProductListPage = lazy(() => import('src/pages/product/list'));
 const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
 const ProductCheckoutPage = lazy(() => import('src/pages/checkout/checkout'));
-
-//USER
-const UserProfilePage = lazy(() => import('src/pages/user/profile'));
-const UserOrdersPage = lazy(() => import('src/pages/user/orders'));
-const UserOrderDetailsPage = lazy(() => import('src/pages/user/order'));
 
 // ----------------------------------------------------------------------
 /* eslint react-refresh/only-export-components: off */
@@ -54,26 +49,7 @@ export const mainRoutes = [
           { path: ':id', element: <ProductDetailsPage /> },
         ],
       },
-      {
-        path: 'user',
-        children: [
-          { element: <UserProfilePage />, index: true },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'orders', element: <UserOrdersPage /> },
-          { path: 'order/:id', element: <UserOrderDetailsPage /> },
-        ],
-      },
     ],
-  },
-  {
-    element: (
-      <SimpleLayout>
-        <Suspense fallback={<SplashScreen />}>
-          <Outlet />
-        </Suspense>
-      </SimpleLayout>
-    ),
-    children: [{ path: 'payment', element: <PaymentPage /> }],
   },
   {
     element: (

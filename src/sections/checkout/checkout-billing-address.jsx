@@ -11,6 +11,8 @@ import Iconify from 'src/components/iconify';
 import { useCheckoutContext } from './context';
 import CheckoutSummary from './checkout-summary';
 import { AddressItem, AddressNewForm } from '../address';
+import { useAuthContext } from 'src/auth/hooks';
+import useAddressBook from '../user/hooks/address-book';
 
 // ----------------------------------------------------------------------
 
@@ -19,18 +21,27 @@ export default function CheckoutBillingAddress() {
 
   const addressForm = useBoolean();
 
+  const { user } = useAuthContext();
+
+  const { handleAddAddressToAddressBook, handleDeleteAddress } = useAddressBook();
+
   return (
     <>
       <Grid container spacing={3}>
         <Grid xs={12}>
-          {_addressBooks.slice(0, 4).map((address) => (
+          {user.addressBook.map((address, index) => (
             <AddressItem
-              key={address.id}
+              key={address._id}
               address={address}
               action={
                 <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}>
                   {!address.primary && (
-                    <Button size="small" color="error" sx={{ mr: 1 }}>
+                    <Button
+                      size="small"
+                      color="error"
+                      sx={{ mr: 1 }}
+                      onClick={() => handleDeleteAddress(index)}
+                    >
                       Delete
                     </Button>
                   )}
@@ -85,7 +96,7 @@ export default function CheckoutBillingAddress() {
       <AddressNewForm
         open={addressForm.value}
         onClose={addressForm.onFalse}
-        onCreate={checkout.onCreateBilling}
+        onCreate={handleAddAddressToAddressBook}
       />
     </>
   );

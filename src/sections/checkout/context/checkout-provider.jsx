@@ -41,7 +41,6 @@ export function CheckoutProvider({ children }) {
 
     update('subTotal', subTotal);
     update('totalItems', totalItems);
-    update('billing', state.activeStep === 1 ? null : state.billing);
     update('discount', state.items.length ? state.discount : 0);
     update('shipping', state.items.length ? state.shipping : 0);
     update('total', state.subTotal - state.discount + state.shipping);
@@ -57,7 +56,6 @@ export function CheckoutProvider({ children }) {
 
   useEffect(() => {
     const restored = getStorage(STORAGE_KEY);
-
     if (restored) {
       onGetCart();
     }

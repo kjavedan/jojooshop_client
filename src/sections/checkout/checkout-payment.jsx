@@ -9,11 +9,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+import { useAuthContext } from 'src/auth/hooks';
+
 import { useCheckoutContext } from './context';
 import CheckoutSummary from './checkout-summary';
 import CheckoutDelivery from './checkout-delivery';
 import CheckoutBillingInfo from './checkout-billing-info';
 import CheckoutPaymentMethods from './checkout-payment-methods';
+import LoginToProceed from '../auth/login-to-proceed';
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +66,10 @@ const CARDS_OPTIONS = [
 export default function CheckoutPayment() {
   const checkout = useCheckoutContext();
 
+  const { authenticated } = useAuthContext();
+
+  const login = useBoolean();
+
   const PaymentSchema = Yup.object().shape({
     payment: Yup.string().required('Payment is required'),
   });
@@ -83,58 +91,67 @@ export default function CheckoutPayment() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      checkout.onNextStep();
-      checkout.onReset();
-      console.info('DATA', data);
+      if (authenticated) {
+        checkout.onNextStep();
+        checkout.onReset();
+        console.info('DATA', data);
+      } else {
+        login.onTrue();
+      }
     } catch (error) {
       console.error(error);
     }
   });
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <CheckoutDelivery onApplyShipping={checkout.onApplyShipping} options={DELIVERY_OPTIONS} />
+    <>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Grid container spacing={3}>
+          <Grid xs={12} md={8}>
+            <CheckoutDelivery
+              onApplyShipping={checkout.onApplyShipping}
+              options={DELIVERY_OPTIONS}
+            />
 
-          <CheckoutPaymentMethods
-            cardOptions={CARDS_OPTIONS}
-            options={PAYMENT_OPTIONS}
-            sx={{ my: 3 }}
-          />
+            <CheckoutPaymentMethods
+              cardOptions={CARDS_OPTIONS}
+              options={PAYMENT_OPTIONS}
+              sx={{ my: 3 }}
+            />
 
-          <Button
-            size="small"
-            color="inherit"
-            onClick={checkout.onBackStep}
-            startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
-          >
-            Back
-          </Button>
+            <Button
+              size="small"
+              color="inherit"
+              onClick={checkout.onBackStep}
+              startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
+            >
+              Back
+            </Button>
+          </Grid>
+
+          <Grid xs={12} md={4}>
+            <CheckoutBillingInfo billing={checkout.billing} onBackStep={checkout.onBackStep} />
+
+            <CheckoutSummary
+              total={checkout.total}
+              subTotal={checkout.subTotal}
+              discount={checkout.discount}
+              shipping={checkout.shipping}
+            />
+
+            <LoadingButton
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={isSubmitting}
+            >
+              Complete Order
+            </LoadingButton>
+          </Grid>
         </Grid>
-
-        <Grid xs={12} md={4}>
-          <CheckoutBillingInfo billing={checkout.billing} onBackStep={checkout.onBackStep} />
-
-          <CheckoutSummary
-            total={checkout.total}
-            subTotal={checkout.subTotal}
-            discount={checkout.discount}
-            shipping={checkout.shipping}
-            onEdit={() => checkout.onGotoStep(0)}
-          />
-
-          <LoadingButton
-            fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
-            loading={isSubmitting}
-          >
-            Complete Order
-          </LoadingButton>
-        </Grid>
-      </Grid>
-    </FormProvider>
+      </FormProvider>
+      <LoginToProceed open={login.value} onClose={login.onFalse} />
+    </>
   );
 }

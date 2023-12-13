@@ -2,16 +2,11 @@ import { useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Unstable_Grid2';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
@@ -23,6 +18,7 @@ import { useCheckoutContext } from './context';
 
 import CheckoutSummary from './checkout-summary';
 import CheckoutCartProductList from './checkout-cart-product-list';
+import LoginToProceed from '../auth/login-to-proceed';
 
 // ----------------------------------------------------------------------
 
@@ -30,8 +26,6 @@ export default function CheckoutCart() {
   const checkout = useCheckoutContext();
 
   const { authenticated } = useAuthContext();
-
-  const router = useRouter();
 
   const login = useBoolean();
 
@@ -110,21 +104,7 @@ export default function CheckoutCart() {
         </Grid>
       </Grid>
 
-      <Dialog open={login.value} onClose={login.onFalse}>
-        <DialogTitle> Login to proceed </DialogTitle>
-
-        <DialogActions>
-          <Button
-            sx={{ width: 250 }}
-            size="large"
-            color="inherit"
-            variant="contained"
-            onClick={() => router.push(paths.auth.login)}
-          >
-            Login
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <LoginToProceed open={login.value} onClose={login.onFalse} />
     </>
   );
 }
