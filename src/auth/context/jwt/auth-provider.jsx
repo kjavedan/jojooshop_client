@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
   const initialize = useCallback(async () => {
     const handleSuccessfulInitialization = async (accessToken) => {
       try {
-        const response = await axios.get(endpoints.auth.me, { withCredentials: true });
+        const response = await axios.post(endpoints.auth.me, { accessToken });
         const { user } = response.data;
 
         dispatch({

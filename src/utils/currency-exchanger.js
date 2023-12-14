@@ -30,7 +30,8 @@ export function useCurrencyConverter() {
   }, [lang]);
 
   const fCurrency = (value) => {
-    // Set the currency code for money.js
+    if (!value) return '';
+
     fx.base = 'USD';
     fx.rates = {
       USD: 1,

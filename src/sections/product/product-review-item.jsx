@@ -151,7 +151,7 @@ export default function ProductReviewItem({ review }) {
 
         {renderContent}
 
-        {userId === user._id && (
+        {userId === user?._id && (
           <IconButton
             onClick={popover.onOpen}
             sx={{
