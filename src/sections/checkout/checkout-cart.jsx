@@ -16,6 +16,8 @@ import EmptyContent from 'src/components/empty-content';
 import { useAuthContext } from 'src/auth/hooks';
 import { useCheckoutContext } from './context';
 
+import { useTranslate } from 'src/locales';
+
 import CheckoutSummary from './checkout-summary';
 import CheckoutCartProductList from './checkout-cart-product-list';
 import LoginToProceed from '../auth/login-to-proceed';
@@ -24,6 +26,7 @@ import LoginToProceed from '../auth/login-to-proceed';
 
 export default function CheckoutCart() {
   const checkout = useCheckoutContext();
+  const { t } = useTranslate();
 
   const { authenticated } = useAuthContext();
 
@@ -47,9 +50,9 @@ export default function CheckoutCart() {
             <CardHeader
               title={
                 <Typography variant="h6">
-                  Cart
+                  {t('cart')}
                   <Typography component="span" sx={{ color: 'text.secondary' }}>
-                    &nbsp;({checkout.totalItems} item)
+                    &nbsp;({checkout.totalItems} {t('item')})
                   </Typography>
                 </Typography>
               }
@@ -58,8 +61,8 @@ export default function CheckoutCart() {
 
             {empty ? (
               <EmptyContent
-                title="Cart is Empty!"
-                description="Look like you have no items in your shopping cart."
+                title={t('item')}
+                description={t('shoppingDescription')}
                 imgUrl="/assets/icons/empty/ic_cart.svg"
                 sx={{ pt: 5, pb: 10 }}
               />
@@ -79,7 +82,7 @@ export default function CheckoutCart() {
             color="inherit"
             startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
           >
-            Continue Shopping
+            {t('continueShopping')}
           </Button>
         </Grid>
 
@@ -99,7 +102,7 @@ export default function CheckoutCart() {
             disabled={empty}
             onClick={handleCheckout}
           >
-            Check Out
+            {t('checkout')}
           </Button>
         </Grid>
       </Grid>

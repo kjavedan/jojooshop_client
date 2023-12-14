@@ -10,7 +10,10 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import InputAdornment from '@mui/material/InputAdornment';
+
 import { useCurrencyConverter } from 'src/utils/currency-exchanger';
+
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -22,32 +25,33 @@ export default function CheckoutSummary({
   //
   onApplyDiscount,
 }) {
+  const { t } = useTranslate();
   const { fCurrency } = useCurrencyConverter();
-  const displayShipping = shipping?.value !== null ? 'Free' : '-';
+  const displayShipping = shipping?.value !== null ? t('free') : '-';
 
   return (
     <Card sx={{ mb: 3 }}>
-      <CardHeader title="Order Summary" />
+      <CardHeader title={t('orderSummary')} />
 
       <CardContent>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Sub Total
+              {t('subTotal')}
             </Typography>
             <Typography variant="subtitle2">{fCurrency(subTotal)}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Discount
+              {t('discount')}
             </Typography>
             <Typography variant="subtitle2">{discount ? fCurrency(-discount) : '-'}</Typography>
           </Stack>
 
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Shipping
+              {t('shipping')}
             </Typography>
             <Typography variant="subtitle2">
               {shipping?.value ? fCurrency(shipping?.value) : displayShipping}
@@ -57,13 +61,13 @@ export default function CheckoutSummary({
           <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="subtitle1">Total</Typography>
+            <Typography variant="subtitle1">{t('total')}</Typography>
             <Box sx={{ textAlign: 'right' }}>
               <Typography variant="subtitle1" sx={{ color: 'error.main' }}>
                 {fCurrency(total)}
               </Typography>
               <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                (VAT included if applicable)
+                ({t('vatIncluded')})
               </Typography>
             </Box>
           </Stack>
@@ -71,13 +75,13 @@ export default function CheckoutSummary({
           {onApplyDiscount && (
             <TextField
               fullWidth
-              placeholder="Discount codes / Gifts"
+              placeholder={t('discountPlaceholder')}
               value="DISCOUNT5"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <Button color="primary" onClick={() => onApplyDiscount(5)} sx={{ mr: -0.5 }}>
-                      Apply
+                      {t('apply')}
                     </Button>
                   </InputAdornment>
                 ),

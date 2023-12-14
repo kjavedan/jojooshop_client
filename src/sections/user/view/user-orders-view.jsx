@@ -188,8 +188,6 @@ export default function UserOrdersView() {
           <LoadingScreen />
         </Box>
       )}
-
-      {!dataFiltered.length && <p>{t('noData')}</p>}
     </Container>
   );
 }

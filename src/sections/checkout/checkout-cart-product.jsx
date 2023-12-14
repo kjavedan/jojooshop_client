@@ -14,13 +14,15 @@ import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 
 import IncrementerButton from '../product/common/incrementer-button';
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }) {
   const { lang } = useLocales();
+  const { t } = useTranslate();
+
   const { fCurrency } = useCurrencyConverter();
   const { name, discount, price, discountedPrice, colors, coverUrl, quantity, stock } = row;
   return (
@@ -43,7 +45,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             alignItems="center"
             sx={{ typography: 'body2', color: 'text.secondary' }}
           >
-            color:
+            {t('color')}:
             <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} />
             <ColorPreview colors={colors} />
           </Stack>
@@ -67,7 +69,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
           />
 
           <Typography variant="caption" component="div" sx={{ color: 'text.secondary', mt: 1 }}>
-            available: {stock - quantity}
+            {t('available')}: {stock - quantity}
           </Typography>
         </Box>
       </TableCell>

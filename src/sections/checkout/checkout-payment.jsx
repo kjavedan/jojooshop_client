@@ -23,46 +23,9 @@ import LoginToProceed from '../auth/login-to-proceed';
 import CheckoutBillingInfo from './checkout-billing-info';
 import CheckoutPaymentMethods from './checkout-payment-methods';
 
+import { useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
-
-const DELIVERY_OPTIONS = [
-  {
-    value: 0,
-    speedy: 'Free',
-    description: '5-7 Days delivery',
-    trackingNumber: 'SPX037739199373',
-  },
-  {
-    value: 10,
-    speedy: 'Standard',
-    description: '3-5 Days delivery',
-    trackingNumber: 'SPX037739199373',
-  },
-  {
-    value: 20,
-    speedy: 'Express',
-    description: '2-3 Days delivery',
-    trackingNumber: 'SPX037739199373',
-  },
-];
-
-const PAYMENT_OPTIONS = [
-  {
-    value: 'paypal',
-    label: 'Pay with Paypal',
-    description: 'You will be redirected to PayPal website to complete your purchase securely.',
-  },
-  {
-    value: 'credit',
-    label: 'Credit / Debit Card',
-    description: 'We support Mastercard, Visa, Discover and Stripe.',
-  },
-  {
-    value: 'cash',
-    label: 'Cash',
-    description: 'Pay with cash when your order is delivered.',
-  },
-];
 
 const CARDS_OPTIONS = [
   { value: 'ViSa1', label: '**** **** **** 1212 - Jimmy Holland' },
@@ -71,6 +34,47 @@ const CARDS_OPTIONS = [
 ];
 
 export default function CheckoutPayment() {
+  const { t } = useTranslate();
+
+  const DELIVERY_OPTIONS = [
+    {
+      value: 0,
+      speedy: t('free'),
+      description: t('deliveryOption5To7Days'),
+      trackingNumber: 'SPX037739199373',
+    },
+    {
+      value: 10,
+      speedy: t('standard'),
+      description: t('deliveryOption3To5Days'),
+      trackingNumber: 'SPX037739199373',
+    },
+    {
+      value: 20,
+      speedy: t('express'),
+      description: t('deliveryOption2To3Days'),
+      trackingNumber: 'SPX037739199373',
+    },
+  ];
+
+  const PAYMENT_OPTIONS = [
+    {
+      value: 'paypal',
+      label: t('payWithPaypal'),
+      description: t('paypalDescription'),
+    },
+    {
+      value: 'credit',
+      label: t('creditDebitCard'),
+      description: t('creditDebitCardDescription'),
+    },
+    {
+      value: 'cash',
+      label: t('cash'),
+      description: t('cashDescription'),
+    },
+  ];
+
   const checkout = useCheckoutContext();
   const { items, billing, shipping } = checkout;
   const { addressType, fullAddress, phoneNumber } = billing;
@@ -80,11 +84,11 @@ export default function CheckoutPayment() {
 
   const PaymentSchema = Yup.object().shape({
     payment: Yup.object().shape({
-      cardType: Yup.string().required('CardType is required'),
-      cardNumber: Yup.string().required('CardNumber is required'),
+      cardType: Yup.string().required(t('cardTypeRequired')),
+      cardNumber: Yup.string().required(t('cardNumberRequired')),
     }),
     delivery: Yup.object().shape({
-      speedy: Yup.string().required('shipby is required'),
+      speedy: Yup.string().required(t('shipByRequired')),
     }),
   });
 
@@ -152,7 +156,7 @@ export default function CheckoutPayment() {
               onClick={checkout.onBackStep}
               startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
             >
-              Back
+              {t('back')}
             </Button>
           </Grid>
 
@@ -173,7 +177,7 @@ export default function CheckoutPayment() {
               variant="contained"
               loading={isSubmitting}
             >
-              Complete Order
+              {t('completeOrder')}
             </LoadingButton>
           </Grid>
         </Grid>

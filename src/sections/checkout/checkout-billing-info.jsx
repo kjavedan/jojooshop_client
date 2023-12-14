@@ -8,16 +8,20 @@ import CardHeader from '@mui/material/CardHeader';
 
 import Iconify from 'src/components/iconify';
 
+import { useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function CheckoutBillingInfo({ billing, onBackStep }) {
+  const { t } = useTranslate();
+
   return (
     <Card sx={{ mb: 3 }}>
       <CardHeader
-        title="Address"
+        title={t('address')}
         action={
           <Button size="small" startIcon={<Iconify icon="solar:pen-bold" />} onClick={onBackStep}>
-            Edit
+            {t('edit')}
           </Button>
         }
       />

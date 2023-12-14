@@ -14,10 +14,13 @@ import { OrderCompleteIllustration } from 'src/assets/illustrations';
 
 import Iconify from 'src/components/iconify';
 import { varFade } from 'src/components/animate';
+import { useTranslate } from 'src/locales'; // Assuming you have a hook for translation
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) {
+  const { t } = useTranslate();
+
   const renderContent = (
     <Stack
       spacing={5}
@@ -26,22 +29,23 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
         maxWidth: 480,
         textAlign: 'center',
         px: { xs: 2, sm: 0 },
+        py: 10,
       }}
     >
-      <Typography variant="h4">Thank you for your purchase!</Typography>
+      <Typography variant="h4">{t('thankYouForPurchase')}</Typography>
 
       <OrderCompleteIllustration sx={{ height: 260 }} />
 
       <Typography>
-        Thanks for placing order
+        {t('thanksForPlacingOrder')}
         <br />
         <br />
-        <Link>01dc1370-3df6-11eb-b378-0242ac130002</Link>
+        <Link>#2564</Link>
         <br />
         <br />
-        We will send you a notification within 5 days when it ships.
-        <br /> If you have any question or queries then fell to get in contact us. <br /> <br />
-        All the best,
+        {t('notificationSentWithinDays')}
+        <br /> {t('contactUsForQuestions')} <br /> <br />
+        {t('allTheBest')}
       </Typography>
 
       <Divider sx={{ borderStyle: 'dashed' }} />
@@ -59,7 +63,7 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
           onClick={onReset}
           startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
         >
-          Continue Shopping
+          {t('continueShopping')}
         </Button>
 
         <Button
@@ -69,7 +73,7 @@ export default function CheckoutOrderComplete({ open, onReset, onDownloadPDF }) 
           startIcon={<Iconify icon="eva:cloud-download-fill" />}
           onClick={onDownloadPDF}
         >
-          Download as PDF
+          {t('downloadAsPDF')}
         </Button>
       </Stack>
     </Stack>

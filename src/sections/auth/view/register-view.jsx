@@ -31,19 +31,13 @@ export default function ModernRegisterView() {
   const { register } = useAuthContext();
 
   const RegisterSchema = Yup.object().shape({
-    fullName: Yup.string().trim().required('FullName required'),
-    email: Yup.string()
-      .trim()
-      .required('Email is required')
-      .email('Email must be a valid email address'),
-    password: Yup.string()
-      .trim()
-      .required(t('passwordRequired'))
-      .min(6, 'Password must be at least 6 characters'),
+    fullName: Yup.string().trim().required(t('fullNameRequired')),
+    email: Yup.string().trim().required(t('emailRequired')).email(t('emailInvalid')),
+    password: Yup.string().trim().required(t('passwordRequired')).min(6, t('passwordError')),
     confirmPassword: Yup.string()
       .trim()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
+      .oneOf([Yup.ref('password'), null], t('passwordNotMatch'))
+      .required(t('confirmPasswordRequired')),
   });
 
   const defaultValues = {
@@ -73,13 +67,13 @@ export default function ModernRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Register</Typography>
+      <Typography variant="h4">{t('register')}</Typography>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> Already have an account? </Typography>
+        <Typography variant="body2"> {t('alreadyHaveAccount')} </Typography>
 
         <Link href={paths.auth.login} component={RouterLink} variant="subtitle2">
-          Login
+          {t('login')}
         </Link>
       </Stack>
     </Stack>
@@ -95,13 +89,13 @@ export default function ModernRegisterView() {
         textAlign: 'center',
       }}
     >
-      {'By signing up, I agree to '}
+      {t('bySignIn')}
       <Link underline="always" color="text.primary">
-        Terms of Service
+        {t('termsOfService')}
       </Link>
-      {' and '}
+      {t('and')}
       <Link underline="always" color="text.primary">
-        Privacy Policy
+        {t('termsOfService')}
       </Link>
       .
     </Typography>
@@ -110,14 +104,14 @@ export default function ModernRegisterView() {
   const renderForm = (
     <Stack spacing={2.5}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField name="fullName" label="Full name" />
+        <RHFTextField name="fullName" label={t('fullName')} />
       </Stack>
 
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label={t('emailAddress')} />
 
       <RHFTextField
         name="password"
-        label="Password"
+        label={t('password')}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -131,7 +125,7 @@ export default function ModernRegisterView() {
       />
       <RHFTextField
         name="confirmPassword"
-        label="Confirm Password"
+        label={t('confirmPassword')}
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -154,7 +148,7 @@ export default function ModernRegisterView() {
         endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
         sx={{ justifyContent: 'space-between', pl: 2, pr: 1.5 }}
       >
-        Create account
+        {t('createAccount')}
       </LoadingButton>
     </Stack>
   );

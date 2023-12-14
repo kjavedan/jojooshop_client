@@ -12,11 +12,13 @@ import { AddressItem, AddressNewForm } from '../address';
 import { useAuthContext } from 'src/auth/hooks';
 import useAddressBook from '../user/hooks/address-book';
 
+import { useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function CheckoutBillingAddress() {
   const checkout = useCheckoutContext();
-
+  const { t } = useTranslate();
   const addressForm = useBoolean();
 
   const { user } = useAuthContext();
@@ -48,7 +50,7 @@ export default function CheckoutBillingAddress() {
                     size="small"
                     onClick={() => checkout.onCreateBilling(address)}
                   >
-                    Deliver to this Address
+                    {t('deliverToThisAddress')}
                   </Button>
                 </Stack>
               }
@@ -68,7 +70,7 @@ export default function CheckoutBillingAddress() {
               onClick={checkout.onBackStep}
               startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
             >
-              Back
+              {t('back')}
             </Button>
 
             <Button
@@ -77,7 +79,7 @@ export default function CheckoutBillingAddress() {
               onClick={addressForm.onTrue}
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Address
+              {t('newAddress')}
             </Button>
           </Stack>
         </Grid>

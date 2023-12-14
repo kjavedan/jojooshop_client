@@ -9,17 +9,7 @@ import { TableHeadCustom } from 'src/components/table';
 
 import CheckoutCartProduct from './checkout-cart-product';
 
-// ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'product', label: 'Product' },
-  { id: 'discount', label: 'discount' },
-  { id: 'price', label: 'Price' },
-  { id: 'discountedPrice', label: 'discountedPrice' },
-  { id: 'quantity', label: 'Quantity' },
-  { id: 'totalAmount', label: 'Total Price', align: 'right' },
-  { id: '' },
-];
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +19,17 @@ export default function CheckoutCartProductList({
   onIncreaseQuantity,
   onDecreaseQuantity,
 }) {
+  const { t } = useTranslate();
+
+  const TABLE_HEAD = [
+    { id: 'product', label: t('product') },
+    { id: 'discount', label: t('discount') },
+    { id: 'price', label: t('price') },
+    { id: 'discountedPrice', label: t('discountedPrice') },
+    { id: 'quantity', label: t('quantity') },
+    { id: 'totalAmount', label: t('totalPrice'), align: 'right' },
+    { id: '' },
+  ];
   return (
     <TableContainer sx={{ overflow: 'unset' }}>
       <Scrollbar>

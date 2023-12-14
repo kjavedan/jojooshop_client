@@ -8,9 +8,11 @@ import DialogActions from '@mui/material/DialogActions';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { useCallback } from 'react';
+import { useTranslate } from 'src/locales';
 
 export default function LoginToProceed({ open, onClose, returnTo }) {
   const router = useRouter();
+  const { t } = useTranslate();
 
   const handleLoginRedirect = useCallback(() => {
     const path = `${paths.auth.login}?returnTo=${returnTo}`;
@@ -19,7 +21,7 @@ export default function LoginToProceed({ open, onClose, returnTo }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle> Login to proceed </DialogTitle>
+      <DialogTitle> {t('loginToProceed')} </DialogTitle>
 
       <DialogActions>
         <Button
@@ -29,7 +31,7 @@ export default function LoginToProceed({ open, onClose, returnTo }) {
           variant="contained"
           onClick={handleLoginRedirect}
         >
-          Login
+          {t('login')}
         </Button>
       </DialogActions>
     </Dialog>
