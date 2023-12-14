@@ -14,36 +14,38 @@ import { RouterLink } from 'src/routes/components';
 
 import { _socials } from 'src/_mock';
 
+import { useTranslate } from 'src/locales';
+
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-const LINKS = [
-  {
-    headline: 'Minimal',
-    children: [
-      { name: 'About us', href: paths.about },
-      { name: 'Contact us', href: paths.contact },
-      { name: 'FAQs', href: paths.faqs },
-    ],
-  },
-  {
-    headline: 'Legal',
-    children: [
-      { name: 'Terms and Condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' },
-    ],
-  },
-  {
-    headline: 'Contact',
-    children: [{ name: 'support@minimals.cc', href: '#' }],
-  },
-];
-
-// ----------------------------------------------------------------------
-
 export default function Footer() {
+  const { t } = useTranslate();
+
+  const Links = [
+    {
+      headline: t('jojooshopCom'),
+      children: [
+        { linkName: t('aboutUs'), href: paths.about },
+        { linkName: t('contactUs'), href: paths.contact },
+        { linkName: t('faqs'), href: paths.faqs },
+      ],
+    },
+    {
+      headline: t('legal'),
+      children: [
+        { linkName: t('termsAndConditions'), href: '#' },
+        { linkName: t('privacyPolicy'), href: '#' },
+      ],
+    },
+    {
+      headline: t('contact'),
+      children: [{ linkName: t('adminEmail'), href: '#' }],
+    },
+  ];
+
   const pathname = usePathname();
 
   const homePage = pathname === '/';
@@ -62,8 +64,8 @@ export default function Footer() {
         <Logo sx={{ mb: 1, mx: 'auto' }} />
 
         <Typography variant="caption" component="div">
-          © All rights reserved
-          <br /> made by
+          © {t('allRightsReserved')}
+          <br /> {t('madeBy')}
           <Link href="https://minimals.cc/"> jojooshop.com </Link>
         </Typography>
       </Container>
@@ -104,8 +106,7 @@ export default function Footer() {
                 mx: { xs: 'auto', md: 'unset' },
               }}
             >
-              The starting point for your next project with Minimal UI Kit, built on the newest
-              version of Material-UI ©, ready to be customized to your style.
+              {t('useContentDisclaimer')}
             </Typography>
 
             <Stack
@@ -133,7 +134,7 @@ export default function Footer() {
 
           <Grid xs={12} md={6}>
             <Stack spacing={5} direction={{ xs: 'column', md: 'row' }}>
-              {LINKS.map((list) => (
+              {Links.map((list) => (
                 <Stack
                   key={list.headline}
                   spacing={2}
@@ -141,18 +142,18 @@ export default function Footer() {
                   sx={{ width: 1 }}
                 >
                   <Typography component="div" variant="overline">
-                    {list.headline}
+                    {t(list.headline)}
                   </Typography>
 
                   {list.children.map((link) => (
                     <Link
-                      key={link.name}
+                      key={link.linkName}
                       component={RouterLink}
                       href={link.href}
                       color="inherit"
                       variant="body2"
                     >
-                      {link.name}
+                      {t(link.linkName)}
                     </Link>
                   ))}
                 </Stack>
@@ -162,7 +163,7 @@ export default function Footer() {
         </Grid>
 
         <Typography variant="body2" sx={{ mt: 10 }}>
-          © 2021. All rights reserved
+          © 2024. {t('allRightsReserved')}
         </Typography>
       </Container>
     </Box>

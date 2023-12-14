@@ -20,7 +20,7 @@ import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider from 'src/components/hook-form';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import IncrementerButton from './common/incrementer-button';
 import { useCurrencyConverter } from 'src/utils/currency-exchanger';
 
@@ -35,7 +35,9 @@ export default function ProductDetailsSummary({
   ...other
 }) {
   const router = useRouter();
+  const { t } = useTranslate();
   const { lang } = useLocales();
+
   const { fCurrency } = useCurrencyConverter();
   const {
     _id,
@@ -50,7 +52,7 @@ export default function ProductDetailsSummary({
     priceSale,
     saleLabel,
     rate,
-    totalReviews,
+    reviews,
     subDescription,
     discountedPrice,
   } = product;
@@ -146,20 +148,8 @@ export default function ProductDetailsSummary({
           alignItems: 'center',
         }}
       >
-        <Iconify icon="mingcute:add-line" width={16} sx={{ mr: 1 }} />
-        Compare
-      </Link>
-
-      <Link
-        variant="subtitle2"
-        sx={{
-          color: 'text.secondary',
-          display: 'inline-flex',
-          alignItems: 'center',
-        }}
-      >
         <Iconify icon="solar:heart-bold" width={16} sx={{ mr: 1 }} />
-        Favorite
+        {t('favorite')}
       </Link>
 
       <Link
@@ -171,7 +161,7 @@ export default function ProductDetailsSummary({
         }}
       >
         <Iconify icon="solar:share-bold" width={16} sx={{ mr: 1 }} />
-        Share
+        {t('share')}
       </Link>
     </Stack>
   );
@@ -179,7 +169,7 @@ export default function ProductDetailsSummary({
   const renderColorOptions = (
     <Stack direction="row">
       <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-        Color
+        {t('color')}
       </Typography>
       <Controller
         name="colors"
@@ -200,7 +190,7 @@ export default function ProductDetailsSummary({
   const renderQuantity = (
     <Stack direction="row">
       <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-        Quantity
+        {t('quantity')}
       </Typography>
 
       <Stack spacing={1}>
@@ -208,13 +198,13 @@ export default function ProductDetailsSummary({
           name="quantity"
           quantity={values.quantity}
           disabledDecrease={values.quantity <= 1}
-          disabledIncrease={values.quantity >= available}
+          disabledIncrease={values.quantity >= stock}
           onIncrease={() => setValue('quantity', values.quantity + 1)}
           onDecrease={() => setValue('quantity', values.quantity - 1)}
         />
 
         <Typography variant="caption" component="div" sx={{ textAlign: 'right' }}>
-          Available: {stock - values.quantity}
+          {t('available')}: {stock - values.quantity}
         </Typography>
       </Stack>
     </Stack>
@@ -232,11 +222,11 @@ export default function ProductDetailsSummary({
         onClick={handleAddCart}
         sx={{ whiteSpace: 'nowrap' }}
       >
-        Add to Cart
+        {t('addToCart')}
       </Button>
 
       <Button fullWidth size="large" type="submit" variant="contained" disabled={disabledActions}>
-        Buy Now
+        {t('buyNow')}
       </Button>
     </Stack>
   );
@@ -257,7 +247,11 @@ export default function ProductDetailsSummary({
       }}
     >
       <Rating size="small" value={rate} precision={0.1} readOnly sx={{ mr: 1 }} />
-      {`(${fShortenNumber(totalReviews)} reviews)`}
+      {!reviews?.length
+        ? t('noReview')
+        : reviews === 1
+        ? 1 + t('review')
+        : `${fShortenNumber(reviews?.length)} ${t('reviews')}`}
     </Stack>
   );
 
@@ -269,7 +263,11 @@ export default function ProductDetailsSummary({
       {saleLabel.enabled && (
         <Label color="error">{saleLabel.content ? saleLabel.content[lang] : 'sale'}</Label>
       )}
-      {discount && <Label color="error">%{discount} discout</Label>}
+      {discount && (
+        <Label color="error">
+          %{discount} {t('discount')}
+        </Label>
+      )}
     </Stack>
   );
 
@@ -281,7 +279,7 @@ export default function ProductDetailsSummary({
         color: (stock <= 0 && 'error.main') || stock < 20 ? 'warning.main' : 'success.main',
       }}
     >
-      {(stock <= 0 && 'Out Of Stock') || stock < 20 ? 'Low Stock' : 'In Stock'}
+      {(stock <= 0 && t('outOfStock')) || stock < 20 ? t('lowStock') : t('inStock')}
     </Box>
   );
 

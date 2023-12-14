@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
 import { useSettingsContext } from 'src/components/settings';
@@ -13,7 +15,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 export default function SettingsButton({ sx }) {
   const settings = useSettingsContext();
-
+  const { t } = useTranslate();
   return (
     <Badge
       color="error"
@@ -43,7 +45,7 @@ export default function SettingsButton({ sx }) {
           whileTap="tap"
           whileHover="hover"
           variants={varHover(1.05)}
-          aria-label="settings"
+          aria-label={t('settings')}
           onClick={settings.onToggle}
           sx={{
             width: 40,

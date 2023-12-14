@@ -145,7 +145,6 @@ export function AuthProvider({ children }) {
         const { accessToken, user } = response.data;
 
         setSession(accessToken);
-        console.log(returnTo);
         router.push(returnTo || PATH_AFTER_LOGIN);
 
         dispatch({

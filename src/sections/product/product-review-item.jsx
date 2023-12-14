@@ -173,12 +173,12 @@ export default function ProductReviewItem({ review }) {
           }}
         >
           <Iconify icon="solar:pen-bold" />
-          Edit
+          {t('edit')}
         </MenuItem>
 
         <MenuItem onClick={handleDelteReview} sx={{ color: 'error.main' }}>
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          {t('delete')}
         </MenuItem>
       </CustomPopover>
 

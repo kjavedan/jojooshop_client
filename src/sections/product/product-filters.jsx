@@ -20,6 +20,8 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { ColorPicker } from 'src/components/color-utils';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function ProductFilters({
@@ -38,6 +40,9 @@ export default function ProductFilters({
   ratingOptions,
   categoryPriceRange,
 }) {
+  const { t } = useTranslate();
+  const { lang } = useLocales();
+
   const marksLabel = [...Array(21)].map((_, index) => {
     const value = index * (categoryPriceRange.max / 20);
 
@@ -88,7 +93,7 @@ export default function ProductFilters({
       sx={{ py: 2, pr: 1, pl: 2.5 }}
     >
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
-        Filters
+        {t('filters')}
       </Typography>
 
       <Tooltip title="Reset">
@@ -108,7 +113,7 @@ export default function ProductFilters({
   const renderTags = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Tags
+        {t('tags')}
       </Typography>
       {tagOptions.map((tag, index) => (
         <FormControlLabel
@@ -119,7 +124,7 @@ export default function ProductFilters({
               onClick={() => handleFilterTags(tag.key)}
             />
           }
-          label={tag.title.en}
+          label={tag.title[lang]}
         />
       ))}
     </Stack>
@@ -128,7 +133,7 @@ export default function ProductFilters({
   const renderColor = (
     <Stack>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Color
+        {t('color')}
       </Typography>
       <ColorPicker
         selected={filters.colors}
@@ -143,18 +148,18 @@ export default function ProductFilters({
   const renderPrice = (
     <Stack>
       <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-        Price
+        {t('price')}
       </Typography>
 
       <Stack direction="row" spacing={5} sx={{ my: 2 }}>
         <InputRange
-          type="min"
+          type={t('min')}
           value={filters.priceRange}
           categoryPriceRange={categoryPriceRange}
           onFilters={onFilters}
         />
         <InputRange
-          type="max"
+          type={t('max')}
           value={filters.priceRange}
           categoryPriceRange={categoryPriceRange}
           onFilters={onFilters}
@@ -180,7 +185,7 @@ export default function ProductFilters({
 
   const renderRating = (
     <Stack spacing={2} alignItems="flex-start">
-      <Typography variant="subtitle2">Rating</Typography>
+      <Typography variant="subtitle2">{t('rating')}</Typography>
 
       {ratingOptions.map((item, index) => (
         <Stack
@@ -192,7 +197,7 @@ export default function ProductFilters({
             cursor: 'pointer',
             typography: 'body2',
             '&:hover': { opacity: 0.48 },
-            ...(filters.rating === item && {
+            ...(filters.rate === item && {
               pl: 0.5,
               pr: 0.75,
               py: 0.25,
@@ -200,7 +205,7 @@ export default function ProductFilters({
             }),
           }}
         >
-          <Rating readOnly value={4 - index} sx={{ mr: 1 }} /> & Up
+          <Rating readOnly value={4 - index} sx={{ mr: 1 }} /> & {t('up')}
         </Stack>
       ))}
     </Stack>
@@ -218,7 +223,7 @@ export default function ProductFilters({
         }
         onClick={onOpen}
       >
-        Filters
+        {t('filters')}
       </Button>
 
       <Drawer

@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
-
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function SearchNotFound({ query, sx, ...other }) {
+  const { t } = useTranslate();
+
   return query ? (
     <Paper
       sx={{
@@ -16,18 +19,17 @@ export default function SearchNotFound({ query, sx, ...other }) {
       {...other}
     >
       <Typography variant="h6" gutterBottom>
-        Not Found
+        {t('notFound')}
       </Typography>
 
       <Typography variant="body2">
-        No results found for &nbsp;
-        <strong>&quot;{query}&quot;</strong>.
-        <br /> Try checking for typos or using complete words.
+        {t('noResults', { query: <strong>&quot;{query}&quot;</strong> })}
+        <br /> {t('tryChecking')}
       </Typography>
     </Paper>
   ) : (
     <Typography variant="body2" sx={sx}>
-      Please enter keywords
+      {t('enterKeywords')}
     </Typography>
   );
 }

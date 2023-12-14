@@ -9,6 +9,8 @@ import { alpha } from '@mui/material/styles';
 
 import Iconify from 'src/components/iconify';
 
+import { useLocales, useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function ProductFiltersResult({
@@ -19,15 +21,18 @@ export default function ProductFiltersResult({
   onResetFilters,
   //
   results,
+  tagOptions,
   ...other
 }) {
+  const { t } = useTranslate();
+  const { lang } = useLocales();
+
   const handleRemoveTags = (inputValue) => {
     const newValue = filters.tags.filter((item) => item !== inputValue);
     onFilters('tags', newValue);
   };
 
   const handleRemoveColor = (inputValue) => {
-    console.log(inputValue);
     const newValue = filters.colors.filter((item) => item !== inputValue);
     onFilters('colors', newValue);
   };
@@ -37,31 +42,34 @@ export default function ProductFiltersResult({
   };
 
   const handleRemoveRating = () => {
-    onFilters('rating', '');
+    onFilters('rate', '');
   };
-
-  console.log(filters.colors);
 
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t('resultsFound')}
         </Box>
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {!!filters.tags.length && (
-          <Block label="Tags:">
+          <Block label={t('tags')}>
             {filters.tags.map((item) => (
-              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveTags(item)} />
+              <Chip
+                key={item}
+                label={tagOptions?.find((option) => option.key === item)?.title?.[lang] || item}
+                size="small"
+                onDelete={() => handleRemoveTags(item)}
+              />
             ))}
           </Block>
         )}
 
         {!!filters?.colors.length && (
-          <Block label="Colors:">
+          <Block label={t('colors')}>
             {filters?.colors?.map((item, index) => (
               <Chip
                 key={index}
@@ -85,7 +93,7 @@ export default function ProductFiltersResult({
         )}
 
         {(filters.priceRange[0] !== 0 || filters.priceRange[1] !== 0) && (
-          <Block label="Price:">
+          <Block label={t('price')}>
             <Chip
               size="small"
               label={`$${filters.priceRange[0]} - ${filters.priceRange[1]}`}
@@ -95,8 +103,8 @@ export default function ProductFiltersResult({
         )}
 
         {!!filters.rating && (
-          <Block label="Rating:">
-            <Chip size="small" label={filters.rating} onDelete={handleRemoveRating} />
+          <Block label={t('rating')}>
+            <Chip size="small" label={filters.rate} onDelete={handleRemoveRating} />
           </Block>
         )}
 
@@ -106,7 +114,7 @@ export default function ProductFiltersResult({
             onClick={onResetFilters}
             startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
           >
-            Clear
+            {t('clear')}
           </Button>
         )}
       </Stack>
@@ -120,6 +128,7 @@ ProductFiltersResult.propTypes = {
   onFilters: PropTypes.func,
   results: PropTypes.number,
   onResetFilters: PropTypes.func,
+  tagOptions: PropTypes.array,
 };
 
 // ----------------------------------------------------------------------

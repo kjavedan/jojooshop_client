@@ -189,7 +189,7 @@ export default function UserOrdersView() {
         </Box>
       )}
 
-      {!dataFiltered.length && <p>no data</p>}
+      {!dataFiltered.length && <p>{t('noData')}</p>}
     </Container>
   );
 }

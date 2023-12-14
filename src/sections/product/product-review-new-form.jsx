@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { mutate } from 'swr';
 import PropTypes from 'prop-types';
 import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -32,14 +32,13 @@ export default function ProductReviewNewForm({ onClose, currentReview, ...other 
   const params = useParams();
   const { id: productId } = params;
   const { user } = useAuthContext();
-
   const { t } = useTranslate();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const ReviewSchema = Yup.object().shape({
-    rate: Yup.number().min(1, 'Rating must be greater than or equal to 1'),
-    comment: Yup.string().required('Review is required'),
+    rate: Yup.number().min(1, t('ratingError')),
+    comment: Yup.string().required(t('reviewRequired')),
   });
 
   const defaultValues = {
@@ -62,6 +61,12 @@ export default function ProductReviewNewForm({ onClose, currentReview, ...other 
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (currentReview) {
+      reset(currentReview);
+    }
+  }, [reset, currentReview]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -93,11 +98,11 @@ export default function ProductReviewNewForm({ onClose, currentReview, ...other 
   return (
     <Dialog onClose={onClose} {...other}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle> Add Review </DialogTitle>
+        <DialogTitle> {t('addReview')} </DialogTitle>
 
         <DialogContent>
           <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={1.5}>
-            <Typography variant="body2">Your review about this product:</Typography>
+            <Typography variant="body2">{t('yourReviewAbout')}:</Typography>
 
             <Controller
               name="rate"
@@ -117,16 +122,16 @@ export default function ProductReviewNewForm({ onClose, currentReview, ...other 
 
           {!!errors.rate && <FormHelperText error> {errors.rate?.message}</FormHelperText>}
 
-          <RHFTextField name="comment" label="Review *" multiline rows={3} sx={{ mt: 3 }} />
+          <RHFTextField name="comment" label={t('review')} multiline rows={3} sx={{ mt: 3 }} />
         </DialogContent>
 
         <DialogActions>
           <Button color="inherit" variant="outlined" onClick={onCancel}>
-            Cancel
+            {t('cancel')}
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Post
+            {t('post')}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

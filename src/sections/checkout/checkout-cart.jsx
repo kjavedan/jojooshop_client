@@ -104,7 +104,7 @@ export default function CheckoutCart() {
         </Grid>
       </Grid>
 
-      <LoginToProceed open={login.value} onClose={login.onFalse} />
+      <LoginToProceed open={login.value} onClose={login.onFalse} returnTo={paths.checkout.root} />
     </>
   );
 }

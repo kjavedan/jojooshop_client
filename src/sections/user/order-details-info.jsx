@@ -12,8 +12,7 @@ import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
-export default function OrderDetailsInfo({ customer, delivery, payment, shippingAddress }) {
-  console.log(customer);
+export default function OrderDetailsInfo({ delivery, payment, shippingAddress }) {
   const { t } = useTranslate();
 
   const renderDelivery = (

@@ -43,7 +43,6 @@ const useAddressBook = () => {
 
   const handleDeleteAddress = useCallback(
     (index) => {
-      console.log(index);
       const addressBook = user.addressBook.filter((_, i) => i !== index);
       handleUpdateUser({ addressBook });
     },

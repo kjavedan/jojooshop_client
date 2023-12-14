@@ -5,16 +5,19 @@ import TableCell from '@mui/material/TableCell';
 
 import EmptyContent from '../empty-content';
 
+import { useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function TableNoData({ notFound, sx }) {
+  const { t } = useTranslate();
   return (
     <TableRow>
       {notFound ? (
         <TableCell colSpan={12}>
           <EmptyContent
             filled
-            title="No Data"
+            title={t('noData')}
             sx={{
               py: 10,
               ...sx,

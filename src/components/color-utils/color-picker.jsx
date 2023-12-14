@@ -14,10 +14,7 @@ const ColorPicker = forwardRef(
     const handleSelect = useCallback(
       (color) => {
         if (singleSelect) {
-          console.log(color);
-          console.log(selected);
           if (color.value !== selected.value) {
-            console.log('ran');
             onSelectColor(color);
           }
         } else {

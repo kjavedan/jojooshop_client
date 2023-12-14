@@ -12,7 +12,6 @@ import { NavItem } from './nav-item';
 // ----------------------------------------------------------------------
 
 export default function NavList({ data }) {
-  console.log(data);
   const active = useActiveLink(data.path, !!data.children);
 
   const [openMenu, setOpenMenu] = useState(false);

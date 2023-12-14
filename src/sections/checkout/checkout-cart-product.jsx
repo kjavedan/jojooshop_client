@@ -23,7 +23,6 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
   const { lang } = useLocales();
   const { fCurrency } = useCurrencyConverter();
   const { name, discount, price, discountedPrice, colors, coverUrl, quantity, stock } = row;
-  console.log(row);
   return (
     <TableRow>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>

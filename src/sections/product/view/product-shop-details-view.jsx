@@ -15,7 +15,7 @@ import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
-import { useLocales } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import { useGetProduct } from 'src/api/product';
 
@@ -34,28 +34,29 @@ import ProductDetailsDescription from '../product-details-description';
 
 // ----------------------------------------------------------------------
 
-const SUMMARY = [
-  {
-    title: '100% Original',
-    description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
-    icon: 'solar:verified-check-bold',
-  },
-  {
-    title: '10 Day Replacement',
-    description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
-    icon: 'solar:clock-circle-bold',
-  },
-  {
-    title: 'Year Warranty',
-    description: 'Cotton candy gingerbread cake I love sugar sweet.',
-    icon: 'solar:shield-check-bold',
-  },
-];
-
-// ----------------------------------------------------------------------
-
 export default function ProductShopDetailsView() {
+  const { t } = useTranslate();
+
+  const SUMMARY = [
+    {
+      title: t('original100Percent'),
+      description: t('original100PercentDescription'),
+      icon: 'solar:verified-check-bold',
+    },
+    {
+      title: t('replacement10Days'),
+      description: t('replacement10DaysDescription'),
+      icon: 'solar:clock-circle-bold',
+    },
+    {
+      title: t('warrantyYear'),
+      description: t('warrantyYearDescription'),
+      icon: 'solar:shield-check-bold',
+    },
+  ];
+
   const settings = useSettingsContext();
+
   const { lang } = useLocales();
 
   const checkout = useCheckoutContext();
@@ -85,7 +86,7 @@ export default function ProductShopDetailsView() {
           startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
           sx={{ mt: 3 }}
         >
-          Back to List
+          {t('backToList')}
         </Button>
       }
       sx={{ py: 10 }}
@@ -96,9 +97,9 @@ export default function ProductShopDetailsView() {
     <>
       <CustomBreadcrumbs
         links={[
-          { name: 'Home', href: '/' },
+          { name: t('home'), href: '/' },
           {
-            name: 'Shop',
+            name: t('shop'),
             href: paths.product.category(product?.category),
           },
           { name: product?.name[lang] },
@@ -157,11 +158,11 @@ export default function ProductShopDetailsView() {
           {[
             {
               value: 'description',
-              label: 'Description',
+              label: t('description'),
             },
             {
               value: 'reviews',
-              label: `Reviews (${product?.reviews?.length})`,
+              label: `${t('reviews')} (${product?.reviews?.length})`,
             },
           ].map((tab) => (
             <Tab key={tab.value} value={tab.value} label={tab.label} />

@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import { paths } from 'src/routes/paths';
+
 import Iconify from 'src/components/iconify';
 import FormProvider from 'src/components/hook-form';
 
@@ -176,7 +178,7 @@ export default function CheckoutPayment() {
           </Grid>
         </Grid>
       </FormProvider>
-      <LoginToProceed open={login.value} onClose={login.onFalse} />
+      <LoginToProceed open={login.value} onClose={login.onFalse} returnTo={paths.checkout.root} />
     </>
   );
 }

@@ -44,7 +44,7 @@ ProductItemSkeleton.propTypes = {
 
 export function ProductDetailsSkeleton({ ...other }) {
   return (
-    <Grid container spacing={8} {...other}>
+    <Grid container spacing={8} {...other} sx={{ overflow: 'hidden' }}>
       <Grid xs={12} md={6} lg={7}>
         <Skeleton sx={{ paddingTop: '100%' }} />
       </Grid>

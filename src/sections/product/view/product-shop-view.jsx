@@ -11,10 +11,12 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useDebounce } from 'src/hooks/use-debounce';
 
 import { useGetProducts, useSearchProducts } from 'src/api/product';
-import { PRODUCT_SORT_OPTIONS, PRODUCT_RATING_OPTIONS } from 'src/_mock';
+import { PRODUCT_RATING_OPTIONS } from 'src/_mock';
 
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+
+import { useTranslate } from 'src/locales';
 
 import ProductList from '../product-list';
 import ProductSort from '../product-sort';
@@ -38,6 +40,16 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function ProductShopView() {
+  const { t } = useTranslate();
+
+  const PRODUCT_SORT_OPTIONS = [
+    { value: 'featured', label: t('featured') },
+    { value: 'newest', label: t('newest') },
+    { value: 'discount', label: t('highestDiscount') },
+    { value: 'priceDesc', label: t('priceHighToLow') },
+    { value: 'priceAsc', label: t('priceLowToHigh') },
+  ];
+
   const settings = useSettingsContext();
 
   const checkout = useCheckoutContext();
@@ -122,17 +134,6 @@ export default function ProductShopView() {
     setFilters(defaultFilters);
   }, []);
 
-  const handleFetchFilteredData = useCallback(() => {
-    const { colors, priceRange, rating, tags } = filters;
-    if (colors.length || !!priceRange[1] || !!rating || tags.length) {
-      console.log('need filtering');
-    }
-  }, [filters]);
-
-  useEffect(() => {
-    handleFetchFilteredData();
-  }, [handleFetchFilteredData]);
-
   const renderFilters = (
     <Stack
       spacing={3}
@@ -180,10 +181,11 @@ export default function ProductShopView() {
       onResetFilters={handleResetFilters}
       //
       results={totalCount}
+      tagOptions={tagOptions}
     />
   );
 
-  const renderNotFound = <EmptyContent filled title="No Data" sx={{ py: 10 }} />;
+  const renderNotFound = <EmptyContent filled title={t('noData')} sx={{ py: 10 }} />;
 
   return (
     <Container
@@ -200,7 +202,7 @@ export default function ProductShopView() {
           my: { xs: 3, md: 5 },
         }}
       >
-        Shop
+        {t('shop')}
       </Typography>
 
       <Stack
