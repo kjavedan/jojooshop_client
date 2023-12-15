@@ -41,12 +41,13 @@ export default function OrderDetailsToolbar({ status, backLink, orderDate, order
                 variant="soft"
                 color={
                   (status === 'completed' && 'success') ||
+                  (status === 'processing' && 'primary') ||
                   (status === 'pending' && 'warning') ||
                   (status === 'cancelled' && 'error') ||
                   'default'
                 }
               >
-                {status}
+                {t(status)}
               </Label>
             </Stack>
 

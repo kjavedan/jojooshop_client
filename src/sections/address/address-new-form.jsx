@@ -22,17 +22,21 @@ import FormProvider, {
   RHFAutocomplete,
 } from 'src/components/hook-form';
 
+import { useTranslate } from 'src/locales';
+
 // ----------------------------------------------------------------------
 
 export default function AddressNewForm({ open, onClose, onCreate }) {
+  const { t } = useTranslate();
+
   const NewAddressSchema = Yup.object().shape({
-    name: Yup.string().required('Fullname is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    city: Yup.string().required('City is required'),
-    state: Yup.string().required('State is required'),
-    country: Yup.string().required('Country is required'),
-    zipCode: Yup.string().required('Zip code is required'),
+    name: Yup.string().required(t('fullNameRequired')),
+    phoneNumber: Yup.string().required(t('phoneNumberRequired')),
+    address: Yup.string().required(t('addressRequired')),
+    city: Yup.string().required(t('cityRequired')),
+    state: Yup.string().required(t('stateRequired')),
+    country: Yup.string().required(t('countryRequried')),
+    zipCode: Yup.string().required(t('zipCodeRequried')),
     // not required
     addressType: Yup.string(),
     primary: Yup.boolean(),
@@ -78,7 +82,7 @@ export default function AddressNewForm({ open, onClose, onCreate }) {
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>New address</DialogTitle>
+        <DialogTitle>{t('newAddress')}</DialogTitle>
 
         <DialogContent dividers>
           <Stack spacing={3}>
@@ -86,8 +90,8 @@ export default function AddressNewForm({ open, onClose, onCreate }) {
               row
               name="addressType"
               options={[
-                { label: 'Home', value: 'Home' },
-                { label: 'Office', value: 'Office' },
+                { label: t('home'), value: 'home' },
+                { label: t('office'), value: 'office' },
               ]}
             />
 
@@ -100,12 +104,12 @@ export default function AddressNewForm({ open, onClose, onCreate }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
+              <RHFTextField name="name" label={t('fullName')} />
 
-              <RHFTextField name="phoneNumber" label="Phone Number" />
+              <RHFTextField name="phoneNumber" label={t('phoneNumber')} />
             </Box>
 
-            <RHFTextField name="address" label="Address" />
+            <RHFTextField name="address" label={t('address')} />
 
             <Box
               rowGap={3}
@@ -116,16 +120,16 @@ export default function AddressNewForm({ open, onClose, onCreate }) {
                 sm: 'repeat(3, 1fr)',
               }}
             >
-              <RHFTextField name="city" label="Town / City" />
+              <RHFTextField name="city" label={t('city')} />
 
-              <RHFTextField name="state" label="State" />
+              <RHFTextField name="state" label={t('state')} />
 
-              <RHFTextField name="zipCode" label="Zip/Code" />
+              <RHFTextField name="zipCode" label={t('zipCode')} />
             </Box>
 
             <RHFAutocomplete
               name="country"
-              label="Country"
+              label={t('country')}
               options={countries.map((country) => country.label)}
               getOptionLabel={(option) => option}
               renderOption={(props, option) => {
@@ -151,17 +155,17 @@ export default function AddressNewForm({ open, onClose, onCreate }) {
               }}
             />
 
-            <RHFCheckbox name="primary" label="Use this address as default." />
+            <RHFCheckbox name="primary" label={t('useAddressAsDefault')} />
           </Stack>
         </DialogContent>
 
         <DialogActions>
           <Button color="inherit" variant="outlined" onClick={onClose}>
-            Cancel
+            {t('cancel')}
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Deliver to this Address
+            {t('deliverToThisAddress')}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

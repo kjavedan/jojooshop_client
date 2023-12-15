@@ -20,6 +20,17 @@ import { useTranslate } from 'src/locales';
 
 export default function OrderDetailsHistory({ history }) {
   const { t } = useTranslate();
+
+  const ORDER_TIMELINE_OPTIONS = [
+    { value: 7, label: t('orderisDelivered') },
+    { value: 6, label: t('orderIsBeingDelivered') },
+    { value: 5, label: t('packageInTransitToDestination') },
+    { value: 4, label: t('packageHandedToShippingCarrier') },
+    { value: 3, label: t('orderHasBeenPacked') },
+    { value: 2, label: t('orderIsBeingProcessed') },
+    { value: 1, label: t('orderHasBeenCreated') },
+  ];
+
   const renderSummary = (
     <Stack
       spacing={2}
@@ -64,27 +75,28 @@ export default function OrderDetailsHistory({ history }) {
         },
       }}
     >
-      {history?.timeline?.map((item, index) => {
-        const firstTimeline = index === 0;
+      {ORDER_TIMELINE_OPTIONS.map((item) => {
+        const firstTimeline = item.value === history.timeline;
 
-        const lastTimeline = index === history?.timeline?.length - 1;
+        const lastTimeline = item.value === history.timeline + 1;
+        if (item.value <= history.timeline) {
+          return (
+            <TimelineItem key={item.value}>
+              <TimelineSeparator>
+                <TimelineDot color={(firstTimeline && 'primary') || 'grey'} />
+                {lastTimeline ? null : <TimelineConnector />}
+              </TimelineSeparator>
 
-        return (
-          <TimelineItem key={item.title}>
-            <TimelineSeparator>
-              <TimelineDot color={(firstTimeline && 'primary') || 'grey'} />
-              {lastTimeline ? null : <TimelineConnector />}
-            </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="subtitle2">{item.label}</Typography>
 
-            <TimelineContent>
-              <Typography variant="subtitle2">{item.title}</Typography>
-
-              <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
-                {fDateTime(item.time)}
-              </Box>
-            </TimelineContent>
-          </TimelineItem>
-        );
+                <Box sx={{ color: 'text.disabled', typography: 'caption', mt: 0.5 }}>
+                  {fDateTime(item.time)}
+                </Box>
+              </TimelineContent>
+            </TimelineItem>
+          );
+        }
       })}
     </Timeline>
   );

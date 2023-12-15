@@ -17,21 +17,20 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function UpdatePasswordForm({ open, onClose, onCreate }) {
   const password = useBoolean();
+  const { t } = useTranslate();
 
   const NewPasswordSchema = Yup.object().shape({
-    password: Yup.string()
-      .trim()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters'),
+    password: Yup.string().trim().required(t('passwordRequired')).min(6, t('passwordError')),
     confirmPassword: Yup.string()
       .trim()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
+      .oneOf([Yup.ref('password'), null], t('passwordNotMatch'))
+      .required(t('confirmPasswordRequired')),
   });
 
   const defaultValues = {
@@ -63,13 +62,13 @@ export default function UpdatePasswordForm({ open, onClose, onCreate }) {
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>New Password</DialogTitle>
+        <DialogTitle>{t('newPassword')}</DialogTitle>
 
         <DialogContent dividers>
           <Stack spacing={2.5} mt={2}>
             <RHFTextField
               name="password"
-              label="Password"
+              label={t('password')}
               type={password.value ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
@@ -83,7 +82,7 @@ export default function UpdatePasswordForm({ open, onClose, onCreate }) {
             />
             <RHFTextField
               name="confirmPassword"
-              label="Confirm Password"
+              label={t('confirmPassword')}
               type={password.value ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
@@ -100,11 +99,11 @@ export default function UpdatePasswordForm({ open, onClose, onCreate }) {
 
         <DialogActions>
           <Button color="inherit" variant="outlined" onClick={onClose}>
-            Cancel
+            {t('cancel')}
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Update
+            {t('update')}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

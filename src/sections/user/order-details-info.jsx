@@ -9,6 +9,7 @@ import CardHeader from '@mui/material/CardHeader';
 
 import Iconify from 'src/components/iconify';
 import { useTranslate } from 'src/locales';
+import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ export default function OrderDetailsInfo({ delivery, payment, shippingAddress })
           <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
             {t('speedy')}
           </Box>
-          {delivery?.speedy}
+          {t(delivery?.speedy)}
         </Stack>
         <Stack direction="row" alignItems="center">
           <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
@@ -53,7 +54,12 @@ export default function OrderDetailsInfo({ delivery, payment, shippingAddress })
           </Box>
           {shippingAddress?.fullAddress}
         </Stack>
-
+        <Stack direction="row">
+          <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
+            {t('addressType')}
+          </Box>
+          <Label color="primary">{t(shippingAddress.addressType)}</Label>
+        </Stack>
         <Stack direction="row">
           <Box component="span" sx={{ color: 'text.secondary', width: 120, flexShrink: 0 }}>
             {t('phoneNumber')}

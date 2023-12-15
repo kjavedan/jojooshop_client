@@ -18,22 +18,23 @@ import { useAuthContext } from 'src/auth/hooks';
 import { varHover } from 'src/components/animate';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-// ----------------------------------------------------------------------
-
-const OPTIONS = [
-  {
-    label: 'Profile',
-    linkTo: paths.user.profile,
-  },
-  {
-    label: 'My Orders',
-    linkTo: paths.user.orders,
-  },
-];
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const { t } = useTranslate();
+  const OPTIONS = [
+    {
+      label: t('profile'),
+      linkTo: paths.user.profile,
+    },
+    {
+      label: t('myOrders'),
+      linkTo: paths.user.orders,
+    },
+  ];
+
   const router = useRouter();
 
   const { logout, user } = useAuthContext();
@@ -116,7 +117,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
-          Logout
+          {t('logout')}
         </MenuItem>
       </CustomPopover>
     </>

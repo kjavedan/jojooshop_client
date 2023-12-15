@@ -134,8 +134,8 @@ export default function UserOrdersView() {
             </ListItemAvatar>
             <Stack sx={{ flexDirection: { sx: 'column', md: 'row' }, gap: { md: 10 } }}>
               <ListItemText
-                primary={`Order Number: ${order.orderNumber}`}
-                secondary={` Date: ${fDate(order.orderDate)}`}
+                primary={`${t('orderNumber')}: ${order.orderNumber}`}
+                secondary={`${t('date')}: ${fDate(order.orderDate)}`}
               />
               <Box
                 sx={{
@@ -145,11 +145,11 @@ export default function UserOrdersView() {
                 }}
               >
                 <Typography variant="body2">
-                  Items:
+                  {t('itmes')}
                   <Label sx={{ mx: 1 }}>x{order?.qty}</Label>
                 </Typography>
                 <Typography variant="body2">
-                  Paid:
+                  {t('paid')}
                   <Label color="primary" sx={{ mx: 1 }}>
                     {fCurrency(order.discountedTotalPrice)}
                   </Label>
@@ -171,8 +171,8 @@ export default function UserOrdersView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Account"
-        links={[{ name: 'User', href: paths.user.root }, { name: 'Profile' }]}
+        heading={t('account')}
+        links={[{ name: t('user'), href: paths.user.root }, { name: t('profile') }]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}

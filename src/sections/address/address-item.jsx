@@ -6,11 +6,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import Label from 'src/components/label';
+import { useTranslate } from 'src/locales';
 
 // ----------------------------------------------------------------------
 
 export default function AddressItem({ address, action, sx, ...other }) {
   const { name, fullAddress, addressType, phoneNumber, primary } = address;
+
+  const { t } = useTranslate();
 
   return (
     <Stack
@@ -29,13 +32,13 @@ export default function AddressItem({ address, action, sx, ...other }) {
           <Typography variant="subtitle2">
             {name}
             <Box component="span" sx={{ ml: 0.5, typography: 'body2', color: 'text.secondary' }}>
-              ({addressType})
+              ({t(addressType)})
             </Box>
           </Typography>
 
           {primary && (
             <Label color="info" sx={{ ml: 1 }}>
-              Default
+              {t('default')}
             </Label>
           )}
         </Stack>

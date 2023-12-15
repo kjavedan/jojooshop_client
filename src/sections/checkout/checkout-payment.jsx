@@ -24,6 +24,7 @@ import CheckoutBillingInfo from './checkout-billing-info';
 import CheckoutPaymentMethods from './checkout-payment-methods';
 
 import { useTranslate } from 'src/locales';
+import { useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -39,21 +40,24 @@ export default function CheckoutPayment() {
   const DELIVERY_OPTIONS = [
     {
       value: 0,
-      speedy: t('free'),
+      speedy: 'free',
+      label: t('free'),
       description: t('deliveryOption5To7Days'),
-      trackingNumber: 'SPX037739199373',
+      trackingNumber: '',
     },
     {
       value: 10,
-      speedy: t('standard'),
+      speedy: 'standard',
+      label: t('standard'),
       description: t('deliveryOption3To5Days'),
-      trackingNumber: 'SPX037739199373',
+      trackingNumber: '',
     },
     {
       value: 20,
-      speedy: t('express'),
+      speedy: 'express',
+      label: t('express'),
       description: t('deliveryOption2To3Days'),
-      trackingNumber: 'SPX037739199373',
+      trackingNumber: '',
     },
   ];
 
@@ -103,9 +107,9 @@ export default function CheckoutPayment() {
     shippingPrice: shipping.value,
     payment: {},
     delivery: {
-      shipBy: 'BHL',
-      speedy: 'Free',
-      trackingNumber: 'SPX037739199373',
+      shipBy: '',
+      speedy: '',
+      trackingNumber: '',
     },
   };
 
@@ -115,9 +119,17 @@ export default function CheckoutPayment() {
   });
 
   const {
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const handleShippingChange = useCallback(
+    (newValue) => {
+      setValue('shippingPrice', newValue);
+    },
+    [setValue]
+  );
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -141,6 +153,7 @@ export default function CheckoutPayment() {
           <Grid xs={12} md={8}>
             <CheckoutDelivery
               onApplyShipping={checkout.onApplyShipping}
+              onShippingChange={handleShippingChange}
               options={DELIVERY_OPTIONS}
             />
 

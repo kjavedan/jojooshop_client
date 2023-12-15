@@ -13,7 +13,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function CheckoutDelivery({ options, onApplyShipping, ...other }) {
+export default function CheckoutDelivery({ options, onApplyShipping, onShippingChange, ...other }) {
   const { control } = useFormContext();
 
   return (
@@ -42,10 +42,11 @@ export default function CheckoutDelivery({ options, onApplyShipping, ...other })
                 onClick={() => {
                   field.onChange({
                     speedy: option.speedy,
-                    shipBy: 'DHL',
+                    shipBy: '',
                     trackingNumber: option.trackingNumber,
                   });
                   onApplyShipping(option);
+                  onShippingChange(option.value);
                 }}
               />
             ))}
@@ -64,13 +65,14 @@ export default function CheckoutDelivery({ options, onApplyShipping, ...other })
 
 CheckoutDelivery.propTypes = {
   onApplyShipping: PropTypes.func,
+  onShippingChange: PropTypes.func,
   options: PropTypes.array,
 };
 
 // ----------------------------------------------------------------------
 
 function OptionItem({ option, selected, ...other }) {
-  const { value, speedy, description } = option;
+  const { value, label, description } = option;
 
   return (
     <Paper
@@ -86,16 +88,16 @@ function OptionItem({ option, selected, ...other }) {
       }}
       {...other}
     >
-      {speedy === 'Free' && <Iconify icon="carbon:bicycle" width={32} />}
-      {speedy === 'Standard' && <Iconify icon="carbon:delivery" width={32} />}
-      {speedy === 'Express' && <Iconify icon="carbon:rocket" width={32} />}
+      {label === 'Free' && <Iconify icon="carbon:bicycle" width={32} />}
+      {label === 'Standard' && <Iconify icon="carbon:delivery" width={32} />}
+      {label === 'Express' && <Iconify icon="carbon:rocket" width={32} />}
 
       <ListItemText
         sx={{ ml: 2 }}
         primary={
           <Stack direction="row" alignItems="center">
             <Box component="span" sx={{ flexGrow: 1 }}>
-              {speedy}
+              {label}
             </Box>
             <Box component="span" sx={{ typography: 'h6' }}>{`$${value}`}</Box>
           </Stack>

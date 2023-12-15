@@ -17,7 +17,6 @@ import axios, { endpoints } from 'src/utils/axios';
 import { useAuthContext } from 'src/auth/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { fData } from 'src/utils/format-number';
 import { convertFileToBase64 } from 'src/utils/format-image';
 
 import { useTranslate } from 'src/locales';
@@ -140,7 +139,6 @@ export default function UserEditForm() {
                       }}
                     >
                       {t('allowedFileTypes')}
-                      <br /> {t('maxSize', { size: fData(3145728) })}
                     </Typography>
                   }
                 />
@@ -199,7 +197,7 @@ export default function UserEditForm() {
                   onClick={updatePasswordForm.onTrue}
                   startIcon={<Iconify icon="uim:lock" />}
                 >
-                  update password
+                  {t('updateUassword')}
                 </Button>
                 <LoadingButton
                   type="submit"
@@ -213,7 +211,7 @@ export default function UserEditForm() {
             </Card>
             <Stack mt={3}>
               <Typography variant="h6" mb={1}>
-                Address Book
+                {t('addressBook')}
               </Typography>
               {values?.addressBook?.map((address, index) => (
                 <AddressItem
@@ -227,7 +225,7 @@ export default function UserEditForm() {
                         sx={{ mr: 1 }}
                         onClick={() => handleDeleteAddress(index)}
                       >
-                        Delete
+                        {t('delete')}
                       </Button>
                     </Stack>
                   }
@@ -247,7 +245,7 @@ export default function UserEditForm() {
                   onClick={addressForm.onTrue}
                   startIcon={<Iconify icon="mingcute:add-line" />}
                 >
-                  New Address
+                  {t('newAddress')}
                 </Button>
               </Stack>
             </Stack>
