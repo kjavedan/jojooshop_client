@@ -1,5 +1,3 @@
-import parse from 'autosuggest-highlight/parse';
-import match from 'autosuggest-highlight/match';
 import { memo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
@@ -14,8 +12,10 @@ import Dialog, { dialogClasses } from '@mui/material/Dialog';
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useResponsive } from 'src/hooks/use-responsive';
 import { useEventListener } from 'src/hooks/use-event-listener';
+
+import { endpoints } from 'src/utils/axios';
+import { useGetGroups } from 'src/api/category';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -23,8 +23,7 @@ import Scrollbar from 'src/components/scrollbar';
 import SearchNotFound from 'src/components/search-not-found';
 
 import ResultItem from './result-item';
-import { useNavData } from '../../dashboard/config-navigation';
-import { applyFilter, groupedData, getAllItems } from './utils';
+import { applyFilter, getAllItems } from './utils';
 
 // ----------------------------------------------------------------------
 
@@ -35,11 +34,9 @@ function Searchbar() {
 
   const search = useBoolean();
 
-  const lgUp = useResponsive('up', 'lg');
+  const { groups } = useGetGroups();
 
   const [searchQuery, setSearchQuery] = useState('');
-
-  const navData = useNavData();
 
   const handleClose = useCallback(() => {
     search.onFalse();
@@ -57,11 +54,7 @@ function Searchbar() {
 
   const handleClick = useCallback(
     (path) => {
-      if (path.includes('http')) {
-        window.open(path);
-      } else {
-        router.push(path);
-      }
+      router.push(endpoints.product.category(path));
       handleClose();
     },
     [handleClose, router]
@@ -72,47 +65,32 @@ function Searchbar() {
   }, []);
 
   const dataFiltered = applyFilter({
-    inputData: getAllItems({ data: navData }),
+    inputData: getAllItems({ data: groups }),
     query: searchQuery,
   });
 
   const notFound = searchQuery && !dataFiltered.length;
 
-  const renderItems = () => {
-    const data = groupedData(dataFiltered);
-
-    return Object.keys(data)
-      .sort((a, b) => -b.localeCompare(a))
-      .map((group, index) => (
-        <List key={group || index} disablePadding>
-          {data[group].map((item) => {
-            const { title, path } = item;
-
-            const partsTitle = parse(title, match(title, searchQuery));
-
-            const partsPath = parse(path, match(path, searchQuery));
-
-            return (
-              <ResultItem
-                path={partsPath}
-                title={partsTitle}
-                key={`${title}${path}`}
-                groupLabel={searchQuery && group}
-                onClickItem={() => handleClick(path)}
-              />
-            );
-          })}
-        </List>
-      ));
-  };
+  const renderItems = () => (
+    <List>
+      {dataFiltered.map((item, index) => (
+        <ResultItem
+          path={item.path}
+          title={item.title}
+          coverUrl={item.coverUrl}
+          key={index}
+          groupLabel={searchQuery}
+          onClickItem={() => handleClick(item.path)}
+        />
+      ))}
+    </List>
+  );
 
   const renderButton = (
-    <Stack direction="row" alignItems="center">
+    <Stack direction="row" alignItems="center" sx={{ mx: { sx: 2, md: 5 } }}>
       <IconButton onClick={search.onTrue}>
         <Iconify icon="eva:search-fill" />
       </IconButton>
-
-      {lgUp && <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>}
     </Stack>
   );
 

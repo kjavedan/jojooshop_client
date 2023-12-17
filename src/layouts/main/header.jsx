@@ -16,12 +16,14 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { bgBlur } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
+import { usePathname } from 'src/routes/hooks';
 
 import NavMobile from './nav/mobile';
 import NavDesktop from './nav/desktop';
 import { HEADER } from '../config-layout';
-import { useNavConfig } from './config-navigation';
+import Searchbar from '../common/searchbar';
 import LoginButton from '../common/login-button';
+import { useNavConfig } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
 import AccountPopover from '../common/account-popover';
 import SettingsButton from '../common/settings-button';
@@ -39,6 +41,10 @@ export default function Header() {
   const navConfigData = useNavConfig();
 
   const { authenticated } = useAuthContext();
+
+  const pathname = usePathname();
+
+  const isHome = pathname === '/';
 
   return (
     <AppBar>
@@ -83,6 +89,8 @@ export default function Header() {
           >
             <Logo />
           </Badge>
+
+          {isHome && <Searchbar />}
 
           <Box sx={{ flexGrow: 1 }} />
 

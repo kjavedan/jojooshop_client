@@ -39,6 +39,7 @@ export const endpoints = {
     list: '/product/',
     details: (id) => `/product/${id}`,
     search: '/api/product/search',
+    category: (id) => `/product/category/${id}`,
   },
   category: {
     list: '/category/',

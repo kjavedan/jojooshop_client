@@ -44,7 +44,7 @@ export const paths = {
   },
   user: {
     root: `/user`,
-    profile: 'user/profile/',
+    profile: '/user/profile/',
     orders: '/user/orders/',
     order: (id) => `/user/order/${id}`,
   },

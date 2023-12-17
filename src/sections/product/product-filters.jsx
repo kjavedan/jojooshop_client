@@ -275,7 +275,6 @@ ProductFilters.propTypes = {
 
 function InputRange({ type, value, categoryPriceRange, onFilters }) {
   const min = value[0];
-
   const max = value[1];
 
   const handleBlurInputRange = useCallback(() => {
@@ -283,7 +282,7 @@ function InputRange({ type, value, categoryPriceRange, onFilters }) {
       onFilters('priceRange', [categoryPriceRange.min, max]);
     }
     if (min > categoryPriceRange.max) {
-      onFilters('priceRange', [categoryPriceRange.mx, max]);
+      onFilters('priceRange', [categoryPriceRange.max, max]);
     }
     if (max < categoryPriceRange.min) {
       onFilters('priceRange', [min, categoryPriceRange.min]);
@@ -309,9 +308,9 @@ function InputRange({ type, value, categoryPriceRange, onFilters }) {
 
       <InputBase
         fullWidth
-        value={type === 'min' ? min : max}
+        value={type === 'Min' ? min : max}
         onChange={(event) =>
-          type === 'min'
+          type === 'Min'
             ? onFilters('priceRange', [Number(event.target.value), max])
             : onFilters('priceRange', [min, Number(event.target.value)])
         }
@@ -342,6 +341,6 @@ function InputRange({ type, value, categoryPriceRange, onFilters }) {
 InputRange.propTypes = {
   onFilters: PropTypes.func,
   categoryPriceRange: PropTypes.object,
-  type: PropTypes.oneOf(['min', 'max']),
+  type: PropTypes.oneOf(['Min', 'Max']),
   value: PropTypes.arrayOf(PropTypes.number),
 };

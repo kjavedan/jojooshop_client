@@ -66,7 +66,7 @@ export default function ProductShopView() {
 
   const debouncedQuery = useDebounce(searchQuery);
 
-  // console.log(debouncedQuery);
+  console.log(debouncedQuery);
 
   // const [dataFiltered, setDataFilteredData] = useState([]);
 
