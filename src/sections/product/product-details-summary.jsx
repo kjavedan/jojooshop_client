@@ -17,8 +17,8 @@ import { fShortenNumber } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import { ColorPicker } from 'src/components/color-utils';
 import FormProvider from 'src/components/hook-form';
+import { ColorPicker } from 'src/components/color-utils';
 
 import { useLocales, useTranslate } from 'src/locales';
 import IncrementerButton from './common/incrementer-button';
@@ -39,6 +39,7 @@ export default function ProductDetailsSummary({
   const { lang } = useLocales();
 
   const { fCurrency } = useCurrencyConverter();
+
   const {
     _id,
     name,
@@ -57,17 +58,15 @@ export default function ProductDetailsSummary({
     discountedPrice,
   } = product;
 
-  const existProduct = !!items?.length && items.map((item) => item.id).includes(_id);
+  const existProduct = !!items?.length && items.find((item) => item.id === _id);
 
-  const isMaxQuantity =
-    !!items?.length &&
-    items.filter((item) => item.id === _id).map((item) => item.quantity)[0] >= available;
+  const isMaxQuantity = existProduct?.quantity >= stock;
 
   const defaultValues = {
     id: _id,
     name,
     coverUrl: imgUrls[0].url,
-    available: stock,
+    available: stock - existProduct.quantity,
     price: priceSale,
     discountedPrice: discount ? discountedPrice : null,
     discount,
@@ -204,7 +203,7 @@ export default function ProductDetailsSummary({
         />
 
         <Typography variant="caption" component="div" sx={{ textAlign: 'right' }}>
-          {t('available')}: {stock - values.quantity}
+          {t('available')}: {existProduct ? stock - existProduct.quantity : stock}
         </Typography>
       </Stack>
     </Stack>
