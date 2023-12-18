@@ -285,5 +285,11 @@
   "account": "Account",
   "orderNumber": "Order Number",
   "itmes": "Items",
-  "paid": "Paid"
+  "paid": "Paid",
+  "forbidden": "Forbidden",
+  "serverError": "Internal Server Error",
+  "jojooshop": "jojooshop",
+  "comingSoon": "Coming Soon",
+  "maintenance": "Maintenance",
+  "verify": "Verify"
 }

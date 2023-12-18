@@ -25,7 +25,7 @@ export default function CheckoutView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ mb: 10 }}>
-      <Typography variant="h4" sx={{ my: { xs: 3, md: 5 } }}>
+      <Typography variant="h1" sx={{ my: { xs: 3, md: 5 } }}>
         {t('checkout')}
       </Typography>
 

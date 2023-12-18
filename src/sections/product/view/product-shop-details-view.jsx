@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -34,7 +34,7 @@ import ProductDetailsDescription from '../product-details-description';
 
 // ----------------------------------------------------------------------
 
-export default function ProductShopDetailsView() {
+export default function ProductShopDetailsView({ onSetPageTitle }) {
   const { t } = useTranslate();
 
   const SUMMARY = [
@@ -72,6 +72,12 @@ export default function ProductShopDetailsView() {
   const handleChangeTab = useCallback((event, newValue) => {
     setCurrentTab(newValue);
   }, []);
+
+  useEffect(() => {
+    if (product) {
+      onSetPageTitle(product.name);
+    }
+  }, [product, onSetPageTitle]);
 
   const renderSkeleton = <ProductDetailsSkeleton />;
 
@@ -204,5 +210,5 @@ export default function ProductShopDetailsView() {
 }
 
 ProductShopDetailsView.propTypes = {
-  id: PropTypes.string,
+  onSetPageTitle: PropTypes.func,
 };

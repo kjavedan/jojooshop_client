@@ -7,8 +7,6 @@ import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 
-import { paths } from 'src/routes/paths';
-
 import { useAuthContext } from 'src/auth/hooks';
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -79,7 +77,7 @@ export default function Header() {
             }}
             badgeContent={
               <Link
-                href={paths.changelog}
+                href={'/'}
                 target="_blank"
                 rel="noopener"
                 underline="none"

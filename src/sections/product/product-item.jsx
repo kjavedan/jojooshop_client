@@ -65,6 +65,7 @@ export default function ProductItem({ product }) {
           ratio="1/1"
           sx={{
             borderRadius: 1.5,
+
             ...(!stock > 0 && {
               opacity: 0.48,
               filter: 'grayscale(1)',

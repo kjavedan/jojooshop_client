@@ -120,7 +120,7 @@ export default function ProductDetailsSummary({
   }, [onAddCart, values]);
 
   const renderPrice = (
-    <Box sx={{ typography: 'h5' }}>
+    <Box sx={{ typography: 'h2' }}>
       {!!discount && (
         <Box
           component="span"
@@ -168,7 +168,7 @@ export default function ProductDetailsSummary({
 
   const renderColorOptions = (
     <Stack direction="row">
-      <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+      <Typography variant="h3" sx={{ flexGrow: 1 }}>
         {t('color')}
       </Typography>
       <Controller
@@ -189,7 +189,7 @@ export default function ProductDetailsSummary({
 
   const renderQuantity = (
     <Stack direction="row">
-      <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+      <Typography variant="h3" sx={{ flexGrow: 1 }}>
         {t('quantity')}
       </Typography>
 
@@ -291,7 +291,7 @@ export default function ProductDetailsSummary({
 
           {renderInventoryType}
 
-          <Typography variant="h5">{name[lang]}</Typography>
+          <Typography variant="h1">{name[lang]}</Typography>
 
           {renderRating}
 

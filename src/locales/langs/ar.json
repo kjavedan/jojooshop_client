@@ -287,5 +287,11 @@
   "account": "حساب",
   "orderNumber": "رقم الأمر",
   "itmes": "أغراض",
-  "paid": "مدفوع"
+  "paid": "مدفوع",
+  "forbidden": "مُحرَّم",
+  "serverError": "خطأ في الخادم الداخلي",
+  "jojooshop": "jojooshop",
+  "comingSoon": "قريباً",
+  "maintenance": "صيانة",
+  "verify": "يؤكد"
 }

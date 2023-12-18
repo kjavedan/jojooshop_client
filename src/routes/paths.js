@@ -24,13 +24,6 @@ export const paths = {
   page404: '/404',
   page500: '/500',
   components: '/components',
-  docs: 'https://docs.minimals.cc',
-  changelog: 'https://docs.minimals.cc/changelog',
-  zoneUI: 'https://mui.com/store/items/zone-landing-page/',
-  minimalUI: 'https://mui.com/store/items/minimal-dashboard/',
-  freeUI: 'https://mui.com/store/items/minimal-dashboard-free/',
-  figma:
-    'https://www.figma.com/file/hjxMnGUJCjY7pX8lQbS7kn/%5BPreview%5D-Minimal-Web.v5.4.0?type=design&node-id=0-1&mode=design&t=2fxnS70DuiTLGzND-0',
   product: {
     root: `/product`,
     details: (id) => `/product/${id}`,

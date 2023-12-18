@@ -287,5 +287,11 @@
   "account": "حساب",
   "orderNumber": "شماره سفارش",
   "itmes": "موارد",
-  "paid": "پرداخت شده"
+  "paid": "پرداخت شده",
+  "forbidden": "ممنوع",
+  "serverError": "خطای سرور داخلی",
+  "jojooshop": "jojooshop",
+  "comingSoon": "به زودی",
+  "maintenance": "نگهداری",
+  "verify": "تأیید کنید"
 }

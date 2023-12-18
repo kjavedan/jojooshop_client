@@ -4,6 +4,8 @@ import { useSettingsContext } from 'src/components/settings';
 import { useGetGroups } from 'src/api/category';
 
 import CarouselCategory from '../home-carousel';
+import { HomeSkeleton } from '../home-skeleton';
+import Typography from '@mui/material/Typography';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -16,14 +18,13 @@ export default function HomeView() {
       ))}
     </>
   );
+
   return (
-    <Container
-      maxWidth={settings.themeStretch ? false : 'lg'}
-      sx={{
-        my: { xs: 10, md: 12 },
-      }}
-    >
-      {!groupsLoading && renderCategories}
+    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Typography variant="h1" sx={{ opacity: 0 }}>
+        jojoshop: Home page - start shopping now
+      </Typography>
+      {groupsLoading ? <HomeSkeleton /> : renderCategories}
     </Container>
   );
 }

@@ -47,7 +47,7 @@ export default function CarouselCategory({ data }) {
         mt: 5,
       }}
     >
-      <Typography variant="h4">{data.title[lang]}</Typography>
+      <Typography variant="h2">{data.title[lang]}</Typography>
       <CarouselArrows
         filled
         icon="mingcute:right-fill"
@@ -112,7 +112,7 @@ function CarouselItem({ item }) {
           }),
         }}
       >
-        <TextMaxLine variant="h5" sx={{ mb: 0 }}>
+        <TextMaxLine variant="h3" sx={{ mb: 0 }}>
           {title[lang]}
         </TextMaxLine>
       </CardContent>

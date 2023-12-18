@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { useState, useCallback, useEffect } from 'react';
 
@@ -39,7 +40,7 @@ const defaultFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function ProductShopView() {
+export default function ProductShopView({ pageTitle, onSetPageTitle }) {
   const { t } = useTranslate();
   const { lang } = useLocales();
 
@@ -109,13 +110,14 @@ export default function ProductShopView() {
       .find((groupCategory) => groupCategory.path === category);
 
     if (foundCategory) {
+      onSetPageTitle(foundCategory.title);
       const { filters, colors, priceRange } = foundCategory;
       const tags = filters.map((filter) => ({ key: filter.key, title: filter.title }));
       setTagOptions(tags);
       setColorOptions(colors);
       setCategoryPriceRange(priceRange);
     }
-  }, [category, groups]);
+  }, [category, groups, onSetPageTitle]);
 
   const canReset = !isEqual(defaultFilters, filters);
 
@@ -194,12 +196,12 @@ export default function ProductShopView() {
       <CartIcon totalItems={checkout.totalItems} />
 
       <Typography
-        variant="h4"
+        variant="h1"
         sx={{
           my: { xs: 3, md: 5 },
         }}
       >
-        {t('shop')}
+        {t('category')}: {pageTitle[lang]}
       </Typography>
 
       <Stack
@@ -226,3 +228,8 @@ export default function ProductShopView() {
 }
 
 // ----------------------------------------------------------------------
+
+ProductShopView.propTypes = {
+  pageTitle: PropTypes.object,
+  onSetPageTitle: PropTypes.func,
+};

@@ -1,14 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 
+import { useTranslate } from 'src/locales';
+
 import { NewPassordView } from 'src/sections/auth';
 
 // ----------------------------------------------------------------------
 
 export default function NewPasswordPage() {
+  const { t } = useTranslate();
+
   return (
     <>
       <Helmet>
-        <title> Auth Classic: New Password</title>
+        <title>
+          {t('jojooshop')} : {t('newPassword')}
+        </title>
       </Helmet>
 
       <NewPassordView />

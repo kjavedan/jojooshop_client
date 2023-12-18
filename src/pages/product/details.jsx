@@ -1,22 +1,34 @@
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'src/routes/hooks';
+import { useState, useCallback } from 'react';
+
+import { useLocales, useTranslate } from 'src/locales';
+
 import { ProductShopDetailsView } from 'src/sections/product/view';
-import { useTranslate } from 'src/locales'; // Adjust the import path as needed
 
 // ----------------------------------------------------------------------
 
 export default function ProductShopDetailsPage() {
   const { t } = useTranslate();
-  const params = useParams();
-  const { id } = params;
+  const { lang } = useLocales();
+
+  const [pageTitle, setPageTitle] = useState(null);
+
+  const handlePageTitle = useCallback(
+    (newVal) => {
+      setPageTitle(newVal);
+    },
+    [setPageTitle]
+  );
 
   return (
     <>
       <Helmet>
-        <title>{t('productDetails')}</title>
+        <title>
+          {t('productDetails')}: {(pageTitle && pageTitle[lang]) || ''}
+        </title>
       </Helmet>
 
-      <ProductShopDetailsView id={`${id}`} />
+      <ProductShopDetailsView onSetPageTitle={handlePageTitle} />
     </>
   );
 }

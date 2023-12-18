@@ -66,7 +66,7 @@ export default function Footer() {
         <Typography variant="caption" component="div">
           © {t('allRightsReserved')}
           <br /> {t('madeBy')}
-          <Link href="https://minimals.cc/"> jojooshop.com </Link>
+          <Link href="https://jojooshop.com/"> jojooshop.com </Link>
         </Typography>
       </Container>
     </Box>
