@@ -59,9 +59,8 @@ export function useGetProduct(productId) {
 
 // ----------------------------------------------------------------------
 
-export function useSearchProducts(filters) {
-  const URL = [endpoints.product.search, { params: { filters } }];
-
+export function useSearchProducts(category, query, lang) {
+  const URL = [endpoints.search.root, { params: { category, query, lang } }];
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     keepPreviousData: true,
   });

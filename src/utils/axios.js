@@ -38,8 +38,10 @@ export const endpoints = {
   product: {
     list: '/product/',
     details: (id) => `/product/${id}`,
-    search: '/api/product/search',
     category: (id) => `/product/category/${id}`,
+  },
+  search: {
+    root: '/search',
   },
   category: {
     list: '/category/',

@@ -11,7 +11,7 @@ import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import SearchNotFound from 'src/components/search-not-found';
@@ -22,19 +22,10 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
   const router = useRouter();
 
   const { t } = useTranslate();
+  const { lang } = useLocales();
 
   const handleClick = (id) => {
     router.push(hrefItem(id));
-  };
-
-  const handleKeyUp = (event) => {
-    if (query) {
-      if (event.key === 'Enter') {
-        const selectItem = results?.filter((product) => product.name === query)[0];
-
-        handleClick(selectItem.id);
-      }
-    }
   };
 
   return (
@@ -45,9 +36,9 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
       popupIcon={null}
       options={results}
       onInputChange={(event, newValue) => onSearch(newValue)}
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={(option) => option.name[lang]}
       noOptionsText={<SearchNotFound query={query} sx={{ bgcolor: 'unset' }} />}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option._id === value._id}
       slotProps={{
         popper: {
           placement: 'bottom-start',
@@ -67,7 +58,6 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
         <TextField
           {...params}
           placeholder={t('search')}
-          onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -85,15 +75,15 @@ export default function ProductSearch({ query, results, onSearch, hrefItem, load
         />
       )}
       renderOption={(props, product, { inputValue }) => {
-        const matches = match(product.name, inputValue);
-        const parts = parse(product.name, matches);
+        const matches = match(product.name[lang], inputValue);
+        const parts = parse(product.name[lang], matches);
 
         return (
-          <Box component="li" {...props} onClick={() => handleClick(product.id)} key={product.id}>
+          <Box component="li" {...props} onClick={() => handleClick(product._id)} key={product._id}>
             <Avatar
-              key={product.id}
-              alt={product.name}
-              src={product.coverUrl}
+              key={product._id}
+              alt={product.name[lang]}
+              src={product.imgUrls[0].url}
               variant="rounded"
               sx={{
                 width: 48,

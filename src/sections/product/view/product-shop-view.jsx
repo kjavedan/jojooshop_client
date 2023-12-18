@@ -16,7 +16,7 @@ import { PRODUCT_RATING_OPTIONS } from 'src/_mock';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 
 import ProductList from '../product-list';
 import ProductSort from '../product-sort';
@@ -41,6 +41,7 @@ const defaultFilters = {
 
 export default function ProductShopView() {
   const { t } = useTranslate();
+  const { lang } = useLocales();
 
   const PRODUCT_SORT_OPTIONS = [
     { value: 'featured', label: t('featured') },
@@ -65,10 +66,6 @@ export default function ProductShopView() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const debouncedQuery = useDebounce(searchQuery);
-
-  console.log(debouncedQuery);
-
-  // const [dataFiltered, setDataFilteredData] = useState([]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -97,7 +94,7 @@ export default function ProductShopView() {
     sortBy
   );
 
-  const { searchLoading } = useSearchProducts(debouncedQuery);
+  const { searchResults, searchLoading } = useSearchProducts(category, debouncedQuery, lang);
 
   const handleFilters = useCallback((name, value) => {
     setFilters((prevState) => ({
@@ -143,7 +140,7 @@ export default function ProductShopView() {
     >
       <ProductSearch
         query={debouncedQuery}
-        results={[]}
+        results={searchResults}
         onSearch={handleSearch}
         loading={searchLoading}
         hrefItem={(id) => paths.product.details(id)}
