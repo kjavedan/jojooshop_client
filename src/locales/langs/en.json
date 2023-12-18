@@ -300,5 +300,6 @@
   "jojooshop": "jojooshop",
   "comingSoon": "Coming Soon",
   "maintenance": "Maintenance",
-  "verify": "Verify"
+  "verify": "Verify",
+  "emailNotFound": "Email not found"
 }

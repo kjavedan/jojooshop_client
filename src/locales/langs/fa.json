@@ -293,5 +293,6 @@
   "jojooshop": "jojooshop",
   "comingSoon": "به زودی",
   "maintenance": "نگهداری",
-  "verify": "تأیید کنید"
+  "verify": "تأیید کنید",
+  "emailNotFound": "ایمیل پیدا نشد"
 }

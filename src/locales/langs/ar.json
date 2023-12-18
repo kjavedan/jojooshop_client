@@ -293,5 +293,6 @@
   "jojooshop": "jojooshop",
   "comingSoon": "قريباً",
   "maintenance": "صيانة",
-  "verify": "يؤكد"
+  "verify": "يؤكد",
+  "emailNotFound": "البريد الإلكتروني غير موجود"
 }

@@ -158,10 +158,19 @@ export function AuthProvider({ children }) {
         });
       } catch (error) {
         console.log(error);
-        const errorMessage =
-          error.msg === 'User is not authorized!'
-            ? t('emailOrPasswordWrong')
-            : t('somethingWentWrong');
+        let errorMessage;
+        switch (error?.status) {
+          case 401:
+            errorMessage = t('emailOrPasswordWrong');
+            break;
+          case 404:
+            errorMessage = t('emailNotFound');
+            break;
+          default:
+            errorMessage = t('somethingWentWrong');
+            break;
+        }
+
         enqueueSnackbar(errorMessage, { variant: 'error' });
       }
     },

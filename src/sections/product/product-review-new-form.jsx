@@ -77,7 +77,7 @@ export default function ProductReviewNewForm({ onClose, currentReview, ...other 
       mutate(endpoints.product.details(productId));
       reset();
       onClose();
-      const successMessage = currentReview ? t('reviewAddSuccess') : t('updateSuccess');
+      const successMessage = currentReview ? t('updateSuccess') : t('reviewAddSuccess');
 
       enqueueSnackbar(successMessage, {
         variant: 'success',

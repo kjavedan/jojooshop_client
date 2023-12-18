@@ -45,14 +45,7 @@ export function CheckoutProvider({ children }) {
     update('shipping', state.items.length ? state.shipping : { value: 0 });
     update('total', state.subTotal - state.discount + state.shipping.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    state.items,
-    state.activeStep,
-    state.billing,
-    state.discount,
-    state.shipping,
-    state.subTotal,
-  ]);
+  }, [state.items, state.activeStep, state.billing, state.discount, state.subTotal]);
 
   useEffect(() => {
     const restored = getStorage(STORAGE_KEY);

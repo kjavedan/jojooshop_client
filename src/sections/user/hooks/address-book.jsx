@@ -38,15 +38,15 @@ const useAddressBook = () => {
       const addressBook = [...newAddressBook, address];
       handleUpdateUser({ addressBook });
     },
-    [user.addressBook, handleUpdateUser]
+    [user?.addressBook, handleUpdateUser]
   );
 
   const handleDeleteAddress = useCallback(
     (index) => {
-      const addressBook = user.addressBook.filter((_, i) => i !== index);
+      const addressBook = user?.addressBook.filter((_, i) => i !== index);
       handleUpdateUser({ addressBook });
     },
-    [user.addressBook, handleUpdateUser]
+    [user?.addressBook, handleUpdateUser]
   );
 
   return { handleAddAddressToAddressBook, handleDeleteAddress, handleUpdateUser };
