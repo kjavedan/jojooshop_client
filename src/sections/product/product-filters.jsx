@@ -124,7 +124,7 @@ export default function ProductFilters({
               onClick={() => handleFilterTags(tag.key)}
             />
           }
-          label={tag.title[lang]}
+          label={tag.title?.[lang] ?? ""}
         />
       ))}
     </Stack>
